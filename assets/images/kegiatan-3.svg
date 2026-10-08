@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#167a47"/>
+      <stop offset="100%" stop-color="#0f5a34"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" fill="url(#bgGrad3)"/>
+  <circle cx="480" cy="120" r="150" fill="rgba(255,255,255,0.06)"/>
+  
+  <rect x="40" y="35" width="220" height="30" rx="6" fill="#c89524"/>
+  <text x="50" y="55" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="12" letter-spacing="1">ASESMEN &amp; AKADEMIK</text>
+  
+  <g transform="translate(60, 95)">
+    <!-- Meja Lab Komputer / CBT Madrasah -->
+    <rect x="30" y="140" width="440" height="12" rx="3" fill="#ffffff" opacity="0.9"/>
+    
+    <!-- Monitor Komputer 1 -->
+    <rect x="60" y="40" width="100" height="70" rx="6" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
+    <rect x="70" y="50" width="80" height="50" fill="#eaf6ef"/>
+    <rect x="105" y="110" width="10" height="25" fill="#94a3b8"/>
+    <rect x="90" y="135" width="40" height="5" fill="#64748b"/>
+    <circle cx="110" cy="75" r="12" fill="#0f5a34"/>
+
+    <!-- Monitor Komputer 2 -->
+    <rect x="190" y="40" width="100" height="70" rx="6" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
+    <rect x="200" y="50" width="80" height="50" fill="#eaf6ef"/>
+    <rect x="235" y="110" width="10" height="25" fill="#94a3b8"/>
+    <rect x="220" y="135" width="40" height="5" fill="#64748b"/>
+    <rect x="210" y="60" width="60" height="8" rx="2" fill="#0f5a34"/>
+    <rect x="210" y="74" width="45" height="6" rx="2" fill="#c89524"/>
+
+    <!-- Monitor Komputer 3 -->
+    <rect x="320" y="40" width="100" height="70" rx="6" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
+    <rect x="330" y="50" width="80" height="50" fill="#eaf6ef"/>
+    <rect x="365" y="110" width="10" height="25" fill="#94a3b8"/>
+    <rect x="350" y="135" width="40" height="5" fill="#64748b"/>
+    <circle cx="370" cy="75" r="12" fill="#c89524"/>
+  </g>
+  
+  <text x="40" y="315" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Asesmen Madrasah Berbasis Komputer</text>
+  <text x="40" y="342" fill="#d1fae5" font-family="'Plus Jakarta Sans', sans-serif" font-size="13">Pelaksanaan Evaluasi Capaian Pembelajaran Siswa Semester Genap</text>
+</svg>

@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Informasi & Presensi Akademik Madrasah - Bidang Kurikulum</title>
+  
+  <meta name="author" content="nmcode">
+  <meta name="creator" content="nmcode">
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Utama -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Notification Bar Resmi Kementerian Agama / Madrasah -->
+  <div class="top-notification-bar">
+    <div class="top-bar-info">
+      <span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        KEMENTERIAN AGAMA REPUBLIK INDONESIA
+      </span>
+      <span>•</span>
+      <span id="calendarDateHeader">Tahun Pelajaran 2026/2027 • Ganjil</span>
+    </div>
+    <div class="top-bar-info">
+      <span id="liveClockBadge">00:00:00 WIB</span>
+      <span>•</span>
+      <span class="badge-kurikulum">PORTAL MA AL-IKHLASH SUBANG</span>
+    </div>
+  </div>
+
+  <!-- Header & Identitas Madrasah -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-section">
+        <div class="logo-wrapper" id="logoContainer">
+          <img id="mainLogoImg" src="assets/images/logo-madrasah.svg" alt="Logo MA Al-Ikhlash" class="logo-img">
+        </div>
+        <div class="brand-info">
+          <h1 id="headerSchoolName">MADRASAH ALIYAH AL-IKHLASH</h1>
+          <p id="headerSchoolMeta">NSM: 131232130037 • NPSN: 70049578 • Akreditasi: B</p>
+        </div>
+      </div>
+
+      <!-- Navigasi Menu Utama -->
+      <nav class="main-nav">
+        <button class="nav-link active" onclick="switchMainTab('tab-beranda')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Beranda
+        </button>
+        <button class="nav-link" onclick="switchMainTab('tab-dokumentasi')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Dokumentasi Kegiatan
+        </button>
+        <button class="nav-link" onclick="switchMainTab('tab-guru')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Absensi Guru
+        </button>
+        <button class="nav-link" onclick="switchMainTab('tab-siswa')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+          Cek Kehadiran Siswa
+        </button>
+      </nav>
+
+      <!-- Tombol Akses Operator Admin (Dilindungi Admin Gate) -->
+      <div class="header-actions">
+        <button class="btn-operator-chip" id="btnAdminGateTrigger" onclick="handleOperatorAccess()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span id="operatorBtnLabel">Admin / Operator</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Konten Utama -->
+  <main class="main-wrapper">
+
+    <!-- ========================================== -->
+    <!-- 1. TAB BERANDA / DASHBOARD KURIKULUM      -->
+    <!-- ========================================== -->
+    <section id="tab-beranda" class="tab-content">
+      <!-- Banner Sambutan Waka Kurikulum -->
+      <div class="academic-banner">
+        <div class="banner-content">
+          <h2>Selamat Datang di Portal Kurikulum Madrasah</h2>
+          <p>Layanan terpadu presensi pendidik, jurnal refleksi mengajar harian, serta monitoring kehadiran peserta didik berlandaskan Kurikulum Merdeka & Regulasi Kemenag.</p>
+        </div>
+        <div class="banner-stats">
+          <div class="stat-box">
+            <span class="stat-num" id="statTotalGuru">0</span>
+            <span class="stat-label">Pendidik Aktif</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statTotalSiswa">0</span>
+            <span class="stat-label">Peserta Didik</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statPresensiGuruHariIni">0%</span>
+            <span class="stat-label">Kehadiran Guru</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card cursor-pointer" onclick="switchMainTab('tab-guru', 'sub-selfie')">
+          <div class="card-body" style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: var(--color-primary-subtle); color: var(--color-primary); width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--color-primary-dark);">Presensi Selfie Pendidik</h3>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Foto selfie dengan validasi waktu &amp; presensi mandiri.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card cursor-pointer" onclick="switchMainTab('tab-guru', 'sub-aktivitas')">
+          <div class="card-body" style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: #fef8eb; color: var(--color-gold); width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--color-primary-dark);">Agenda &amp; Jurnal Mengajar</h3>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Pencatatan realisasi KBM &amp; evaluasi capaian materi.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card cursor-pointer" onclick="switchMainTab('tab-siswa')">
+          <div class="card-body" style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: #e0f2fe; color: #0284c7; width: 50px; height: 50px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; font-weight: 700; color: var(--color-primary-dark);">Cek Kehadiran Siswa</h3>
+              <p style="font-size: 0.8rem; color: var(--color-text-muted);">Monitoring kehadiran Kelas 1, Kelas 2, dan Kelas 3.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuplikan Dokumentasi Terkini -->
+      <div class="card" style="margin-bottom: 2rem;">
+        <div class="card-header">
+          <div class="card-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Dokumentasi &amp; Galeri Kegiatan Terbaru Madrasah
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="switchMainTab('tab-dokumentasi')">Lihat Semua Dokumentasi →</button>
+        </div>
+        <div class="card-body">
+          <div class="gallery-grid" id="berandaGalleryPreview">
+            <!-- Render via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Biodata & Identitas Resmi Madrasah Berdasarkan EMIS Kemenag (Tersusun Rapi di Bagian Bawah) -->
+      <div class="card" style="margin-bottom: 2rem; border-top: 4px solid var(--color-primary);">
+        <div class="card-header" style="background: linear-gradient(to right, #f4fbf7, #ffffff); border-bottom: 1px solid var(--color-border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+          <div class="card-header-title" style="font-size: 1.05rem;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Biodata Resmi Lembaga (Sistem Informasi EMIS Kemenag)
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb; font-weight:700; font-size:0.775rem; padding: 5px 12px; white-space: nowrap;">
+              📅 Tahun Pelajaran: 2026/2027 (Ganjil)
+            </span>
+            <span class="badge badge-hadir" style="font-size:0.775rem; padding: 5px 12px; white-space: nowrap;">
+              ✓ Data Tervalidasi Kemenag
+            </span>
+          </div>
+        </div>
+        <div class="card-body" style="padding: 1.75rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; font-size: 0.86rem;">
+            
+            <!-- Kolom 1: Profil & Identitas Madrasah -->
+            <div style="background: #f8fbf9; border: 1px solid var(--color-primary-border); border-radius: var(--radius-md); padding: 16px 18px;">
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2ece6; padding-bottom: 10px;">
+                <img src="assets/images/logo-madrasah.svg" alt="Logo" style="width: 32px; height: 32px; object-fit: contain;">
+                <div>
+                  <h4 style="color: var(--color-primary-dark); font-weight: 800; font-size: 1rem; margin: 0;">MA AL-IKHLASH</h4>
+                  <span style="font-size: 0.75rem; color: var(--color-text-muted);">Madrasah Aliyah Al-Ikhlash Sindangsari</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Nomor Statistik (NSM):</span>
+                  <code style="color:var(--color-primary-dark); font-weight: 700; font-size:0.875rem; background: #eaf6ef; padding: 2px 7px; border-radius: 4px;">131232130037</code>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">NPSN Kemdikbud:</span>
+                  <code style="color:var(--color-primary-dark); font-weight: 700; font-size:0.875rem; background: #eaf6ef; padding: 2px 7px; border-radius: 4px;">70049578</code>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Status Lembaga:</span>
+                  <span style="font-weight: 600; color: var(--color-text-main);">Swasta • Bentuk SP: MA</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Peringkat Akreditasi:</span>
+                  <span class="badge" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; font-weight:700;">Akreditasi B</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Badan Penyelenggara:</span>
+                  <span style="font-weight: 600; color: var(--color-text-main);">Yayasan Al-Ikhlash</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Afiliasi Keagamaan:</span>
+                  <span style="font-weight: 600; color: var(--color-primary-dark);">Nahdlatul Ulama (NU)</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Kode Registrasi:</span>
+                  <code>pnqc58q4a</code>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kolom 2: Domisili & Wilayah Geografis -->
+            <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 18px;">
+              <h5 style="color: var(--color-primary-dark); font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; display: flex; align-items: center; gap: 7px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Domisili &amp; Wilayah Lembaga
+              </h5>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div>
+                  <span style="color: var(--color-text-muted); font-size: 0.775rem; display: block; margin-bottom: 2px;">Alamat Lengkap Madrasah:</span>
+                  <strong style="color: var(--color-text-main); line-height: 1.4; display: block;">KP KRAJAN TENGAH RT/RW 12/03 DESA SINDANGSARI KECAMATAN CIKAUM KABUPATEN SUBANG</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                  <span style="color: var(--color-text-muted);">Kelurahan / Desa:</span>
+                  <span style="font-weight: 600;">SINDANGSARI</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Kecamatan:</span>
+                  <span style="font-weight: 600;">CIKAUM</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Kabupaten &amp; Provinsi:</span>
+                  <span style="font-weight: 600;">SUBANG, JAWA BARAT</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Kode Pos:</span>
+                  <span style="font-weight: 600;">41253</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Titik Koordinat GPS:</span>
+                  <code style="font-size: 0.775rem;">-6.4600709, 107.7299263</code>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kolom 3: Kontak & Legalitas Operasional -->
+            <div style="background: #ffffff; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px 18px;">
+              <h5 style="color: var(--color-primary-dark); font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; display: flex; align-items: center; gap: 7px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Kontak Resmi &amp; Legalitas Kemenag
+              </h5>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">No. Telepon / WhatsApp:</span>
+                  <a href="tel:085119912112" style="color:var(--color-primary); font-weight:700; text-decoration:none;">085119912112</a>
+                </div>
+                <div>
+                  <span style="color: var(--color-text-muted); font-size: 0.775rem; display: block; margin-bottom: 2px;">Email Resmi Madrasah:</span>
+                  <a href="mailto:MAALIKHLASHSINDANGSARI@GMAIL.COM" style="color:var(--color-primary); text-decoration:none; font-weight:600; font-size:0.8rem; word-break: break-all;">MAALIKHLASHSINDANGSARI@GMAIL.COM</a>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+                  <span style="color: var(--color-text-muted);">Waktu Belajar &amp; KKM:</span>
+                  <span style="font-weight: 600;">Pagi • Anggota</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">SK Ijin Operasional:</span>
+                  <code style="font-size: 0.775rem;">962 TAHUN 2023</code>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">Tanggal SK Operasional:</span>
+                  <span style="font-weight: 600; font-size: 0.8rem;">03 November 2023</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="color: var(--color-text-muted);">SK Kemenkumham:</span>
+                  <code style="font-size: 0.72rem;">AHU-0017151.AH.01.12.2021</code>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2. TAB DOKUMENTASI KEGIATAN MADRASAH       -->
+    <!-- ========================================== -->
+    <section id="tab-dokumentasi" class="tab-content d-none">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Arsip Dokumentasi & Publikasi Kegiatan Madrasah
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-primary btn-sm" onclick="openAddDocModal()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Foto Kegiatan
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">
+            Dokumentasi resmi aktivitas kurikulum, asesmen, pembiasaan karakter keagamaan, serta pembinaan peserta didik madrasah.
+          </p>
+          <div class="gallery-grid" id="mainGalleryList">
+            <!-- Render dynamically via JavaScript -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 3. TAB ABSENSI GURU & ADMINISTRASI KBM    -->
+    <!-- ========================================== -->
+    <section id="tab-guru" class="tab-content d-none">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Manajemen Kehadiran & Administrasi Pendidik
+          </div>
+          <span style="font-size: 0.8rem; color: var(--color-text-muted); font-weight: 600;" id="currentTeacherDateLabel">
+            Tanggal: Memuat...
+          </span>
+        </div>
+        <div class="card-body">
+          
+          <!-- Indikator Sesi Guru Aktif (Admin Gate Guru) -->
+          <div id="teacherSessionInfo" class="d-none" style="display: flex; justify-content: space-between; align-items: center; background: #eaf6ef; border: 1px solid #b8e2cb; padding: 10px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="display: inline-block; width: 9px; height: 9px; background: #16a34a; border-radius: 50%;"></span>
+              <span style="font-size: 0.875rem; color: var(--color-primary-dark);">Pendidik Terautentikasi: <strong id="currentActiveTeacherName">-</strong></span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="logoutTeacher()" style="font-size: 0.75rem; padding: 4px 10px;" title="Keluar dan ganti dengan guru lain">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Ganti Pendidik / Kunci
+            </button>
+          </div>
+
+          <!-- Sub-Tab Navigation Khusus Absensi Guru (Tampilan Mandiri Guru) -->
+          <div class="subnav-pills">
+            <button class="subnav-btn active" id="btnSubSelfie" onclick="switchTeacherSubTab('sub-selfie')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              1. Presensi Mandiri &amp; Foto Selfie Guru
+            </button>
+            <button class="subnav-btn" id="btnSubAktivitas" onclick="switchTeacherSubTab('sub-aktivitas')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+              2. Agenda &amp; Aktivitas Pembelajaran
+            </button>
+            <button class="subnav-btn" id="btnSubJurnal" onclick="switchTeacherSubTab('sub-jurnal')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              3. Jurnal Refleksi Mengajar Saya
+            </button>
+            <button class="subnav-btn" id="btnSubRekap" onclick="switchTeacherSubTab('sub-rekap-guru')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              4. Riwayat Presensi Saya Hari Ini
+            </button>
+            <button class="subnav-btn" id="btnSubJadwal" onclick="switchTeacherSubTab('sub-jadwal')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              5. Matriks Jadwal Saya (Kode 1-17)
+            </button>
+          </div>
+
+          <!-- SUB 1: PRESENSI FOTO SELFIE GURU -->
+          <div id="sub-selfie" class="teacher-sub-pane">
+            <div class="camera-card-layout">
+              <!-- Kolom Kamera Web / Foto -->
+              <div>
+                <div class="camera-preview-box" id="cameraBox">
+                  <video id="webcamStream" class="camera-stream" autoplay playsinline></video>
+                  <img id="capturedPhotoImg" class="captured-photo-preview" alt="Preview Selfie">
+                  <div class="camera-overlay-badge">
+                    <span style="display:inline-block; width:8px; height:8px; background:#22c55e; border-radius:50%;"></span>
+                    VALIDASI KAMERA MADRASAH
+                  </div>
+                  <div class="camera-time-badge" id="cameraTimestampOverlay">
+                    08 Oktober 2024 • 07:15:00 WIB
+                  </div>
+                </div>
+                
+                <div class="camera-actions">
+                  <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;" onclick="startWebcam()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Buka Kamera
+                  </button>
+                  <button type="button" class="btn btn-primary btn-sm" style="flex: 1;" onclick="takeSelfieSnapshot()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/></svg>
+                    Ambil Foto
+                  </button>
+                  <label class="btn btn-outline btn-sm" style="flex: 1; margin: 0; cursor: pointer;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload File
+                    <input type="file" id="uploadSelfieInput" accept="image/*" style="display:none;" onchange="handleSelfieUpload(event)">
+                  </label>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--color-text-light); margin-top: 6px; text-align: center;">
+                  *Gunakan kamera depan atau unggah foto selfie dengan seragam dinas harian.
+                </p>
+              </div>
+
+              <!-- Form Data Presensi Guru -->
+              <div>
+                <form id="formTeacherAttendance" onsubmit="submitTeacherAttendance(event)">
+                  <div class="form-grid">
+                    <div class="form-group full-width">
+                      <label class="form-label">Nama Pendidik / Guru <span class="req">*</span></label>
+                      <select id="teacherSelect" class="form-select" required onchange="handleTeacherSelectChange()">
+                        <option value="">-- Pilih Nama Guru Terdaftar --</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">NIP / NUPTK <span style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-muted);">(Opsional)</span></label>
+                      <input type="text" id="teacherNipPreview" class="form-control" readonly placeholder="Otomatis terisi (atau Belum Memiliki NIP)">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Mata Pelajaran Diampu</label>
+                      <input type="text" id="teacherMapelPreview" class="form-control" readonly placeholder="Otomatis terisi">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Jenis Presensi <span class="req">*</span></label>
+                      <select id="attendanceType" class="form-select" required>
+                        <option value="Datang (Pagi)">Presensi Masuk / Datang (Pagi)</option>
+                        <option value="Pulang (Sore)">Presensi Selesai Tugas / Pulang</option>
+                        <option value="Dinas Luar">Tugas Dinas Luar / MGMP / Pelatihan</option>
+                        <option value="Izin / Sakit">Izin / Sakit (Dengan Keterangan)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label">Keterangan / Lokasi Tugas</label>
+                      <input type="text" id="attendanceNotes" class="form-control" placeholder="Contoh: Mengajar jam ke 1-4 / Hadir di Madrasah">
+                    </div>
+                  </div>
+
+                  <div style="background: var(--color-primary-subtle); border: 1px solid var(--color-primary-border); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                      <span style="font-size: 0.825rem; font-weight: 700; color: var(--color-primary-dark);">Status Lokasi Geotagging:</span>
+                      <span class="badge badge-hadir">Radius Area Madrasah (Tervalidasi)</span>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Kirim &amp; Rekam Presensi Pendidik
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB 2: AKTIVITAS & AGENDA PEMBELAJARAN GURU -->
+          <div id="sub-aktivitas" class="teacher-sub-pane d-none">
+            <form id="formTeacherActivity" onsubmit="submitTeacherActivity(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Pendidik yang Mengajar <span class="req">*</span></label>
+                  <select id="actTeacherSelect" class="form-select" required onchange="handleActTeacherSelectChange()">
+                    <option value="">-- Pilih Guru --</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Sasaran Rombongan Belajar (Kelas) <span class="req">*</span></label>
+                  <select id="actClassSelect" class="form-select" required>
+                    <option value="Kelas 1">Kelas 1</option>
+                    <option value="Kelas 2">Kelas 2</option>
+                    <option value="Kelas 3">Kelas 3</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Jam Pelajaran Ke- <span class="req">*</span></label>
+                  <input type="text" id="actTimeHours" class="form-control" required placeholder="Contoh: Jam Ke 1 - 2 (07.30 - 08.50)">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Mata Pelajaran <span class="req">*</span></label>
+                  <input type="text" id="actSubject" class="form-control" required placeholder="Contoh: Al-Qur'an Hadis / Fiqih / Tematik">
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label">Capaian Pembelajaran (CP) / Materi Pokok <span class="req">*</span></label>
+                  <input type="text" id="actTopic" class="form-control" required placeholder="Contoh: Membaca QS At-Tin dengan kaidah Tajwid Mad Thabi'i">
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label">Uraian Ringkas Pembelajaran / Metode KBM</label>
+                  <textarea id="actSummary" class="form-textarea" placeholder="Tuliskan metode (misal: Problem Based Learning, Praktik Hafalan, Diskusi Kelompok)"></textarea>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Simpan Aktivitas Pembelajaran
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- SUB 3: JURNAL PEMBELAJARAN GURU SAYA -->
+          <div id="sub-jurnal" class="teacher-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0;">Buku Jurnal Refleksi Mengajar Saya</h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">Dokumentasi catatan proses KBM, perkembangan siswa, dan tindak lanjut kurikuler yang Anda catat.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Cetak Jurnal Saya
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th style="width: 155px;">Tanggal &amp; Jam KBM</th>
+                    <th>Nama Pendidik</th>
+                    <th>Kelas &amp; Mapel</th>
+                    <th>Materi / Capaian Pembelajaran</th>
+                    <th>Catatan &amp; Tindak Lanjut</th>
+                  </tr>
+                </thead>
+                <tbody id="journalTableBody">
+                  <!-- Rendered via JS (Data Personal Guru) -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB 4: REKAPITULASI PRESENSI PENDIDIK SAYA -->
+          <div id="sub-rekap-guru" class="teacher-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0;">Riwayat Presensi Mandiri Pendidik Saya Hari Ini</h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">Daftar rekam kehadiran dan geotagging selfie mandiri Anda hari ini.</p>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="renderTeacherAttendanceTable()">Muat Ulang Data</button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th>Foto Selfie</th>
+                    <th>Nama Guru &amp; NIP</th>
+                    <th style="width: 155px;">Tanggal &amp; Jam Absen</th>
+                    <th>Status Presensi</th>
+                    <th>Keterangan</th>
+                  </tr>
+                </thead>
+                <tbody id="teacherAttendanceTableBody">
+                  <!-- Rendered via JS (Data Personal Guru) -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUB 5: MATRIKS NAMA GURU DAN MATA PELAJARAN (KODE 1 - 17) -->
+          <div id="sub-jadwal" class="teacher-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); font-size: 1.05rem; margin: 0;">
+                  Tabel Resmi Distribusi Mata Pelajaran &amp; Kode Guru (1 - 17)
+                </h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">
+                  Matriks resmi pembagian tugas mengajar di lingkungan madrasah sesuai SK Kurikulum KMA 450.
+                </p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Cetak Matriks Jadwal
+              </button>
+            </div>
+
+            <div id="teacherScheduleNotice" style="margin-bottom: 1rem;">
+              <!-- Banner informasi personal guru dirender via JS -->
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr style="background: var(--color-primary-subtle); border-bottom: 2px solid var(--color-primary);">
+                    <th colspan="3" style="text-align: center; border-right: 2px solid var(--color-border); color: var(--color-primary-dark); font-weight: 800;">DISTRIBUSI KELOMPOK 1 (KODE 1 - 9)</th>
+                    <th colspan="3" style="text-align: center; color: var(--color-primary-dark); font-weight: 800;">DISTRIBUSI KELOMPOK 2 (KODE 10 - 17)</th>
+                  </tr>
+                  <tr style="background: #f8fafc;">
+                    <th style="width: 22%;">Mata Pelajaran</th>
+                    <th style="width: 20%;">Nama Guru</th>
+                    <th style="width: 8%; text-align: center; border-right: 2px solid var(--color-border);">Kode</th>
+                    <th style="width: 22%;">Mata Pelajaran</th>
+                    <th style="width: 20%;">Nama Guru</th>
+                    <th style="width: 8%; text-align: center;">Kode</th>
+                  </tr>
+                </thead>
+                <tbody id="scheduleMatrixTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. TAB CEK KEHADIRAN SISWA (KELAS 1, 2, 3) -->
+    <!-- ========================================== -->
+    <section id="tab-siswa" class="tab-content d-none">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Presensi &amp; Database Kehadiran Peserta Didik
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button class="btn btn-outline btn-sm" onclick="switchSiswaSubTab('history')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Lihat History Arsip
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="window.print()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              Cetak Presensi
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          
+          <!-- Sub-Tab Navigasi: 1. Input Presensi & 2. Database Riwayat -->
+          <div class="subnav-pills" style="margin-bottom: 1.25rem;">
+            <button class="subnav-btn active" id="btnSubSiswaInput" onclick="switchSiswaSubTab('input')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              1. Input &amp; Pengecekan Presensi Harian
+            </button>
+            <button class="subnav-btn" id="btnSubSiswaHistory" onclick="switchSiswaSubTab('history')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              2. Database &amp; Riwayat Presensi Tersimpan (<span id="historyBadgeCount">0</span> Sesi)
+            </button>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- SUB-PANE 1: INPUT & PENGECEKAN PRESENSI HARIAN -->
+          <!-- ============================================== -->
+          <div id="sub-siswa-input">
+            <!-- ALUR LOGIKA RESMI: Atur Tanggal > Atur Guru Pengisi > Pilih Kelas > Input Kehadiran > Simpan -->
+            
+            <!-- Step 1 & 2: Atur Tanggal (Hari/Bulan/Tahun) & Guru Pengisi Absensi -->
+            <div style="background: #ffffff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); padding: 14px 18px; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
+              <div style="font-size: 0.8rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                <span style="background: var(--color-primary); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem;">1</span>
+                ALUR LOGIKA: ATUR TANGGAL &amp; GURU PENGISI ABSENSI
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-end; justify-content: space-between;">
+                <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: flex-end; flex: 1;">
+                  <div>
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); display: block; margin-bottom: 5px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                      Tanggal Presensi (Hari / Bulan / Tahun): <span class="req" style="color:var(--color-danger)">*</span>
+                    </label>
+                    <input type="date" id="studentAttendanceDate" class="form-control" style="padding: 7px 12px; font-size: 0.875rem; font-weight: 600; width: 185px;" onchange="handleStudentAttendanceDateChange()">
+                  </div>
+                  <div style="flex: 1; min-width: 260px;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); display: block; margin-bottom: 5px;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 3px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      Guru yang Mengisi Absensi Siswa: <span class="req" style="color:var(--color-danger)">*</span>
+                    </label>
+                    <select id="studentAttendanceTeacherSelect" class="form-select" style="padding: 7px 12px; font-size: 0.875rem; font-weight: 600;" onchange="handleStudentAttendanceTeacherChange()">
+                      <!-- Rendered dynamically via JS -->
+                    </select>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 4px;">
+                  <button class="btn btn-primary btn-sm" onclick="exportStudentAttendanceExcel()" style="background: #15803d; border-color: #15803d; font-weight: 600;" title="Unduh Berkas Format Excel (.xls)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Unduh Excel (.xls)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Pemilihan Tab Kelas Sesuai Permintaan User: Kelas 1, Kelas 2, Kelas 3 -->
+            <div style="margin-bottom: 0.75rem;">
+              <div style="font-size: 0.8rem; font-weight: 800; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                <span style="background: var(--color-primary); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem;">2</span>
+                PILIH ROMBONGAN BELAJAR (KELAS 1 / 2 / 3):
+              </div>
+              <div class="subnav-pills" style="margin-bottom: 1rem; border-bottom: none;">
+                <button class="subnav-btn active" id="btnClass1" onclick="switchStudentClass('Kelas 1')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Daftar Siswa Kelas 1 (Kelas X)
+                </button>
+                <button class="subnav-btn" id="btnClass2" onclick="switchStudentClass('Kelas 2')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Daftar Siswa Kelas 2 (Kelas XI)
+                </button>
+                <button class="subnav-btn" id="btnClass3" onclick="switchStudentClass('Kelas 3')">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  Daftar Siswa Kelas 3 (Kelas XII)
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Alert Banner: Dinamis Apakah Sudah Ada Data Tersimpan Atau Kosong -->
+            <div id="attendanceBatchStatusAlert" style="margin-bottom: 1.25rem;">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Statistik Ringkas Kehadiran Sesi Ini (Termasuk Belum Diisi) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem;">
+              <div style="background: #ffffff; border: 1px solid var(--color-border); padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: var(--color-text-muted); display: block;">Total Siswa</span>
+                <strong style="font-size: 1.2rem; color: var(--color-text-main);" id="classStatTotal">0</strong>
+              </div>
+              <div style="background: var(--color-success-bg); border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: var(--color-success); display: block;">Hadir (H)</span>
+                <strong style="font-size: 1.2rem; color: var(--color-success);" id="classStatHadir">0</strong>
+              </div>
+              <div style="background: var(--color-warning-bg); border: 1px solid #fde68a; padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: var(--color-warning); display: block;">Sakit (S)</span>
+                <strong style="font-size: 1.2rem; color: var(--color-warning);" id="classStatSakit">0</strong>
+              </div>
+              <div style="background: var(--color-info-bg); border: 1px solid #bae6fd; padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: var(--color-info); display: block;">Izin (I)</span>
+                <strong style="font-size: 1.2rem; color: var(--color-info);" id="classStatIzin">0</strong>
+              </div>
+              <div style="background: var(--color-danger-bg); border: 1px solid #fecaca; padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: var(--color-danger); display: block;">Alpa (A)</span>
+                <strong style="font-size: 1.2rem; color: var(--color-danger);" id="classStatAlpa">0</strong>
+              </div>
+              <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px 14px; border-radius: var(--radius-md);">
+                <span style="font-size: 0.72rem; color: #64748b; display: block;">Belum Diisi (-)</span>
+                <strong style="font-size: 1.2rem; color: #64748b;" id="classStatBelum">0</strong>
+              </div>
+            </div>
+
+            <!-- Toolbar Input Cepat & Pencarian Siswa -->
+            <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+                <button class="btn btn-primary btn-sm" onclick="markAllStudentsPresent()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  Tandai Semua Hadir (H)
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="clearCurrentAttendanceSelection()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  Kosongkan Semua Pilihan
+                </button>
+              </div>
+              <div style="display: flex; gap: 0.5rem; flex: 1; max-width: 400px;">
+                <input type="text" id="studentSearchInput" class="form-control" placeholder="Cari nama siswa atau NISN..." oninput="handleStudentSearch(this.value)">
+                <button class="btn btn-secondary btn-sm" onclick="resetStudentFilter()">Reset</button>
+              </div>
+            </div>
+
+            <!-- Step 4: Tabel Presensi Siswa -->
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">No</th>
+                    <th style="width: 105px;">NISN</th>
+                    <th>Nama Peserta Didik</th>
+                    <th style="width: 95px;">Jenis Kelamin</th>
+                    <th style="width: 180px;">Guru Pengisi</th>
+                    <th style="width: 170px; text-align: center;">Status Kehadiran</th>
+                    <th>Catatan Khusus Siswa</th>
+                  </tr>
+                </thead>
+                <tbody id="studentAttendanceTableBody">
+                  <!-- Rendered dynamically sorted A to Z via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Step 5: Tombol Simpan & Rekam Database -->
+            <div style="margin-top: 1.25rem; padding: 14px 18px; background: #f8fafc; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); border-radius: var(--radius-md); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <strong style="color: var(--color-primary-dark); font-size: 0.925rem; display: block;" id="saveSectionTitle">
+                  💾 Simpan Data Presensi ke Database
+                </strong>
+                <span id="saveSessionHint" style="font-size: 0.8rem; color: var(--color-text-muted);">
+                  Pastikan status kehadiran siswa telah diisi, lalu klik simpan untuk memperbarui riwayat presensi madrasah.
+                </span>
+              </div>
+              <div style="display: flex; gap: 0.75rem; align-items: center;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="clearCurrentAttendanceSelection()">
+                  Reset Form
+                </button>
+                <button type="button" class="btn btn-primary" id="btnSaveAttendanceBatch" onclick="saveCurrentStudentAttendanceBatch()" style="font-weight: 700; padding: 9px 22px; font-size: 0.9rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  <span id="btnSaveAttendanceText">Simpan Data Presensi</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- SUB-PANE 2: DATABASE & RIWAYAT PRESENSI        -->
+          <!-- ============================================== -->
+          <div id="sub-siswa-history" class="d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); font-size: 1.1rem; margin-bottom: 3px;">
+                  Database Arsip &amp; Riwayat Presensi Siswa Tersimpan
+                </h4>
+                <p style="font-size: 0.825rem; color: var(--color-text-muted);">
+                  Daftar rekam kehadiran per tanggal &amp; kelas. Anda dapat memeriksa, mengedit kesalahan penulisan/kehadiran, atau mengunduh rekapan Excel resmi.
+                </p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="switchSiswaSubTab('input')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Input / Cek Presensi Baru
+              </button>
+            </div>
+
+            <!-- Filter Riwayat Database (Kelas & Tanggal) -->
+            <div style="background: #f8fafc; border: 1px solid var(--color-border); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+              <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Kelas:
+                  </label>
+                  <select id="filterHistoryClass" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 140px;" onchange="renderStudentHistoryTable()">
+                    <option value="ALL">Semua Kelas</option>
+                    <option value="Kelas 1">Kelas 1 (X)</option>
+                    <option value="Kelas 2">Kelas 2 (XI)</option>
+                    <option value="Kelas 3">Kelas 3 (XII)</option>
+                  </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Tanggal:
+                  </label>
+                  <input type="date" id="filterHistoryDate" class="form-control" style="padding: 5px 10px; font-size: 0.825rem; width: 165px;" onchange="renderStudentHistoryTable()">
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="resetHistoryFilters()">
+                Reset Filter Arsip
+              </button>
+            </div>
+
+            <!-- Tabel Riwayat Database Presensi -->
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">No</th>
+                    <th style="width: 140px;">Tanggal Presensi</th>
+                    <th style="width: 110px;">Rombel / Kelas</th>
+                    <th>Guru Pengisi Absensi</th>
+                    <th style="width: 220px; text-align: center;">Rekap Kehadiran (H/S/I/A)</th>
+                    <th style="width: 160px;">Waktu Disimpan</th>
+                    <th style="width: 210px; text-align: right;">Aksi &amp; Koreksi</th>
+                  </tr>
+                </thead>
+                <tbody id="studentHistoryTableBody">
+                  <!-- Rendered dynamically via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 5. TAB OPERATOR / ADMIN KURIKULUM          -->
+    <!-- ========================================== -->
+    <section id="tab-operator" class="tab-content d-none">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Panel Administrator &amp; Operator Kurikulum
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+            <span class="badge" style="background:#f8fafc; color:#334155; border:1px solid #cbd5e1; font-size: 0.8rem; padding: 5px 11px; font-family: 'JetBrains Mono', 'Consolas', monospace;">
+              Penulis: <strong style="color:var(--color-primary-dark); font-family: 'JetBrains Mono', 'Consolas', monospace;">&lt;nmcode/&gt;</strong>
+            </span>
+            <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb; font-size: 0.8rem; padding: 5px 10px;">
+              <span style="display:inline-block; width:7px; height:7px; background:#16a34a; border-radius:50%; margin-right:4px;"></span>
+              Operator: <strong>admin</strong>
+            </span>
+            <button class="btn btn-secondary btn-sm" onclick="logoutAdminOperator()" title="Kunci Akses Operator">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kunci &amp; Keluar
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.5rem;">
+            Ruang kendali operator &amp; Waka Kurikulum untuk memantau agenda seluruh dewan guru (Full Jurnal Refleksi, Rekapitulasi Presensi Pendidik, Matriks Jadwal), koreksi data guru &amp; siswa, serta pengelolaan kode masuk dan identitas madrasah.
+          </p>
+
+          <!-- Sub Nav Operator -->
+          <div class="subnav-pills">
+            <button class="subnav-btn active" id="btnOpJurnalAll" onclick="switchOpSubTab('op-jurnal-all')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Full Jurnal Refleksi Dewan Guru
+            </button>
+            <button class="subnav-btn" id="btnOpRekapGuruAll" onclick="switchOpSubTab('op-rekap-guru-all')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+              Full Rekap Presensi Pendidik
+            </button>
+            <button class="subnav-btn" id="btnOpMatriksGuru" onclick="switchOpSubTab('op-matriks-guru')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+              Matriks Guru &amp; Mapel (Kode 1-17)
+            </button>
+            <button class="subnav-btn" id="btnOpGuru" onclick="switchOpSubTab('op-guru')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Koreksi &amp; Kelola Data Guru
+            </button>
+            <button class="subnav-btn" id="btnOpKodeGuru" onclick="switchOpSubTab('op-kode-guru')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Kelola Kode Masuk Guru
+            </button>
+            <button class="subnav-btn" id="btnOpSiswa" onclick="switchOpSubTab('op-siswa')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Koreksi &amp; Kelola Nama Siswa
+            </button>
+            <button class="subnav-btn" id="btnOpPengaturan" onclick="switchOpSubTab('op-pengaturan')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Identitas Lembaga &amp; Upload Logo
+            </button>
+            <button class="subnav-btn" id="btnOpCloudSync" onclick="switchOpSubTab('op-cloud-sync')" style="color: #0f5a34; font-weight: 700;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
+              Backup Google Sheets
+            </button>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- PANE OPERATOR 1: FULL JURNAL REFLEKSI GURU     -->
+          <!-- ============================================== -->
+          <div id="op-jurnal-all" class="operator-sub-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0; font-size: 1.1rem;">
+                  Full Jurnal Refleksi Mengajar Seluruh Dewan Guru
+                </h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">
+                  Supervisi kurikulum lengkap atas seluruh agenda materi, capaian pembelajaran, catatan perkembangan siswa, dan evaluasi KBM seluruh guru.
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb; font-size: 0.825rem; padding: 6px 12px;">
+                  Total Jurnal: <strong id="opJournalTotalCount" style="margin-left: 3px;">0</strong>
+                </span>
+                <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Cetak Jurnal Guru
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Jurnal Operator -->
+            <div style="background: #f8fafc; border: 1px solid var(--color-border); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+              <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Pendidik:
+                  </label>
+                  <select id="opJournalFilterTeacher" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 190px;" onchange="renderOpAllJournalsTable()">
+                    <option value="ALL">Semua Dewan Guru</option>
+                  </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Rombel:
+                  </label>
+                  <select id="opJournalFilterClass" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 140px;" onchange="renderOpAllJournalsTable()">
+                    <option value="ALL">Semua Kelas</option>
+                    <option value="Kelas 1">Kelas 1</option>
+                    <option value="Kelas 2">Kelas 2</option>
+                    <option value="Kelas 3">Kelas 3</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="resetOpJournalFilters()">
+                Reset Filter Jurnal
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">No</th>
+                    <th style="width: 155px;">Tanggal &amp; Jam KBM</th>
+                    <th>Nama Pendidik</th>
+                    <th style="width: 170px;">Rombel &amp; Mapel</th>
+                    <th>Materi / Capaian Pembelajaran</th>
+                    <th>Catatan &amp; Evaluasi KBM</th>
+                    <th style="text-align: right; width: 90px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="opJournalTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- PANE OPERATOR 2: FULL REKAP PRESENSI PENDIDIK  -->
+          <!-- ============================================== -->
+          <div id="op-rekap-guru-all" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0; font-size: 1.1rem;">
+                  Full Rekapitulasi Presensi Seluruh Dewan Guru Hari Ini
+                </h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">
+                  Monitoring kehadiran mandiri, bukti foto selfie, jam kedatangan/kepulangan, dan dinas luar seluruh dewan guru hari ini.
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb; font-size: 0.825rem; padding: 6px 12px;">
+                  Total Presensi: <strong id="opAttTotalCount" style="margin-left: 3px;">0</strong>
+                </span>
+                <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                  Cetak Rekap Presensi
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter Presensi Operator -->
+            <div style="background: #f8fafc; border: 1px solid var(--color-border); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;">
+              <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Pendidik:
+                  </label>
+                  <select id="opAttFilterTeacher" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 190px;" onchange="renderOpAllTeacherAttendanceTable()">
+                    <option value="ALL">Semua Dewan Guru</option>
+                  </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); white-space: nowrap;">
+                    Filter Status:
+                  </label>
+                  <select id="opAttFilterStatus" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 160px;" onchange="renderOpAllTeacherAttendanceTable()">
+                    <option value="ALL">Semua Status / Tipe</option>
+                    <option value="Tepat Waktu">Tepat Waktu</option>
+                    <option value="Terlambat">Terlambat</option>
+                    <option value="Datang (Pagi)">Datang (Pagi)</option>
+                    <option value="Pulang (Sore)">Pulang (Sore)</option>
+                    <option value="Dinas Luar">Dinas Luar</option>
+                    <option value="Izin / Sakit">Izin / Sakit</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="resetOpAttFilters()">
+                Reset Filter Presensi
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">No</th>
+                    <th style="width: 60px;">Foto</th>
+                    <th>Nama Guru &amp; NIP</th>
+                    <th style="width: 155px;">Tanggal &amp; Jam Absen</th>
+                    <th style="width: 180px;">Status &amp; Tipe Presensi</th>
+                    <th>Keterangan / Lokasi Tugas</th>
+                    <th style="text-align: right; width: 90px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="opTeacherAttendanceTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- PANE OPERATOR 3: MATRIKS GURU & MAPEL (1 - 17) -->
+          <!-- ============================================== -->
+          <div id="op-matriks-guru" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0; font-size: 1.1rem;">
+                  Matriks Resmi Distribusi Mata Pelajaran &amp; Kode Guru (1 - 17)
+                </h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">
+                  Master tabel SK Pembagian Tugas Mengajar Kurikulum Madrasah Aliyah Al-Ikhlash Sindangsari Cikaum Subang.
+                </p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Cetak Matriks Jadwal Resmi
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr style="background: var(--color-primary-subtle); border-bottom: 2px solid var(--color-primary);">
+                    <th colspan="3" style="text-align: center; border-right: 2px solid var(--color-border); color: var(--color-primary-dark); font-weight: 800;">DISTRIBUSI KELOMPOK 1 (KODE 1 - 9)</th>
+                    <th colspan="3" style="text-align: center; color: var(--color-primary-dark); font-weight: 800;">DISTRIBUSI KELOMPOK 2 (KODE 10 - 17)</th>
+                  </tr>
+                  <tr style="background: #f8fafc;">
+                    <th style="width: 22%;">Mata Pelajaran</th>
+                    <th style="width: 20%;">Nama Guru</th>
+                    <th style="width: 8%; text-align: center; border-right: 2px solid var(--color-border);">Kode</th>
+                    <th style="width: 22%;">Mata Pelajaran</th>
+                    <th style="width: 20%;">Nama Guru</th>
+                    <th style="width: 8%; text-align: center;">Kode</th>
+                  </tr>
+                </thead>
+                <tbody id="opScheduleMatrixTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE OPERATOR: GURU -->
+          <div id="op-guru" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h4 style="font-weight: 700; color: var(--color-primary-dark);">Daftar &amp; Koreksi Penulisan Data Guru</h4>
+              <button class="btn btn-primary btn-sm" onclick="openAddTeacherModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Tambah Pendidik Baru
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th style="width: 75px; text-align: center;">Kode</th>
+                    <th>Nama Lengkap Guru</th>
+                    <th>NIP / NUPTK</th>
+                    <th>Mata Pelajaran Diampu</th>
+                    <th>Jabatan</th>
+                    <th style="text-align: right; width: 130px;">Aksi Koreksi</th>
+                  </tr>
+                </thead>
+                <tbody id="opTeacherTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE OPERATOR: KELOLA KODE MASUK GURU (ADMIN GATE GURU) -->
+          <div id="op-kode-guru" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0;">Pengaturan Kode Masuk (Admin Gate Guru)</h4>
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin: 3px 0 0 0;">
+                  Setiap guru wajib memasukkan kode masuk ini saat membuka menu Absensi Guru &amp; Jurnal Mengajar.
+                </p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="generateAllTeacherCodes()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                Buat Ulang Semua Kode Otomatis
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th>Nama Lengkap Pendidik</th>
+                    <th style="width: 90px; text-align: center;">Kode Jadwal</th>
+                    <th>Mata Pelajaran Diampu</th>
+                    <th style="width: 230px;">Kode Masuk Guru (PIN)</th>
+                    <th style="text-align: right; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="opTeacherCodesTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE OPERATOR: SISWA -->
+          <div id="op-siswa" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <label style="font-size: 0.825rem; font-weight: 600;">Filter Kelas:</label>
+                <select id="opClassFilter" class="form-select" style="width: 150px; padding: 5px 10px;" onchange="renderOpStudentsTable()">
+                  <option value="Semua">Semua Kelas</option>
+                  <option value="Kelas 1">Kelas 1</option>
+                  <option value="Kelas 2">Kelas 2</option>
+                  <option value="Kelas 3">Kelas 3</option>
+                </select>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Tambah Siswa Baru
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">No</th>
+                    <th>NISN</th>
+                    <th>Nama Peserta Didik</th>
+                    <th>Kelas</th>
+                    <th>Jenis Kelamin</th>
+                    <th style="text-align: right; width: 130px;">Aksi Koreksi</th>
+                  </tr>
+                </thead>
+                <tbody id="opStudentTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PANE OPERATOR: PENGATURAN LOGO & MADRASAH -->
+          <div id="op-pengaturan" class="operator-sub-pane d-none">
+            <div class="card" style="margin-bottom: 1.25rem;">
+              <div class="card-header">
+                <span style="font-weight: 700; color: var(--color-primary-dark);">Penggantian &amp; Upload Logo Madrasah</span>
+              </div>
+              <div class="card-body">
+                <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                  <div class="logo-wrapper" style="width: 80px; height: 80px;">
+                    <img id="opLogoPreview" src="assets/images/logo-madrasah.svg" alt="Preview Logo" class="logo-img">
+                  </div>
+                  <div style="flex: 1; min-width: 260px;">
+                    <h5 style="font-weight: 700; margin-bottom: 4px;">Pilih Berkas Logo Madrasah Lokal</h5>
+                    <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 10px;">
+                      Pilih file gambar logo (.png, .jpg, atau .svg) dari komputer Anda. Gambar akan otomatis tersimpan langsung di browser Anda atau Anda juga dapat meletakkannya di folder lokal <code>assets/images/logo-madrasah.svg</code>.
+                    </p>
+                    <div style="display: flex; gap: 0.5rem;">
+                      <label class="btn btn-primary btn-sm" style="cursor: pointer;">
+                        Pilih Gambar Logo dari Komputer
+                        <input type="file" id="logoFileInput" accept="image/*" style="display: none;" onchange="handleLogoUpload(event)">
+                      </label>
+                      <button type="button" class="btn btn-secondary btn-sm" onclick="resetDefaultLogo()">Gunakan Logo Standar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Pengaturan Profil Madrasah -->
+            <form id="formSchoolProfile" onsubmit="saveSchoolProfile(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label class="form-label">Nama Lembaga Madrasah <span class="req">*</span></label>
+                  <input type="text" id="profSchoolName" class="form-control" required value="MADRASAH AL-IKHLAS">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Nomor Statistik Madrasah (NSM) <span class="req">*</span></label>
+                  <input type="text" id="profNsm" class="form-control" required value="111232010045">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">NPSN</label>
+                  <input type="text" id="profNpsn" class="form-control" value="69784321">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Status Akreditasi</label>
+                  <input type="text" id="profAkreditasi" class="form-control" value="A (Unggul)">
+                </div>
+                <div class="form-group full-width">
+                  <label class="form-label">Alamat Lengkap Madrasah</label>
+                  <input type="text" id="profAddress" class="form-control" value="Jl. Pendidikan No. 45, Kompleks Islamic Center">
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="resetToInitialData()">
+                  Kembalikan Data Contoh Bawaan
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Simpan Pengaturan Madrasah
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ============================================== -->
+          <!-- PANE OPERATOR: SINKRONISASI & BACKUP CLOUD     -->
+          <!-- ============================================== -->
+          <div id="op-cloud-sync" class="operator-sub-pane d-none">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+              <div>
+                <h4 style="font-weight: 700; color: var(--color-primary-dark); margin: 0; font-size: 1.15rem;">
+                  Pusat Sinkronisasi Google Sheets &amp; Backup Cloud Madrasah
+                </h4>
+                <p style="font-size: 0.825rem; color: var(--color-text-muted); margin: 4px 0 0 0;">
+                  Cadangkan seluruh master data guru, siswa, jurnal KBM, dan rekaman presensi langsung ke Google Spreadsheet &amp; Google Drive resmi madrasah.
+                </p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <span id="cloudStatusBadge" class="badge" style="background: #eaf6ef; color: #0f5a34; border: 1px solid #b8e2cb; font-size: 0.85rem; padding: 6px 12px;">
+                  <span style="display:inline-block; width:8px; height:8px; background:#16a34a; border-radius:50%; margin-right:6px;"></span>
+                  Siap Sinkronisasi
+                </span>
+              </div>
+            </div>
+
+            <!-- Kartu Status Sinkronisasi Real-Time -->
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); margin-bottom: 1.5rem;">
+              <div class="stat-card" style="border-left: 4px solid var(--color-primary);">
+                <div class="stat-label">Terakhir Disinkronkan</div>
+                <div class="stat-value" id="cloudLastSyncTime" style="font-size: 1.05rem; color: var(--color-primary-dark);">-</div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Status: Tersimpan Lokal &amp; Cloud</div>
+              </div>
+              <div class="stat-card" style="border-left: 4px solid #0284c7;">
+                <div class="stat-label">Total Data Guru &amp; Siswa</div>
+                <div class="stat-value" id="cloudStatMaster" style="font-size: 1.05rem; color: #0284c7;">-</div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Sheet DATA_GURU &amp; DATA_SISWA</div>
+              </div>
+              <div class="stat-card" style="border-left: 4px solid var(--color-gold);">
+                <div class="stat-label">Total Arsip Presensi Siswa</div>
+                <div class="stat-value" id="cloudStatPresensiSiswa" style="font-size: 1.05rem; color: #b45309;">-</div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Sheet PRESENSI_SISWA</div>
+              </div>
+              <div class="stat-card" style="border-left: 4px solid #16a34a;">
+                <div class="stat-label">Total Jurnal &amp; Presensi Guru</div>
+                <div class="stat-value" id="cloudStatGuruAgenda" style="font-size: 1.05rem; color: #16a34a;">-</div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">Sheet JURNAL_KBM &amp; PRESENSI_GURU</div>
+              </div>
+            </div>
+
+            <!-- Form Pengaturan URL Endpoint Google Apps Script -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <div class="card-header" style="background: #f8fafc;">
+                <div style="font-weight: 700; color: var(--color-primary-dark); display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  Pengaturan URL Web App Google Apps Script
+                </div>
+                <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb;">100% Gratis Tanpa Biaya Server</span>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">
+                  Masukkan URL Web App Google Apps Script dari Google Spreadsheet MA Al-Ikhlash (berakhiran <code>/exec</code>). Seluruh database akan otomatis disinkronkan ke Spreadsheet tersebut.
+                </p>
+
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                  <input type="url" id="gasEndpointUrl" class="form-control" style="flex: 1; min-width: 280px; font-family: monospace; font-size: 0.85rem;" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+                  <button type="button" class="btn btn-secondary" onclick="saveGasEndpointUrl()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    Simpan URL
+                  </button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="testGasConnection()">
+                    Tes Koneksi
+                  </button>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 0.5rem; flex-wrap: wrap;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                    <input type="checkbox" id="checkAutoSyncCloud" onchange="toggleAutoSyncCloud(event)" style="width: 17px; height: 17px; accent-color: var(--color-primary);">
+                    Auto-Sync Realtime (Kirim otomatis setiap kali guru/wali kelas menyimpan presensi atau jurnal KBM)
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Aksi Utama Sinkronisasi & Backup -->
+            <div style="background: var(--color-primary-subtle); border: 1px solid var(--color-primary-border); padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 1.5rem;">
+              <h5 style="font-weight: 700; color: var(--color-primary-dark); margin-bottom: 6px; font-size: 1.05rem;">
+                Tindakan Sinkronisasi &amp; Cadangan Database
+              </h5>
+              <p style="font-size: 0.825rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">
+                Klik tombol di bawah ini untuk mengirimkan seluruh data saat ini ke 6 sheet Google Spreadsheet atau mengunduh arsip cadangan offline.
+              </p>
+
+              <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn btn-primary" id="btnSyncAllToCloud" onclick="syncAllDataToGoogleSheets()" style="font-weight: 700; padding: 10px 22px; font-size: 0.95rem;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
+                  <span id="btnSyncAllText">🚀 Sinkronkan &amp; Backup Semua Data ke Google Sheets</span>
+                </button>
+
+                <button type="button" class="btn btn-secondary" onclick="downloadJsonBackup()" title="Unduh Arsip Backup Lengkap">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  Unduh Backup Offline (.JSON)
+                </button>
+
+                <label class="btn btn-outline" style="cursor: pointer; margin: 0;" title="Pulihkan data dari berkas JSON">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Pulihkan / Restore dari (.JSON)
+                  <input type="file" id="inputRestoreJson" accept=".json" style="display: none;" onchange="restoreJsonBackup(event)">
+                </label>
+              </div>
+            </div>
+
+            <!-- Petunjuk Langkah Mudah Pemasangan (3 Menit) -->
+            <div class="card">
+              <div class="card-header" style="background: #f8fafc;">
+                <span style="font-weight: 700; color: var(--color-primary-dark);">
+                  📋 Panduan Singkat Pemasangan Google Sheets (3 Langkah Mudah):
+                </span>
+              </div>
+              <div class="card-body" style="font-size: 0.85rem; line-height: 1.6;">
+                <ol style="margin: 0; padding-left: 1.25rem;">
+                  <li style="margin-bottom: 8px;">
+                    <strong>Buat Google Spreadsheet Baru</strong>: Buka <a href="https://sheets.new" target="_blank" style="color:var(--color-primary); font-weight:700;">sheets.new</a> dengan akun Google madrasah, beri nama <em>"SIMADRASAH_AL_IKHLASH_DATABASE"</em>.
+                  </li>
+                  <li style="margin-bottom: 8px;">
+                    <strong>Buka Apps Script</strong>: Klik menu <strong>Ekstensi (Extensions)</strong> &gt; <strong>Apps Script</strong>. Hapus isi bawaannya, lalu buka berkas <code>google_apps_script.js</code> yang sudah kami buat di folder proyek, salin seluruh isinya dan tempel ke Apps Script, lalu klik <strong>Simpan</strong> (ikon disket).
+                  </li>
+                  <li style="margin-bottom: 8px;">
+                    <strong>Deploy sebagai Web App</strong>: Klik tombol biru <strong>Deploy (Terapkan)</strong> &gt; <strong>Deployment baru</strong>. Pilih jenis <strong>Aplikasi Web</strong>, atur Akses: <strong>"Siapa Saja" (Anyone)</strong>, lalu klik <strong>Deploy</strong>. Salin URL Web App yang muncul (berakhiran <code>/exec</code>) lalu tempelkan ke kolom URL di atas dan klik <strong>Simpan URL</strong>. Selesai!
+                  </li>
+                </ol>
+                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 12px; color: #92400e; font-size: 0.8rem;">
+                  💡 <strong>Catatan:</strong> Berkas kode skrip siap pakai telah tersimpan di komputer Anda pada berkas: <code>google_apps_script.js</code>. Anda tinggal membukanya dan menyalin kodenya.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: KOREKSI / EDIT GURU -->
+  <div class="modal-backdrop" id="modalEditTeacher">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTeacherTitle">Koreksi Data Pendidik</h3>
+        <button type="button" class="btn-close" onclick="closeModal('modalEditTeacher')">&times;</button>
+      </div>
+      <form id="formSaveTeacher" onsubmit="saveTeacherFromModal(event)">
+        <div class="modal-body">
+          <input type="hidden" id="modalTeacherId">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Kode Guru / Jadwal</label>
+            <input type="text" id="modalTeacherCode" class="form-control" placeholder="Contoh: 1, 2 atau 6">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nama Lengkap Guru <span class="req">*</span></label>
+            <input type="text" id="modalTeacherName" class="form-control" required placeholder="Contoh: TITA ROSITA / MIMI MUTIARA, S.Pd">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+              <span>NIP / NUPTK <span style="font-weight: normal; font-size: 0.75rem; color: var(--color-text-muted);">(Opsional: Boleh Diisi atau Dikosongkan)</span></span>
+            </label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="modalTeacherNip" class="form-control" placeholder="Contoh: 19830514 200801 2 005 atau biarkan kosong (-)">
+              <button type="button" class="btn btn-outline btn-sm" onclick="clearTeacherNipInput()" style="white-space: nowrap; font-size: 0.775rem;" title="Kosongkan jika pendidik belum memiliki NIP">
+                Kosongkan NIP (-)
+              </button>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--color-text-light); display: block; margin-top: 4px;">
+              *Tidak semua guru sudah memiliki NIP. Anda dapat klik "Kosongkan NIP (-)" atau ketik tanda minus (<code>-</code>) jika belum ada.
+            </span>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Mata Pelajaran Diampu <span class="req">*</span></label>
+            <input type="text" id="modalTeacherMapel" class="form-control" required placeholder="Contoh: Alqur'an hadist, Akidah akhlak">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Jabatan Struktural / Peran</label>
+            <input type="text" id="modalTeacherRole" class="form-control" placeholder="Contoh: Guru PAI / Wali Kelas">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kode Masuk Guru (PIN Admin Gate Guru) <span class="req">*</span></label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="modalTeacherAccessCode" class="form-control" required placeholder="Contoh: GURU-01 / 1234" style="font-family: monospace; font-weight: 700;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="generateRandomTeacherCode('modalTeacherAccessCode')">Acak Kode</button>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--color-text-light);">*Kode ini digunakan guru untuk masuk ke menu Absensi Guru.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditTeacher')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: KOREKSI / EDIT SISWA -->
+  <div class="modal-backdrop" id="modalEditStudent">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalStudentTitle">Koreksi Data Peserta Didik</h3>
+        <button type="button" class="btn-close" onclick="closeModal('modalEditStudent')">&times;</button>
+      </div>
+      <form id="formSaveStudent" onsubmit="saveStudentFromModal(event)">
+        <div class="modal-body">
+          <input type="hidden" id="modalStudentId">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nama Lengkap Siswa <span class="req">*</span></label>
+            <input type="text" id="modalStudentName" class="form-control" required placeholder="Tuliskan nama lengkap yang benar">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">NISN <span class="req">*</span></label>
+            <input type="text" id="modalStudentNisn" class="form-control" required placeholder="Contoh: 0145892301">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Rombongan Belajar (Kelas) <span class="req">*</span></label>
+            <select id="modalStudentClass" class="form-select" required>
+              <option value="Kelas 1">Kelas 1</option>
+              <option value="Kelas 2">Kelas 2</option>
+              <option value="Kelas 3">Kelas 3</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jenis Kelamin <span class="req">*</span></label>
+            <select id="modalStudentGender" class="form-select" required>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalEditStudent')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH DOKUMENTASI KEGIATAN -->
+  <div class="modal-backdrop" id="modalAddDoc">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Tambah Dokumentasi Kegiatan Baru</h3>
+        <button type="button" class="btn-close" onclick="closeModal('modalAddDoc')">&times;</button>
+      </div>
+      <form id="formAddDoc" onsubmit="saveNewDoc(event)">
+        <div class="modal-body">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Judul Kegiatan <span class="req">*</span></label>
+            <input type="text" id="docTitle" class="form-control" required placeholder="Contoh: Upacara Hari Santri Nasional">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Kategori Kegiatan <span class="req">*</span></label>
+            <select id="docCategory" class="form-select" required>
+              <option value="Kurikulum &amp; KBM">Kurikulum &amp; KBM</option>
+              <option value="Keagamaan &amp; Tahfidz">Keagamaan &amp; Tahfidz</option>
+              <option value="Asesmen &amp; Ujian">Asesmen &amp; Ujian</option>
+              <option value="Kesiswaan &amp; Ekstrakurikuler">Kesiswaan &amp; Ekstrakurikuler</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Tanggal Pelaksanaan <span class="req">*</span></label>
+            <input type="date" id="docDate" class="form-control" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Pilih Foto Kegiatan (File Lokal)</label>
+            <input type="file" id="docFileInput" class="form-control" accept="image/*">
+            <span style="font-size: 0.75rem; color: var(--color-text-light);">*Jika tidak memilih gambar, akan menggunakan gambar standar kurikulum.</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Deskripsi / Ringkasan Acara</label>
+            <textarea id="docDesc" class="form-textarea" placeholder="Tuliskan ulasan singkat mengenai kegiatan tersebut"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAddDoc')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Dokumentasi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN GATE / PINTU MASUK OPERATOR -->
+  <div class="modal-backdrop" id="modalAdminGate">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-header" style="background: var(--color-primary-dark); color: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="background: rgba(255,255,255,0.15); width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="color: #ffffff; font-size: 1rem; margin: 0;">Pintu Keamanan Operator</h3>
+            <span style="font-size: 0.72rem; color: #d1fae5;">Autentikasi Akses Khusus Kurikulum</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" style="color: #ffffff;" onclick="closeModal('modalAdminGate')">&times;</button>
+      </div>
+      <form id="formAdminGate" onsubmit="handleAdminLogin(event)">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <p style="font-size: 0.825rem; color: var(--color-text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
+            Menu Administrator &amp; Operator dilindungi kata sandi lembaga untuk mencegah perubahan data guru dan siswa tanpa wewenang.
+          </p>
+
+          <div id="adminGateAlert" class="d-none" style="background: var(--color-danger-bg); border: 1px solid #fecaca; color: var(--color-danger); padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Username atau password salah! Akses ditolak.
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Username Operator <span class="req">*</span></label>
+            <input type="text" id="adminGateUser" class="form-control" required placeholder="Masukkan username" autocomplete="username">
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.75rem;">
+            <label class="form-label">Password Operator <span class="req">*</span></label>
+            <div style="position: relative;">
+              <input type="password" id="adminGatePass" class="form-control" required placeholder="Masukkan password" autocomplete="current-password" style="padding-right: 36px;">
+              <button type="button" onclick="toggleGatePassVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-text-muted);">
+                <svg id="eyeIconOpen" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalAdminGate')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="padding: 8px 18px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Buka Panel Operator
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TEACHER GATE / PINTU MASUK ABSENSI GURU -->
+  <div class="modal-backdrop" id="modalTeacherGate">
+    <div class="modal-dialog" style="max-width: 460px;">
+      <div class="modal-header" style="background: var(--color-primary); color: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="background: rgba(255,255,255,0.18); width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="color: #ffffff; font-size: 1rem; margin: 0;">Pintu Masuk Absensi Guru</h3>
+            <span style="font-size: 0.72rem; color: #d1fae5;">Autentikasi Dewan Guru MA Al-Ikhlash</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" style="color: #ffffff;" onclick="closeModal('modalTeacherGate')">&times;</button>
+      </div>
+      <form id="formTeacherGate" onsubmit="handleTeacherLogin(event)">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <p style="font-size: 0.825rem; color: var(--color-text-muted); margin-bottom: 1.25rem; line-height: 1.5;">
+            Untuk menjaga keamanan data presensi dan jurnal mengajar, silakan pilih nama Bapak/Ibu Guru dan masukkan kode masuk yang terdaftar di madrasah.
+          </p>
+
+          <div id="teacherGateAlert" class="d-none" style="background: var(--color-danger-bg); border: 1px solid #fecaca; color: var(--color-danger); padding: 8px 12px; border-radius: var(--radius-md); font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="teacherGateAlertText">Nama guru atau kode masuk salah! Silakan coba lagi.</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nama Lengkap Guru Terdaftar <span class="req">*</span></label>
+            <select id="teacherGateSelect" class="form-select" required>
+              <option value="">-- Pilih Nama Bapak/Ibu Guru --</option>
+              <!-- Dinamis via JS -->
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label class="form-label">Kode Masuk Guru (PIN) <span class="req">*</span></label>
+            <div style="position: relative;">
+              <input type="password" id="teacherGateCode" class="form-control" required placeholder="Masukkan kode masuk guru" autocomplete="current-password" style="padding-right: 36px; font-family: monospace; font-weight: 700;">
+              <button type="button" onclick="toggleTeacherGatePassVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-text-muted);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <span style="font-size: 0.72rem; color: var(--color-text-light); margin-top: 4px; display: block;">
+              *Hubungi Operator / Waka Kurikulum jika Bapak/Ibu belum mengetahui kode masuk.
+            </span>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modalTeacherGate')">Batal</button>
+          <button type="submit" class="btn btn-primary" style="padding: 8px 18px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            Masuk Absensi Guru
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer Kelembagaan Madrasah -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <div>
+        <h4 style="color: var(--color-primary-dark); font-weight: 800; margin-bottom: 0.5rem;" id="footerSchoolTitle">
+          MADRASAH ALIYAH AL-IKHLASH
+        </h4>
+        <p style="font-size: 0.825rem; line-height: 1.6; margin-bottom: 0.75rem;">
+          Portal Resmi Manajemen Kurikulum, Administrasi Pendidik &amp; Monitoring Presensi Peserta Didik Berbasis Standar Kementerian Agama Republik Indonesia.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--color-text-light);" id="footerSchoolAddr">
+          KP KRAJAN TENGAH RT/RW 12/03 DESA SINDANGSARI KECAMATAN CIKAUM KABUPATEN SUBANG
+        </p>
+      </div>
+
+      <div>
+        <h5 style="font-weight: 700; color: var(--color-text-main); margin-bottom: 0.75rem;">Struktur Kurikulum</h5>
+        <ul style="list-style: none; font-size: 0.825rem; display: flex; flex-direction: column; gap: 0.4rem;">
+          <li>• KMA No. 450 Tahun 2024</li>
+          <li>• Modul Ajar Kurikulum Merdeka</li>
+          <li>• Supervisi &amp; Jurnal Harian KBM</li>
+          <li>• Asesmen Kompetensi Madrasah</li>
+        </ul>
+      </div>
+
+      <div>
+        <h5 style="font-weight: 700; color: var(--color-text-main); margin-bottom: 0.75rem;">Kontak &amp; Layanan Madrasah</h5>
+        <p style="font-size: 0.825rem; line-height: 1.6;">
+          WhatsApp / Telp: <strong>085119912112</strong><br>
+          Email: <code>MAALIKHLASHSINDANGSARI@GMAIL.COM</code><br>
+          Yayasan Al-Ikhlash • Nahdlatul Ulama
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+      <div>
+        &copy; 2026 MA AL-IKHLASH SUBANG • Sistem Informasi Akademik &amp; Presensi Kehadiran Madrasah.
+      </div>
+      <div style="font-size: 0.825rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 7px;">
+        <span>Penulis &amp; Pembuat Web:</span>
+        <span style="font-family: 'JetBrains Mono', 'Consolas', 'Courier New', Courier, monospace; font-weight: 700; color: #065f46; background: #eaf6ef; border: 1px solid #b8e2cb; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.5px; font-size: 0.825rem;">&lt;nmcode/&gt;</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- File JavaScript Aplikasi -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 380" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a4024"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="380" fill="url(#bgGrad4)"/>
+  <circle cx="200" cy="180" r="160" fill="rgba(200,149,36,0.08)"/>
+  
+  <rect x="40" y="35" width="220" height="30" rx="6" fill="#c89524"/>
+  <text x="50" y="55" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="12" letter-spacing="1">KEAGAMAAN &amp; TAHFIDZ</text>
+  
+  <g transform="translate(180, 90)">
+    <!-- Meja Rehal / Tempat Al-Qur'an -->
+    <path d="M 60,110 L 120,40 L 180,110 L 150,110 L 120,70 L 90,110 Z" fill="#c89524"/>
+    <path d="M 60,40 L 120,110 L 180,40 L 150,40 L 120,80 L 90,40 Z" fill="#9a7318"/>
+    
+    <!-- Mushaf Al-Qur'an Terbuka -->
+    <path d="M 80,45 C 95,30 115,40 120,45 C 125,40 145,30 160,45 L 165,20 C 145,5 125,18 120,20 C 115,18 95,5 75,20 Z" fill="#ffffff" stroke="#0f5a34" stroke-width="2"/>
+    <line x1="88" y1="28" x2="112" y2="33" stroke="#0f5a34" stroke-width="1.5"/>
+    <line x1="88" y1="36" x2="112" y2="41" stroke="#0f5a34" stroke-width="1.5"/>
+    <line x1="128" y1="33" x2="152" y2="28" stroke="#0f5a34" stroke-width="1.5"/>
+    <line x1="128" y1="41" x2="152" y2="36" stroke="#0f5a34" stroke-width="1.5"/>
+    
+    <!-- Cahaya Bintang 8 Sisi di Atas Mushaf -->
+    <circle cx="120" cy="-10" r="14" fill="#c89524" opacity="0.3"/>
+    <polygon points="120,-20 123,-13 130,-10 123,-7 120,0 117,-7 110,-10 117,-13" fill="#c89524"/>
+  </g>
+  
+  <text x="40" y="315" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="20">Halaqah Tahfidzul Qur'an &amp; Bimbingan Tilawah</text>
+  <text x="40" y="342" fill="#d1fae5" font-family="'Plus Jakarta Sans', sans-serif" font-size="13">Pembiasaan Tartil Al-Qur'an &amp; Penguatan Karakter Qur'ani Setiap Pagi</text>
+</svg>
