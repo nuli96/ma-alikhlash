@@ -36,6 +36,7 @@ function doGet(e) {
     if (action === "GET_ALL_DATA" || action === "PULL_DATA") {
       var allData = readAllDataFromSpreadsheet(ss);
       return responseJson({
+        success: true,
         status: "success",
         action: "PULL_DATA",
         message: "Alhamdulillah! Seluruh data dari Google Sheets berhasil ditarik ke Web.",
@@ -46,6 +47,7 @@ function doGet(e) {
 
     // Default status liveness check
     return responseJson({
+      success: true,
       status: "success",
       madrasah: "MADRASAH ALIYAH AL-IKHLASH",
       message: "Endpoint SIMADRASAH Dua Arah Aktif & Siap Sinkronisasi!",
@@ -56,7 +58,7 @@ function doGet(e) {
       timestamp: new Date().toISOString()
     });
   } catch (err) {
-    return responseJson({ status: "error", message: "Gagal membaca Google Sheets: " + err.toString() });
+    return responseJson({ success: false, status: "error", message: "Gagal membaca Google Sheets: " + err.toString() });
   }
 }
 
@@ -510,7 +512,8 @@ function readAllDataFromSpreadsheet(ss) {
         driveLink = String(row[6] || "").trim();
       }
 
-      var imgSrc = (driveLink && driveLink !== "-" && driveLink.indexOf("http") === 0) ? driveLink : "assets/images/kegiatan-1.svg";
+      var directDrive = convertDriveLinkToDirectUrl(driveLink);
+      var imgSrc = (directDrive && directDrive !== "-" && directDrive.indexOf("http") === 0) ? directDrive : "assets/images/kegiatan-1.svg";
       docs.push({
         id: String(row[1] || ("DOC" + (i + 1))),
         date: String(row[2] || "-"),
@@ -519,7 +522,7 @@ function readAllDataFromSpreadsheet(ss) {
         teacher: teacherName,
         desc: desc,
         img: imgSrc,
-        driveUrl: driveLink
+        driveUrl: directDrive !== "-" ? directDrive : driveLink
       });
     }
     if (docs.length > 0) result.docs = docs;
@@ -816,6 +819,16 @@ function formatHeaderRow(sheet, numCols) {
   sheet.setFrozenRows(1);
 }
 
+function convertDriveLinkToDirectUrl(link) {
+  if (!link || typeof link !== "string" || link === "-") return "-";
+  if (link.indexOf("lh3.googleusercontent.com") !== -1) return link;
+  var match = link.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || link.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return "https://lh3.googleusercontent.com/d/" + match[1];
+  }
+  return link;
+}
+
 function saveSelfiePhotoToDrive(teacherName, base64Photo) {
   try {
     var folderName = "BUKTI_PRESENSI_MA_AL_IKHLASH";
@@ -827,7 +840,8 @@ function saveSelfiePhotoToDrive(teacherName, base64Photo) {
     var blob = Utilities.newBlob(Utilities.base64Decode(rawData), "image/jpeg", "Presensi_" + (teacherName || "Guru").replace(/[^a-zA-Z0-9]/g, "_") + "_" + Date.now() + ".jpg");
     var file = folder.createFile(blob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-    return file.getUrl();
+    var fileId = file.getId();
+    return "https://lh3.googleusercontent.com/d/" + fileId;
   } catch (e) {
     return "Gagal simpan foto: " + e.toString();
   }
@@ -853,7 +867,7 @@ function saveDocFileToDrive(docTitle, base64OrUrl) {
 
   // Jika sudah berbentuk tautan link web (Google Drive, YouTube, Cloudinary, dsb)
   if (base64OrUrl.indexOf("http://") === 0 || base64OrUrl.indexOf("https://") === 0) {
-    return base64OrUrl;
+    return convertDriveLinkToDirectUrl(base64OrUrl);
   }
 
   // Jika berbentuk Data URL Base64 (data:image/... atau data:video/...)
@@ -883,7 +897,8 @@ function saveDocFileToDrive(docTitle, base64OrUrl) {
       var blob = Utilities.newBlob(Utilities.base64Decode(rawData), mimeType, fileName);
       var file = folder.createFile(blob);
       file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-      return file.getUrl();
+      var fileId = file.getId();
+      return "https://lh3.googleusercontent.com/d/" + fileId;
     } catch (e) {
       return "Gagal unggah ke Drive: " + e.toString();
     }

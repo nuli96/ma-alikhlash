@@ -33,15 +33,21 @@
 
 ## 🌟 Fitur Utama Sistem
 
-1. **Beranda & Matriks Akademik Interaktif**:
+1. **Beranda & Matriks Akademik Ceria & Interaktif**:
    - Jam digital realtime madrasah (WIB) dengan tanggal Hijriah & Masehi.
-   - Grafik Donut Matriks Kehadiran Siswa Hari Ini (Hadir, Sakit, Izin, Alpa).
-   - Grafik Batang Rombel (Distribusi per Kelas 1, 2, dan 3).
-   - Rasio Komposisi Gender Peserta Didik (Laki-laki & Perempuan).
+   - **Maskot Animasi Santri Putra & Santriwati Putri**: Ilustrasi islami beranimasi ceria (*waving hand* & *floating*) yang menyapa ramah dewan guru.
+   - **Pojok Ceria Santri & Santriwati**: Mutiara nasihat interaktif (Semangat, Adab, Prestasi, Doa Guru).
+   - Grafik Donut Matriks Kehadiran Guru Hari Ini beranimasi bercahaya (*glowing ring*).
+   - Grafik Batang Rombel (Distribusi per Kelas 1, 2, dan 3) dengan efek garis animasi *shimmer*.
+   - Badge Komposisi Gender Peserta Didik (👦 13 Santri Putra • 🧕 11 Santriwati Putri).
    - **Kata-Kata Penyemangat Guru Hebat**: Kalimat motivasi profesional acak yang menginspirasi pendidik setiap kali membuka website.
 
 2. **Dokumentasi & Galeri Kegiatan Madrasah**:
    - Arsip visual pelaksanaan kegiatan kurikulum, KMA 450, asesmen madrasah, apel hari santri, dan halaqah tahfidz.
+   - **Verifikasi Guru & PIN Keamanan Anti-Spam**: Pengunggahan dan pengeditan dokumentasi wajib memilih Nama Guru Penanggung Jawab dan memasukkan Kode Masuk Guru (PIN Keamanan) resmi untuk mencegah pihak luar/usil menambahkan data aneh.
+   - **Fitur Koreksi & Edit Dokumentasi**: Kemudahan merevisi judul kegiatan, kategori kurikulum, tanggal, nama guru, deskripsi, maupun berkas kapan saja.
+   - **Konversi Otomatis ke Google Drive**: Setiap foto/video yang diunggah otomatis tersimpan ke folder Google Drive resmi madrasah (`DOKUMENTASI_KEGIATAN_MA_AL_IKHLASH`) dan menghasilkan tautan langsung di spreadsheet.
+   - **Penghapusan Aman**: Penghapusan dokumentasi dilindungi konfirmasi kode keamanan guru/operator dan otomatis membersihkan data di spreadsheet.
    - Filter kategori kegiatan terstruktur dan modal tampilan gambar resolusi penuh.
 
 3. **Portal Pendidik & Kehadiran Guru**:
@@ -146,10 +152,10 @@ Kode Apps Script siap pakai berada pada berkas:
 | No | Waktu Simpan | Tanggal Presensi | Rombel / Kelas | Guru Pengisi | NISN | Nama Peserta Didik | Jenis Kelamin | Status (H/S/I/A) | Catatan Khusus Siswa |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 
-### Format 7 Kolom Standar Lembar `DOKUMENTASI_KEGIATAN`:
-| No | ID Kegiatan | Tanggal Kegiatan | Judul Kegiatan | Kategori Kurikulum | Deskripsi & Ringkasan Kegiatan | Tautan Foto / Video Google Drive |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-*(Foto dan video otomatis dikonversi dan disimpan ke Google Drive publik dalam folder `DOKUMENTASI_KEGIATAN_MA_AL_IKHLASH`)*
+### Format 8 Kolom Standar Lembar `DOKUMENTASI_KEGIATAN`:
+| No | ID Kegiatan | Tanggal Kegiatan | Judul Kegiatan | Kategori Kurikulum | Guru Penanggung Jawab | Deskripsi & Ringkasan Kegiatan | Tautan Foto / Video Google Drive |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+*(Foto dan video otomatis dikonversi dan disimpan ke Google Drive publik dalam folder `DOKUMENTASI_KEGIATAN_MA_AL_IKHLASH` dan tautan publik tertera di Kolom H)*
 
 ---
 

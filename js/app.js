@@ -103,6 +103,15 @@ const DEFAULT_STUDENTS = [
 
 const DEFAULT_DOCS = [
   {
+    id: "DOC_PRAMUKA_2026",
+    title: "Gerakan Pramuka Pondok Pesantren AL-Ikhlash",
+    category: "Kesiswaan & Ekstrakurikuler",
+    date: "2026-07-30",
+    teacher: "NULI MAULANA, S.Pd",
+    img: "assets/images/kegiatan-2.svg",
+    desc: "Upacara Pembukaan Perkemahan Mu'askar Al-Ikhlas Tahun 2026 Gerakan Pramuka Pondok Pesantren AL-Ikhlash (GP3A)."
+  },
+  {
     id: "DOC1",
     title: "Supervisi Akademik & KMA 450",
     category: "Kurikulum & KBM",
@@ -307,12 +316,13 @@ const DEFAULT_STUDENT_HISTORY = [
 // ==========================================
 // 2. STATE MANAGEMENT & LOCAL STORAGE
 // ==========================================
-// Versioning: memastikan pembaruan data 24 siswa resmi MA AL-IKHLASH & kata penyemangat bersih otomatis aktif
-const SYSTEM_DATA_VERSION = "v9_ma_al_ikhlash_official_students_24";
+// Versioning: memastikan pembaruan data 24 siswa resmi & sinkronisasi dokumentasi otomatis aktif
+const SYSTEM_DATA_VERSION = "v10_realtime_cloud_sync_2026";
 if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
   localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
   localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
   localStorage.setItem("simadrasah_students", JSON.stringify(DEFAULT_STUDENTS));
+  localStorage.setItem("simadrasah_docs", JSON.stringify(DEFAULT_DOCS));
   localStorage.setItem("simadrasah_journals", JSON.stringify(DEFAULT_JOURNALS));
   localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify(DEFAULT_TEACHER_ATTENDANCE));
   localStorage.setItem("simadrasah_student_history", JSON.stringify(DEFAULT_STUDENT_HISTORY));
@@ -401,6 +411,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (dateInput) {
     dateInput.value = new Date().toISOString().split("T")[0];
   }
+
+  // ⚡ SINKRONISASI OTOMATIS SAAT PERTAMA KALI MASUK WEBSITE
+  // Menjamin seluruh HP guru yang membuka website langsung menyelaraskan data terbaru dari Database Cloud
+  setTimeout(() => {
+    autoSyncFromCloudOnStartup();
+  }, 400);
+
+  // Auto-sync saat guru kembali membuka tab / aplikasi (Visibility Change & Window Focus)
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      autoSyncFromCloudOnStartup();
+    }
+  });
+  window.addEventListener("focus", () => {
+    autoSyncFromCloudOnStartup();
+  });
+
+  // Auto-sync periodik setiap 3 menit di latar belakang
+  setInterval(() => {
+    autoSyncFromCloudOnStartup();
+  }, 180000);
 });
 
 // Live Clock & Tanggal Masehi/Hijriyah
@@ -608,6 +639,11 @@ function switchMainTab(tabId, subTabId = null) {
   });
   if (activeBtn) activeBtn.classList.add("active");
 
+  // Jika membuka tab Dokumentasi Kegiatan atau Kehadiran Siswa, perbarui data secara otomatis di background
+  if (tabId === "tab-dokumentasi" || tabId === "tab-siswa") {
+    autoSyncFromCloudOnStartup();
+  }
+
   // Jika ada subtab khusus
   if (subTabId && tabId === "tab-guru") {
     switchTeacherSubTab(subTabId);
@@ -722,15 +758,79 @@ function toggleDocCodeVisibility() {
   passInput.type = passInput.type === "password" ? "text" : "password";
 }
 
+// Helper: Ubah link Google Drive biasa menjadi Direct CDN Image Link resmi Google yang bisa di-load oleh browser semua HP
+function formatDriveImageUrl(url) {
+  if (!url || typeof url !== "string" || url === "-" || url === "") {
+    return "assets/images/kegiatan-1.svg";
+  }
+  // Data URL base64 atau path file aset lokal
+  if (url.startsWith("data:") || url.startsWith("assets/") || url.includes("logo.jpeg")) {
+    return url;
+  }
+  // Sudah dalam bentuk Google User Content CDN
+  if (url.includes("lh3.googleusercontent.com")) {
+    return url;
+  }
+  // Ekstrak ID file dari link Google Drive (/file/d/ID/... atau id=ID)
+  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (driveMatch && driveMatch[1]) {
+    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  }
+  return url;
+}
+
+// Helper: Kompresi foto dari kamera/galeri HP sebelum disimpan & dikirim ke Cloud agar ringan (~150-250KB) & super cepat
+function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type || !file.type.startsWith("image/")) {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxWidth || height > maxHeight) {
+          if (width > height) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          } else {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", quality);
+        resolve(dataUrl);
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function renderBerandaPreview() {
   const container = document.getElementById("berandaGalleryPreview");
   if (!container) return;
 
   const previewItems = docs.slice(0, 3);
-  container.innerHTML = previewItems.map(item => `
+  container.innerHTML = previewItems.map(item => {
+    const displayImg = formatDriveImageUrl(item.img || item.driveUrl);
+    return `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${item.img || 'assets/images/kegiatan-1.svg'}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" onerror="this.src='assets/images/kegiatan-1.svg'">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
@@ -763,17 +863,19 @@ function renderBerandaPreview() {
         </div>
       </div>
     </div>
-  `).join("");
+  `;}).join("");
 }
 
 function renderMainGallery() {
   const container = document.getElementById("mainGalleryList");
   if (!container) return;
 
-  container.innerHTML = docs.map(item => `
+  container.innerHTML = docs.map(item => {
+    const displayImg = formatDriveImageUrl(item.img || item.driveUrl);
+    return `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${item.img || 'assets/images/kegiatan-1.svg'}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" onerror="this.src='assets/images/kegiatan-1.svg'">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
@@ -806,7 +908,7 @@ function renderMainGallery() {
         </div>
       </div>
     </div>
-  `).join("");
+  `;}).join("");
 }
 
 function openAddDocModal() {
@@ -986,11 +1088,19 @@ function saveDocFromModal(e) {
   }
 
   if (fileInput && fileInput.files && fileInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      commitDocSave(evt.target.result);
-    };
-    reader.readAsDataURL(fileInput.files[0]);
+    showToast("Mengompres & memproses foto kegiatan...", "info");
+    compressImageFile(fileInput.files[0])
+      .then(compressedDataUrl => {
+        commitDocSave(compressedDataUrl);
+      })
+      .catch(err => {
+        console.warn("Fallback kompresi foto:", err);
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          commitDocSave(evt.target.result);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      });
   } else {
     if (editId) {
       const existingDoc = docs.find(d => d.id === editId);
@@ -3376,17 +3486,17 @@ window.switchMascotQuote = switchMascotQuote;
 // 15. SINKRONISASI TIMBAL BALIK DUA ARAH (TWO-WAY SYNC) DATABASE CLOUD
 // ==========================================
 
-async function pullAllDataFromGoogleSheets() {
+async function pullAllDataFromGoogleSheets(isSilent = false) {
   const url = (document.getElementById("gasEndpointUrl")?.value || getGasEndpointUrl()).trim();
   if (!url) {
-    showToast("Harap masukkan URL Endpoint Database Cloud di Panel Operator terlebih dahulu!", "warning");
+    if (!isSilent) showToast("Harap masukkan URL Endpoint Database Cloud di Panel Operator terlebih dahulu!", "warning");
     return;
   }
 
   const btnPull = document.getElementById("btnPullAllFromCloud");
-  if (btnPull) btnPull.disabled = true;
+  if (btnPull && !isSilent) btnPull.disabled = true;
 
-  showToast("⏳ Sedang menarik data terkini dari Database Cloud...", "info");
+  if (!isSilent) showToast("⏳ Sedang menarik data terkini dari Database Cloud...", "info");
 
   try {
     const pullUrl = url.includes("?") ? `${url}&action=GET_ALL_DATA` : `${url}?action=GET_ALL_DATA`;
@@ -3396,7 +3506,8 @@ async function pullAllDataFromGoogleSheets() {
     }
 
     const json = await res.json();
-    if (!json.success || !json.data) {
+    const isOk = (json.success === true || json.status === "success") && json.data;
+    if (!isOk) {
       throw new Error(json.message || "Format data respons tidak sesuai");
     }
 
@@ -3433,9 +3544,14 @@ async function pullAllDataFromGoogleSheets() {
       updatedItems.push(`${journals.length} Jurnal KBM`);
     }
 
-    // 6. Dokumentasi
+    // 6. Dokumentasi Kegiatan (format link gambar agar dapat diakses oleh semua HP)
     if (Array.isArray(d.docs) && d.docs.length > 0) {
-      docs = d.docs;
+      docs = d.docs.map(item => {
+        return Object.assign({}, item, {
+          img: formatDriveImageUrl(item.img || item.driveUrl)
+        });
+      });
+      updatedItems.push(`${docs.length} Dokumentasi Kegiatan`);
     }
 
     // 7. Profil Madrasah
@@ -3445,7 +3561,7 @@ async function pullAllDataFromGoogleSheets() {
 
     persistAllData();
 
-    // Perbarui seluruh tabel dan antarmuka
+    // Perbarui seluruh tabel dan antarmuka secara realtime
     applySchoolProfileUI();
     populateTeacherDropdowns();
     populateStudentAttendanceTeacherDropdown();
@@ -3473,14 +3589,39 @@ async function pullAllDataFromGoogleSheets() {
     localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
     updateCloudSyncStatsUI();
 
-    showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Database Cloud (${updatedItems.join(", ")}).`, "success");
+    if (!isSilent) {
+      showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Database Cloud (${updatedItems.join(", ")}).`, "success");
+    } else {
+      console.log("⚡ Auto-Sync Sukses:", updatedItems.join(", "));
+    }
   } catch (err) {
-    console.error("Gagal menarik data dari Database Cloud:", err);
-    showToast(`Gagal menarik data dari Database Cloud: ${err.message || 'Periksa koneksi internet / izin akses'}`, "warning");
+    console.warn("Gagal menarik data dari Database Cloud:", err);
+    if (!isSilent) {
+      showToast(`Gagal menarik data dari Database Cloud: ${err.message || 'Periksa koneksi internet / izin akses'}`, "warning");
+    }
   } finally {
-    if (btnPull) btnPull.disabled = false;
+    if (btnPull && !isSilent) btnPull.disabled = false;
   }
 }
+
+// Fungsi Auto-Sync Otomatis saat Pertama Kali Masuk Web & Background Periodic
+let isAutoSyncRunning = false;
+async function autoSyncFromCloudOnStartup() {
+  if (isAutoSyncRunning) return;
+  const url = getGasEndpointUrl();
+  if (!url) return;
+
+  isAutoSyncRunning = true;
+  try {
+    console.log("⚡ Auto-Sync: Memeriksa dan menyelaraskan data dengan Database Cloud...");
+    await pullAllDataFromGoogleSheets(true);
+  } catch (err) {
+    console.warn("Auto-sync background check notice:", err);
+  } finally {
+    isAutoSyncRunning = false;
+  }
+}
+window.autoSyncFromCloudOnStartup = autoSyncFromCloudOnStartup;
 
 function clearAllStudentAttendanceHistory() {
   if (studentAttendanceHistory.length === 0) {
