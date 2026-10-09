@@ -70,29 +70,35 @@ const SCHEDULE_MATRIX = [
 ];
 
 const DEFAULT_STUDENTS = [
-  // Siswa Kelas 1 (Kelas 10 / X)
-  { id: "S101", nisn: "0114923801", name: "ADITIYA PRATAMA", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "Krajan Tengah Sindangsari Subang" },
-  { id: "S102", nisn: "0114923802", name: "BILQIS AULIA RAHMA", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "Bongas Sindangsari Cikaum" },
-  { id: "S103", nisn: "0114923803", name: "FACHRI MAULANA", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "Sukajaya Cikaum Barat Subang" },
-  { id: "S104", nisn: "0114923804", name: "HANA SYAHIDA", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "Pagon Purwadadi Subang" },
-  { id: "S105", nisn: "0114923805", name: "MUHAMMAD ILHAM", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "Kaligambir Sindangsari Subang" },
-  { id: "S106", nisn: "0114923806", name: "NABILA KHAIRUNNISA", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "Krajan Tengah Sindangsari Subang" },
-  { id: "S107", nisn: "0114923807", name: "REHAN ALFARIZI", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "Sindangsari Cikaum Subang" },
-  { id: "S108", nisn: "0114923808", name: "SITI NURHALIZA", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "Pangadungan Sindangsari Subang" },
+  // Siswa Kelas 1 (Kelas 10 / X.1) Sesuai Berkas Resmi Madrasah - 14 Siswa
+  { id: "S101", nisn: "0095675429", name: "DA'I HAMZAH", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KALIGAMBIR SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S102", nisn: "0111629085", name: "FARHAN RIZKI MAULANA", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "PANGADUNGAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S103", nisn: "0173045991", name: "HENDRA FAEYZA ALI", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KRAJAN UTARA SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S104", nisn: "0109909110", name: "LUTHFI ALBIAN PRATAMA", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KALIGAMBIR SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S105", nisn: "0108899834", name: "MUHAMAD RIZKY", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "PANGADUNGAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S106", nisn: "0107187096", name: "NISA", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "KRAJAN UTARA SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S107", nisn: "0106487770", name: "REVISA ARYANI", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "KRAJAN SELATAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S108", nisn: "0113229278", name: "RIYAD JAMIL", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KRAJAN SELATAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S109", nisn: "0102154149", name: "RIZKY MUBAROK", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KRAJAN SELATAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S110", nisn: "0099655942", name: "SASEP RONALDO", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "SALAGEDANG JATI, CIPUNAGARA, SUBANG" },
+  { id: "S111", nisn: "0106554338", name: "SHENA MUHAMMAD REVAN", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "PAGON PURWADADI, SUBANG" },
+  { id: "S112", nisn: "0101417281", name: "TALITA ROFILAH ARTANTI", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "KP. CIDERES SUKAMENAK, SUKARESIK, TASIKMALAYA" },
+  { id: "S113", nisn: "0102680741", name: "WAHYUDI SURANA", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "PANGADUNGAN SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S114", nisn: "0107408414", name: "YUMNA LAILA OCTAVIANI", class: "Kelas 1", gender: "Perempuan", status: "H", notes: "CIDERES SUKAMENAK, SUKARESIK, TASIKMALAYA" },
 
-  // Siswa Kelas 2 (Kelas 11 / XI) Sesuai Berkas Excel Resmi Madrasah
-  { id: "S201", nisn: "3104150969", name: "DIAN NURMALA", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "Kaligambir RT 25/07 Sindangsari, Cikaum" },
-  { id: "S202", nisn: "0108923701", name: "DIKA SAPUTRA", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "Sindangsari, Cikaum, Subang" },
-  { id: "S203", nisn: "0098848705", name: "MIA YULIANTI", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "Pangadungan Sindangsari, Cikaum" },
-  { id: "S204", nisn: "0096315534", name: "NIDATU SYADIAH", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "Kp. Cideres RT 24/12 Sukamenak Sukaresik" },
-  { id: "S205", nisn: "0104502604", name: "SANDI KURNIAWAN", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "PIP: 6013010777025348 • Bongas Sindangsari" },
-  { id: "S206", nisn: "0097957382", name: "SANIA HAYATI HAMIDAH", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "Mekarsari RT 18/07 Pagon, Purwadadi" },
-  { id: "S207", nisn: "0095918417", name: "WAFI BURHANI", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "PIP: 434701002144507 • Krajan Tengah Sindangsari" },
+  // Siswa Kelas 2 (Kelas 11 / XI) Sesuai Berkas Resmi Madrasah - 7 Siswa
+  { id: "S201", nisn: "3104150969", name: "DIAN NURMALA", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "KALIGAMBIR RT 025/007 SINDANGSARI, CIKAUM" },
+  { id: "S202", nisn: "0108923701", name: "DIKA SAPUTRA", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "SINDANGSARI, CIKAUM, SUBANG" },
+  { id: "S203", nisn: "0098848705", name: "MIA YULIANTI", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "PANGADUNGAN SINDANGSARI, CIKAUM" },
+  { id: "S204", nisn: "0096315534", name: "NIDATU SYADIAH", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "KP. CIDERES RT 024/012 SUKAMENAK, SUKARESIK" },
+  { id: "S205", nisn: "0104502604", name: "SANDI KURNIAWAN", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "BONGAS RT 018/005 SINDANGSARI, CIKAUM" },
+  { id: "S206", nisn: "0097957382", name: "SANIA HAYATI HAMIDAH", class: "Kelas 2", gender: "Perempuan", status: "H", notes: "MEKARSARI RT 018/007 PAGON, PURWADADI" },
+  { id: "S207", nisn: "0095918417", name: "WAFI BURHANI", class: "Kelas 2", gender: "Laki-laki", status: "H", notes: "KRAJAN TENGAH RT 016/003 SINDANGSARI, CIKAUM" },
 
-  // Siswa Kelas 3 (Kelas 12 / XII) Sesuai Berkas Excel Resmi Madrasah
-  { id: "S301", nisn: "0098460181", name: "ANITA BELA", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "Lamban Belajar • Sukajaya RT 02/01 Cikaum Barat" },
-  { id: "S302", nisn: "0086477282", name: "SALSA HUZROTIN NISA", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "Pagon RT 13/05 Purwadadi Subang" },
-  { id: "S303", nisn: "0091599474", name: "SRI RUMHAYATI", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "Kp. Krajan Tengah Sindangsari Cikaum" }
+  // Siswa Kelas 3 (Kelas 12 / XII) Sesuai Berkas Resmi Madrasah - 3 Siswa
+  { id: "S301", nisn: "0098460181", name: "ANITA BELA", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "SUKAJAYA RT 002/001 CIKAUM BARAT, SUBANG" },
+  { id: "S302", nisn: "0086477282", name: "SALSA HUZROTIN NISA", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "PAGON RT 013/005 PURWADADI, SUBANG" },
+  { id: "S303", nisn: "0091599474", name: "SRI RUMHAYATI", class: "Kelas 3", gender: "Perempuan", status: "H", notes: "KP. KRAJAN TENGAH SINDANGSARI, CIKAUM" }
 ];
 
 const DEFAULT_DOCS = [
@@ -203,16 +209,22 @@ const DEFAULT_STUDENT_HISTORY = [
     class: "Kelas 1",
     recordedBy: "TITA ROSITA",
     savedAt: "07/10/2026 08:15 WIB",
-    stats: { total: 8, hadir: 7, sakit: 1, izin: 0, alpa: 0, belumDiisi: 0 },
+    stats: { total: 14, hadir: 13, sakit: 1, izin: 0, alpa: 0, belumDiisi: 0 },
     records: [
-      { id: "S101", nisn: "0114923801", name: "ADITIYA PRATAMA", gender: "Laki-laki", status: "H", notes: "Hadir tepat waktu" },
-      { id: "S102", nisn: "0114923802", name: "BILQIS AULIA RAHMA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S103", nisn: "0114923803", name: "FACHRI MAULANA", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S104", nisn: "0114923804", name: "HANA SYAHIDA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S105", nisn: "0114923805", name: "MUHAMMAD ILHAM", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S106", nisn: "0114923806", name: "NABILA KHAIRUNNISA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S107", nisn: "0114923807", name: "REHAN ALFARIZI", gender: "Laki-laki", status: "S", notes: "Sakit demam (surat terlampir)" },
-      { id: "S108", nisn: "0114923808", name: "SITI NURHALIZA", gender: "Perempuan", status: "H", notes: "" }
+      { id: "S101", nisn: "0095675429", name: "DA'I HAMZAH", gender: "Laki-laki", status: "H", notes: "Hadir tepat waktu" },
+      { id: "S102", nisn: "0111629085", name: "FARHAN RIZKI MAULANA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S103", nisn: "0173045991", name: "HENDRA FAEYZA ALI", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S104", nisn: "0109909110", name: "LUTHFI ALBIAN PRATAMA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S105", nisn: "0108899834", name: "MUHAMAD RIZKY", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S106", nisn: "0107187096", name: "NISA", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S107", nisn: "0106487770", name: "REVISA ARYANI", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S108", nisn: "0113229278", name: "RIYAD JAMIL", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S109", nisn: "0102154149", name: "RIZKY MUBAROK", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S110", nisn: "0099655942", name: "SASEP RONALDO", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S111", nisn: "0106554338", name: "SHENA MUHAMMAD REVAN", gender: "Laki-laki", status: "S", notes: "Sakit demam" },
+      { id: "S112", nisn: "0101417281", name: "TALITA ROFILAH ARTANTI", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S113", nisn: "0102680741", name: "WAHYUDI SURANA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S114", nisn: "0107408414", name: "YUMNA LAILA OCTAVIANI", gender: "Perempuan", status: "H", notes: "" }
     ]
   },
   {
@@ -251,16 +263,22 @@ const DEFAULT_STUDENT_HISTORY = [
     class: "Kelas 1",
     recordedBy: "NULI MAULANA, S.Pd",
     savedAt: "06/10/2026 08:10 WIB",
-    stats: { total: 8, hadir: 8, sakit: 0, izin: 0, alpa: 0, belumDiisi: 0 },
+    stats: { total: 14, hadir: 14, sakit: 0, izin: 0, alpa: 0, belumDiisi: 0 },
     records: [
-      { id: "S101", nisn: "0114923801", name: "ADITIYA PRATAMA", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S102", nisn: "0114923802", name: "BILQIS AULIA RAHMA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S103", nisn: "0114923803", name: "FACHRI MAULANA", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S104", nisn: "0114923804", name: "HANA SYAHIDA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S105", nisn: "0114923805", name: "MUHAMMAD ILHAM", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S106", nisn: "0114923806", name: "NABILA KHAIRUNNISA", gender: "Perempuan", status: "H", notes: "" },
-      { id: "S107", nisn: "0114923807", name: "REHAN ALFARIZI", gender: "Laki-laki", status: "H", notes: "" },
-      { id: "S108", nisn: "0114923808", name: "SITI NURHALIZA", gender: "Perempuan", status: "H", notes: "" }
+      { id: "S101", nisn: "0095675429", name: "DA'I HAMZAH", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S102", nisn: "0111629085", name: "FARHAN RIZKI MAULANA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S103", nisn: "0173045991", name: "HENDRA FAEYZA ALI", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S104", nisn: "0109909110", name: "LUTHFI ALBIAN PRATAMA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S105", nisn: "0108899834", name: "MUHAMAD RIZKY", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S106", nisn: "0107187096", name: "NISA", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S107", nisn: "0106487770", name: "REVISA ARYANI", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S108", nisn: "0113229278", name: "RIYAD JAMIL", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S109", nisn: "0102154149", name: "RIZKY MUBAROK", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S110", nisn: "0099655942", name: "SASEP RONALDO", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S111", nisn: "0106554338", name: "SHENA MUHAMMAD REVAN", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S112", nisn: "0101417281", name: "TALITA ROFILAH ARTANTI", gender: "Perempuan", status: "H", notes: "" },
+      { id: "S113", nisn: "0102680741", name: "WAHYUDI SURANA", gender: "Laki-laki", status: "H", notes: "" },
+      { id: "S114", nisn: "0107408414", name: "YUMNA LAILA OCTAVIANI", gender: "Perempuan", status: "H", notes: "" }
     ]
   },
   {
@@ -285,8 +303,8 @@ const DEFAULT_STUDENT_HISTORY = [
 // ==========================================
 // 2. STATE MANAGEMENT & LOCAL STORAGE
 // ==========================================
-// Versioning: memastikan pembaruan profil MA AL-IKHLASH, logo resmi logo.jpeg, & tata letak HP otomatis aktif
-const SYSTEM_DATA_VERSION = "v8_ma_al_ikhlash_logo_jpeg_mobile";
+// Versioning: memastikan pembaruan data 24 siswa resmi MA AL-IKHLASH & kata penyemangat bersih otomatis aktif
+const SYSTEM_DATA_VERSION = "v9_ma_al_ikhlash_official_students_24";
 if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
   localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
   localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
@@ -371,6 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateOperatorButtonStatus();
   updateTeacherGateUI();
   initCloudSyncUI();
+  initTeacherMotivationQuotes();
 
   // Set default date input for doc
   const dateInput = document.getElementById("docDate");
@@ -673,6 +692,7 @@ function renderBerandaPreview() {
           </div>
           <h4 class="gallery-title">${item.title}</h4>
           <p class="gallery-desc">${item.desc}</p>
+          ${item.driveUrl && item.driveUrl.startsWith('http') ? `<div style="margin-top:8px;"><a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Lihat di Google Drive</a></div>` : ''}
         </div>
       </div>
     </div>
@@ -697,6 +717,7 @@ function renderMainGallery() {
           </div>
           <h4 class="gallery-title">${item.title}</h4>
           <p class="gallery-desc">${item.desc}</p>
+          ${item.driveUrl && item.driveUrl.startsWith('http') ? `<div style="margin-top:8px;"><a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buka Berkas di Google Drive</a></div>` : ''}
         </div>
       </div>
     </div>
@@ -717,8 +738,9 @@ function saveNewDoc(e) {
   const date = document.getElementById("docDate").value;
   const desc = document.getElementById("docDesc").value.trim();
   const fileInput = document.getElementById("docFileInput");
+  const driveUrlInput = (document.getElementById("docDriveUrl")?.value || "").trim();
 
-  let imgSource = "assets/images/kegiatan-1.svg";
+  let imgSource = driveUrlInput || "assets/images/kegiatan-1.svg";
 
   if (fileInput && fileInput.files && fileInput.files[0]) {
     const reader = new FileReader();
@@ -738,14 +760,16 @@ function saveNewDoc(e) {
       category,
       date,
       img: imgSource,
+      driveUrl: driveUrlInput,
       desc: desc || "Dokumentasi kegiatan resmi kurikulum madrasah."
     };
     docs.unshift(newDoc);
     persistAllData();
     renderBerandaPreview();
     renderMainGallery();
+    sendBackgroundAutoSync("SAVE_DOCUMENTATION", newDoc);
     closeModal("modalAddDoc");
-    showToast("Dokumentasi kegiatan berhasil ditambahkan!", "success");
+    showToast("Dokumentasi kegiatan berhasil disimpan & otomatis tersinkron ke Google Drive & Sheets!", "success");
   }
 }
 
@@ -1755,7 +1779,8 @@ function saveCurrentStudentAttendanceBatch() {
   }
 
   localStorage.setItem("simadrasah_student_history", JSON.stringify(studentAttendanceHistory));
-  sendBackgroundAutoSync("SAVE_STUDENT_ATTENDANCE", batchData);
+  // Sinkronkan seluruh riwayat ke Google Sheets agar lembar PRESENSI_SISWA 100% konsisten tanpa tumpang tindih kolom
+  sendBackgroundAutoSync("SYNC_STUDENT_ATTENDANCE", { studentAttendanceHistory: studentAttendanceHistory });
   updateHistoryBadgeCount();
   renderStudentHistoryTable();
   loadAttendanceForCurrentSelection();
@@ -1890,7 +1915,9 @@ function deleteHistoryBatch(batchId) {
     if (currentAttendanceDate === batch.date && currentSelectedClass === batch.class) {
       loadAttendanceForCurrentSelection();
     }
-    showToast("Riwayat presensi berhasil dihapus dari database.", "info");
+    // Sinkronkan ke Google Sheets agar baris tersebut langsung terhapus bersih dari sheet PRESENSI_SISWA
+    sendBackgroundAutoSync("SYNC_STUDENT_ATTENDANCE", { studentAttendanceHistory: studentAttendanceHistory });
+    showToast("Riwayat presensi berhasil dihapus dari database dan disinkronkan ke Google Sheets.", "info");
   }
 }
 
@@ -2131,6 +2158,7 @@ function saveTeacherFromModal(e) {
   populateTeacherGateDropdown();
   populateStudentAttendanceTeacherDropdown();
   updateTopStatistics();
+  sendBackgroundAutoSync("SYNC_TEACHERS", { teachers: teachers });
   closeModal("modalEditTeacher");
 }
 
@@ -2146,7 +2174,8 @@ function deleteTeacher(teacherId) {
     populateTeacherGateDropdown();
     populateStudentAttendanceTeacherDropdown();
     updateTopStatistics();
-    showToast("Data pendidik berhasil dihapus.", "info");
+    sendBackgroundAutoSync("SYNC_TEACHERS", { teachers: teachers });
+    showToast("Data pendidik berhasil dihapus dan disinkronkan ke Google Sheets.", "info");
   }
 }
 
@@ -2238,6 +2267,7 @@ function saveStudentFromModal(e) {
   renderOpStudentsTable();
   renderStudentsTable();
   updateTopStatistics();
+  sendBackgroundAutoSync("SYNC_STUDENTS", { students: students });
   closeModal("modalEditStudent");
 }
 
@@ -2246,9 +2276,11 @@ function deleteStudent(studentId) {
     students = students.filter(s => s.id !== studentId);
     persistAllData();
     renderOpStudentsTable();
+    renderOpStudentsTable();
     renderStudentsTable();
     updateTopStatistics();
-    showToast("Data siswa berhasil dihapus.", "info");
+    sendBackgroundAutoSync("SYNC_STUDENTS", { students: students });
+    showToast("Data siswa berhasil dihapus dan disinkronkan ke Google Sheets.", "info");
   }
 }
 
@@ -2807,6 +2839,7 @@ async function syncAllDataToGoogleSheets() {
     schoolProfile: schoolProfile,
     teachers: teachers,
     students: students,
+    docs: docs,
     journals: processedJournals,
     teacherAttendance: processedAttendance,
     studentAttendanceHistory: studentAttendanceHistory,
@@ -2934,3 +2967,175 @@ function restoreJsonBackup(event) {
   };
   reader.readAsText(file);
 }
+
+// ==========================================
+// 14. KATA-KATA PENYEMANGAT RANDOM UNTUK GURU HEBAT
+// ==========================================
+const TEACHER_MOTIVATIONAL_QUOTES = [
+  "Halo Guru Hebat! Terima kasih atas dedikasi, ketulusan, dan kesabaran tanpa batas Bapak/Ibu dalam mendidik para santri hari ini.",
+  "Semangat mendidik, Pendidik Mulia! Setiap butir ilmu dan keteladanan yang diajarkan adalah lentera abadi dan amal jariyah yang tak pernah terputus.",
+  "Selamat bertugas, Insan Pendidik! Mengajar bukan sekadar profesi, melainkan ladang ibadah dan jalan kehormatan mengukir peradaban bangsa.",
+  "Salam takzim dewan guru pejuang! Awali pagi dengan senyuman hangat dan energi positif; kehadiran Anda adalah inspirasi terbesar bagi para murid.",
+  "Bismillah untuk langkah berkah hari ini! Keteladanan akhlak dan keikhlasan Bapak/Ibu adalah kunci pembuka keberhasilan generasi madrasah.",
+  "Guru adalah pelita dalam kegelapan. Tetaplah bersemangat, tabah, dan teruslah membimbing santri dengan ilmu amaliyah dan amal ilmiah.",
+  "Teruslah membimbing dengan sepenuh hati, wahai Guru Hebat. Kebaikan yang Anda tabur di ruang kelas hari ini akan menuai kemuliaan esok hari.",
+  "Hari baru, semangat baru! Jadikan setiap pertemuan di kelas sebagai taman ilmu yang penuh keceriaan, adab mulia, dan keberkahan.",
+  "Pahlawan peradaban ada di sini! Terima kasih telah menyalakan lilin harapan dan menuntun langkah para santri menuju masa depan gemilang.",
+  "Selamat berjuang Guru Hebat! Melangkahlah dengan bangga dan ikhlas, amanah mencerdaskan generasi madrasah ada di hati dan ketulusan Anda."
+];
+
+function getRandomTeacherQuote() {
+  const idx = Math.floor(Math.random() * TEACHER_MOTIVATIONAL_QUOTES.length);
+  return TEACHER_MOTIVATIONAL_QUOTES[idx];
+}
+
+function initTeacherMotivationQuotes() {
+  renderTeacherMotivationalQuote();
+}
+
+function renderTeacherMotivationalQuote() {
+  const textElem = document.getElementById("motivationQuoteText");
+  if (!textElem) return;
+
+  const quote = getRandomTeacherQuote();
+  textElem.style.opacity = 0;
+  setTimeout(() => {
+    textElem.innerText = `"${quote}"`;
+    textElem.style.opacity = 1;
+  }, 100);
+}
+
+// ==========================================
+// 15. SINKRONISASI TIMBAL BALIK DUA ARAH (TWO-WAY SYNC) GOOGLE SHEETS
+// ==========================================
+
+async function pullAllDataFromGoogleSheets() {
+  const url = (document.getElementById("gasEndpointUrl")?.value || getGasEndpointUrl()).trim();
+  if (!url) {
+    showToast("Harap masukkan URL Web App Google Apps Script di Panel Operator terlebih dahulu!", "warning");
+    return;
+  }
+
+  const btnPull = document.getElementById("btnPullAllFromCloud");
+  if (btnPull) btnPull.disabled = true;
+
+  showToast("⏳ Sedang menarik data terkini dari Google Sheets...", "info");
+
+  try {
+    const pullUrl = url.includes("?") ? `${url}&action=GET_ALL_DATA` : `${url}?action=GET_ALL_DATA`;
+    const res = await fetch(pullUrl, { method: "GET", mode: "cors" });
+    if (!res.ok) {
+      throw new Error(`Server merespons status ${res.status}`);
+    }
+
+    const json = await res.json();
+    if (!json.success || !json.data) {
+      throw new Error(json.message || "Format data respons tidak sesuai");
+    }
+
+    const d = json.data;
+    let updatedItems = [];
+
+    // 1. Data Siswa
+    if (Array.isArray(d.students) && d.students.length > 0) {
+      students = d.students;
+      updatedItems.push(`${students.length} Siswa`);
+    }
+
+    // 2. Data Dewan Guru
+    if (Array.isArray(d.teachers) && d.teachers.length > 0) {
+      teachers = d.teachers;
+      updatedItems.push(`${teachers.length} Guru`);
+    }
+
+    // 3. Riwayat Presensi Siswa (bisa kosong jika memang dihapus / dibersihkan di Sheets)
+    if (d.studentAttendanceHistory !== undefined && Array.isArray(d.studentAttendanceHistory)) {
+      studentAttendanceHistory = d.studentAttendanceHistory;
+      updatedItems.push(`${studentAttendanceHistory.length} Sesi Presensi Siswa`);
+    }
+
+    // 4. Presensi Mandiri Guru
+    if (Array.isArray(d.teacherAttendance)) {
+      teacherAttendance = d.teacherAttendance;
+      updatedItems.push(`${teacherAttendance.length} Presensi Guru`);
+    }
+
+    // 5. Jurnal KBM
+    if (Array.isArray(d.journals)) {
+      journals = d.journals;
+      updatedItems.push(`${journals.length} Jurnal KBM`);
+    }
+
+    // 6. Dokumentasi
+    if (Array.isArray(d.docs) && d.docs.length > 0) {
+      docs = d.docs;
+    }
+
+    // 7. Profil Madrasah
+    if (d.schoolProfile && typeof d.schoolProfile === "object" && d.schoolProfile.name) {
+      schoolProfile = Object.assign({}, schoolProfile, d.schoolProfile);
+    }
+
+    persistAllData();
+
+    // Perbarui seluruh tabel dan antarmuka
+    applySchoolProfileUI();
+    populateTeacherDropdowns();
+    populateStudentAttendanceTeacherDropdown();
+    populateOpJournalTeacherDropdown();
+    populateOpAttTeacherDropdown();
+    renderJournalTable();
+    renderTeacherAttendanceTable();
+    renderScheduleMatrixTable();
+    renderOpAllJournalsTable();
+    renderOpAllTeacherAttendanceTable();
+    renderOpScheduleMatrixTable();
+    renderOpTeachersTable();
+    renderOpTeacherCodesTable();
+    renderOpStudentsTable();
+    renderStudentsTable();
+    loadAttendanceForCurrentSelection();
+    renderStudentHistoryTable();
+    updateHistoryBadgeCount();
+    updateTopStatistics();
+
+    const nowStr = new Date().toLocaleString("id-ID");
+    localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
+    updateCloudSyncStatsUI();
+
+    showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Google Sheets (${updatedItems.join(", ")}).`, "success");
+  } catch (err) {
+    console.error("Gagal menarik data dari Google Sheets:", err);
+    showToast(`Gagal menarik data dari Google Sheets: ${err.message || 'Periksa koneksi internet / izin akses Web App'}`, "warning");
+  } finally {
+    if (btnPull) btnPull.disabled = false;
+  }
+}
+
+function clearAllStudentAttendanceHistory() {
+  if (studentAttendanceHistory.length === 0) {
+    showToast("Riwayat presensi siswa saat ini sudah kosong.", "info");
+    return;
+  }
+
+  if (confirm(`Peringatan: Apakah Anda yakin ingin MENGHAPUS SEMUA (${studentAttendanceHistory.length} sesi) riwayat presensi siswa? Lembar PRESENSI_SISWA di Google Sheets juga akan otomatis dibersihkan!`)) {
+    studentAttendanceHistory = [];
+    localStorage.setItem("simadrasah_student_history", JSON.stringify(studentAttendanceHistory));
+    updateHistoryBadgeCount();
+    renderStudentHistoryTable();
+    loadAttendanceForCurrentSelection();
+
+    // Bersihkan lembar Google Sheets secara tuntas
+    sendBackgroundAutoSync("SYNC_STUDENT_ATTENDANCE", { studentAttendanceHistory: [] });
+
+    showToast("Seluruh riwayat presensi siswa berhasil dibersihkan dari database dan Google Sheets.", "success");
+  }
+}
+
+// Fallback aman jika dipanggil
+function triggerStudentExcelUpload() {
+  openAddStudentModal();
+}
+function handleStudentExcelFileSelected() {}
+function autoLoadLocalStudentExcels() {}
+

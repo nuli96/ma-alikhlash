@@ -1549,3 +1549,220 @@ body {
     padding: 0 !important;
   }
 }
+
+/* ===================================================================
+   ANIMASI ESTETIK & TAMPILAN HIDUP MODERN (MICRO-INTERACTIONS)
+   =================================================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
+  }
+}
+
+@keyframes pulseBadge {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.92;
+  }
+}
+
+@keyframes quoteFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Penerapan Animasi Halus */
+.card, .chart-panel, .gallery-card, .academic-banner {
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.badge-kurikulum, .badge-hadir {
+  animation: pulseBadge 3s infinite ease-in-out;
+}
+
+.cloud-status-indicator {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: #16a34a;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+/* Transisi Hover Kartu yang Elegan */
+.card {
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.chart-panel {
+  transition: all 0.22s ease;
+}
+
+.chart-panel:hover {
+  border-color: var(--color-primary-border);
+  box-shadow: 0 4px 12px rgba(15, 90, 52, 0.08);
+}
+
+.btn {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ===================================================================
+   KATA-KATA PENYEMANGAT GURU HEBAT (MURNI TEKS KALIMAT MOTIVASI)
+   =================================================================== */
+.teacher-motivation-card {
+  background: linear-gradient(135deg, #f0fdf4 0%, #fbfdfc 60%, #ffffff 100%);
+  border: 1.5px solid #bbf7d0;
+  border-left: 5px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: 0.95rem 1.35rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 3px 10px rgba(15, 90, 52, 0.05);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.motivation-body {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.motivation-quote-icon {
+  width: 34px;
+  height: 34px;
+  background: #dcfce7;
+  color: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.motivation-content {
+  flex: 1;
+}
+
+.motivation-text {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #064e3b;
+  line-height: 1.5;
+  font-style: italic;
+  margin: 0;
+  animation: quoteFadeIn 0.35s ease-out;
+}
+
+/* ===================================================================
+   AREA IMPOR BERKAS EXCEL SISWA RESMI (KELAS X, XI, XII)
+   =================================================================== */
+.excel-import-box {
+  background: #f8fafc;
+  border: 1.5px dashed #94a3b8;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.excel-import-box:hover {
+  background: #f0fdf4;
+  border-color: #16a34a;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+}
+
+.excel-import-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.excel-import-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.925rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.excel-import-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.excel-file-hidden-input {
+  display: none;
+}
+
+.excel-import-desc {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.excel-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.excel-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.excel-chip.active {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #14532d;
+  font-weight: 700;
+}

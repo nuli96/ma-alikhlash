@@ -22,8 +22,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- CSS Utama (dengan Cache Buster v=8.2 untuk HP) -->
-  <link rel="stylesheet" href="css/style.css?v=8.2">
+  <!-- SheetJS Library untuk Impor & Pengolahan Berkas Excel Siswa Resmi -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+  <!-- CSS Utama (dengan Cache Buster v=9.0 untuk HP & Desktop) -->
+  <link rel="stylesheet" href="css/style.css?v=9.0">
 </head>
 <body>
 
@@ -106,6 +109,20 @@
         </div>
       </div>
 
+      <!-- Kata-Kata Penyemangat Guru Hebat (Murni Kalimat Motivasi, Berganti Tiap Refresh) -->
+      <div class="teacher-motivation-card" id="teacherMotivationCard">
+        <div class="motivation-body">
+          <div class="motivation-quote-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+          </div>
+          <div class="motivation-content">
+            <p class="motivation-text" id="motivationQuoteText">
+              "Halo Guru Hebat! Terima kasih atas dedikasi, ketulusan, dan kesabaran tanpa batas Bapak/Ibu dalam mendidik para santri hari ini."
+            </p>
+          </div>
+        </div>
+      </div>
+
       <!-- 2. Dashboard Visual: Grafik & Tabel Matriks Akademik Realtime -->
       <div class="card dashboard-analytics-card" style="margin-bottom: 2rem;">
         <div class="card-header" style="background: #fbfdfc; border-bottom: 1.5px solid var(--color-border); padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
@@ -166,30 +183,30 @@
                 <div class="bar-item">
                   <div class="bar-item-header">
                     <span>Kelas 1 (X)</span>
-                    <strong id="barClass1Count">7 Siswa (39%)</strong>
+                    <strong id="barClass1Count">14 Siswa (58%)</strong>
                   </div>
                   <div class="bar-track">
-                    <div class="bar-fill" id="barFillClass1" style="width: 39%; background: #0284c7;"></div>
+                    <div class="bar-fill" id="barFillClass1" style="width: 58%; background: #0284c7;"></div>
                   </div>
                 </div>
                 <!-- Bar Kelas 2 -->
                 <div class="bar-item">
                   <div class="bar-item-header">
                     <span>Kelas 2 (XI)</span>
-                    <strong id="barClass2Count">7 Siswa (39%)</strong>
+                    <strong id="barClass2Count">7 Siswa (29%)</strong>
                   </div>
                   <div class="bar-track">
-                    <div class="bar-fill" id="barFillClass2" style="width: 39%; background: #16a34a;"></div>
+                    <div class="bar-fill" id="barFillClass2" style="width: 29%; background: #16a34a;"></div>
                   </div>
                 </div>
                 <!-- Bar Kelas 3 -->
                 <div class="bar-item">
                   <div class="bar-item-header">
                     <span>Kelas 3 (XII)</span>
-                    <strong id="barClass3Count">4 Siswa (22%)</strong>
+                    <strong id="barClass3Count">3 Siswa (13%)</strong>
                   </div>
                   <div class="bar-track">
-                    <div class="bar-fill" id="barFillClass3" style="width: 22%; background: #d97706;"></div>
+                    <div class="bar-fill" id="barFillClass3" style="width: 13%; background: #d97706;"></div>
                   </div>
                 </div>
               </div>
@@ -241,7 +258,7 @@
                       <span style="font-size: 0.72rem; color: var(--color-text-muted);">Rombel Kelas 1, 2, dan 3</span>
                     </td>
                     <td>
-                      <strong id="tableSiswaCount">18 Siswa</strong>
+                      <strong id="tableSiswaCount">24 Siswa</strong>
                     </td>
                     <td>
                       <span class="badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">Terdaftar EMIS</span>
@@ -834,7 +851,15 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             Presensi &amp; Database Kehadiran Peserta Didik
           </div>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-outline btn-sm" onclick="pullAllDataFromGoogleSheets()" title="Tarik data terkini dari Google Sheets (Pull)" style="color: #0284c7; border-color: #0284c7;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              Tarik dari Sheets
+            </button>
+            <button class="btn btn-outline btn-sm" onclick="syncAllDataToGoogleSheets()" title="Kirim data saat ini ke Google Sheets (Push)" style="color: #15803d; border-color: #15803d;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
+              Kirim ke Sheets
+            </button>
             <button class="btn btn-outline btn-sm" onclick="switchSiswaSubTab('history')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               Lihat History Arsip
@@ -1054,9 +1079,19 @@
                   <input type="date" id="filterHistoryDate" class="form-control" style="padding: 5px 10px; font-size: 0.825rem; width: 165px;" onchange="renderStudentHistoryTable()">
                 </div>
               </div>
-              <button class="btn btn-secondary btn-sm" onclick="resetHistoryFilters()">
-                Reset Filter Arsip
-              </button>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <button class="btn btn-secondary btn-sm" onclick="resetHistoryFilters()">
+                  Reset Filter Arsip
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="pullAllDataFromGoogleSheets()" title="Tarik riwayat terbaru dari Google Sheets" style="color: #0284c7; border-color: #0284c7;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  Tarik dari Sheets
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="clearAllStudentAttendanceHistory()" title="Hapus semua riwayat tersimpan dan bersihkan lembar Sheets" style="color: var(--color-danger); border-color: var(--color-danger);">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Bersihkan Semua Riwayat
+                </button>
+              </div>
             </div>
 
             <!-- Tabel Riwayat Database Presensi -->
@@ -1414,10 +1449,20 @@
                   <option value="Kelas 3">Kelas 3</option>
                 </select>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Tambah Siswa Baru
-              </button>
+              <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                <button class="btn btn-outline btn-sm" onclick="pullAllDataFromGoogleSheets()" style="color: #0284c7; border-color: #0284c7;" title="Tarik database siswa terkini dari Google Sheets">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  Tarik dari Sheets
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="syncAllDataToGoogleSheets()" style="color: #15803d; border-color: #15803d;" title="Kirim database siswa ke Google Sheets">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
+                  Kirim ke Sheets
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="openAddStudentModal()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Tambah Siswa Baru
+                </button>
+              </div>
             </div>
 
             <div class="table-responsive">
@@ -1555,7 +1600,6 @@
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                   Pengaturan URL Web App Google Apps Script
                 </div>
-                <span class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb;">100% Gratis Tanpa Biaya Server</span>
               </div>
               <div class="card-body">
                 <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1rem;">
@@ -1592,9 +1636,14 @@
               </p>
 
               <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-                <button type="button" class="btn btn-primary" id="btnSyncAllToCloud" onclick="syncAllDataToGoogleSheets()" style="font-weight: 700; padding: 10px 22px; font-size: 0.95rem;">
+                <button type="button" class="btn btn-primary" id="btnSyncAllToCloud" onclick="syncAllDataToGoogleSheets()" style="font-weight: 700; padding: 10px 20px; font-size: 0.925rem; background: #15803d; border-color: #15803d;">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
-                  <span id="btnSyncAllText">🚀 Sinkronkan &amp; Backup Semua Data ke Google Sheets</span>
+                  <span id="btnSyncAllText">🚀 Kirim Semua Data ke Sheets (Push)</span>
+                </button>
+
+                <button type="button" class="btn btn-primary" id="btnPullAllFromCloud" onclick="pullAllDataFromGoogleSheets()" style="font-weight: 700; padding: 10px 20px; font-size: 0.925rem; background: #0284c7; border-color: #0284c7;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  <span>🔄 Tarik Data Terkini dari Sheets (Pull)</span>
                 </button>
 
                 <button type="button" class="btn btn-secondary" onclick="downloadJsonBackup()" title="Unduh Arsip Backup Lengkap">
@@ -1610,30 +1659,6 @@
               </div>
             </div>
 
-            <!-- Petunjuk Langkah Mudah Pemasangan (3 Menit) -->
-            <div class="card">
-              <div class="card-header" style="background: #f8fafc;">
-                <span style="font-weight: 700; color: var(--color-primary-dark);">
-                  📋 Panduan Singkat Pemasangan Google Sheets (3 Langkah Mudah):
-                </span>
-              </div>
-              <div class="card-body" style="font-size: 0.85rem; line-height: 1.6;">
-                <ol style="margin: 0; padding-left: 1.25rem;">
-                  <li style="margin-bottom: 8px;">
-                    <strong>Buat Google Spreadsheet Baru</strong>: Buka <a href="https://sheets.new" target="_blank" style="color:var(--color-primary); font-weight:700;">sheets.new</a> dengan akun Google madrasah, beri nama <em>"SIMADRASAH_AL_IKHLASH_DATABASE"</em>.
-                  </li>
-                  <li style="margin-bottom: 8px;">
-                    <strong>Buka Apps Script</strong>: Klik menu <strong>Ekstensi (Extensions)</strong> &gt; <strong>Apps Script</strong>. Hapus isi bawaannya, lalu buka berkas <code>google_apps_script.js</code> yang sudah kami buat di folder proyek, salin seluruh isinya dan tempel ke Apps Script, lalu klik <strong>Simpan</strong> (ikon disket).
-                  </li>
-                  <li style="margin-bottom: 8px;">
-                    <strong>Deploy sebagai Web App</strong>: Klik tombol biru <strong>Deploy (Terapkan)</strong> &gt; <strong>Deployment baru</strong>. Pilih jenis <strong>Aplikasi Web</strong>, atur Akses: <strong>"Siapa Saja" (Anyone)</strong>, lalu klik <strong>Deploy</strong>. Salin URL Web App yang muncul (berakhiran <code>/exec</code>) lalu tempelkan ke kolom URL di atas dan klik <strong>Simpan URL</strong>. Selesai!
-                  </li>
-                </ol>
-                <div style="background: #fffbeb; border: 1px solid #fde68a; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 12px; color: #92400e; font-size: 0.8rem;">
-                  💡 <strong>Catatan:</strong> Berkas kode skrip siap pakai telah tersimpan di komputer Anda pada berkas: <code>google_apps_script.js</code>. Anda tinggal membukanya dan menyalin kodenya.
-                </div>
-              </div>
-            </div>
           </div>
 
         </div>
@@ -1742,14 +1767,46 @@
   </div>
 
   <!-- MODAL: TAMBAH DOKUMENTASI KEGIATAN -->
+  <!-- MODAL: TAMBAH & EDIT DOKUMENTASI KEGIATAN -->
   <div class="modal-backdrop" id="modalAddDoc">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width: 540px;">
       <div class="modal-header">
-        <h3 class="modal-title">Tambah Dokumentasi Kegiatan Baru</h3>
+        <h3 class="modal-title" id="modalDocTitleHeader">Tambah Dokumentasi Kegiatan Baru</h3>
         <button type="button" class="btn-close" onclick="closeModal('modalAddDoc')">&times;</button>
       </div>
-      <form id="formAddDoc" onsubmit="saveNewDoc(event)">
+      <form id="formAddDoc" onsubmit="saveDocFromModal(event)">
         <div class="modal-body">
+          <input type="hidden" id="docEditId">
+
+          <!-- 1. IDENTITAS GURU PENANGGUNG JAWAB & KODE AKSES KEAMANAN -->
+          <div style="background: #f8fafc; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 1.25rem;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--color-primary-dark); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Verifikasi Pendidik Resmi Madrasah (Mencegah Akses Usil/Spam)
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0.75rem;">
+              <label class="form-label" style="font-size: 0.8rem; font-weight: 700;">Nama Guru Penanggung Jawab / Pengunggah <span class="req">*</span></label>
+              <select id="docTeacherSelect" class="form-select" required onchange="handleDocTeacherSelectChange()">
+                <option value="">-- Pilih Nama Bapak/Ibu Guru --</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.8rem; font-weight: 700;">Kode Masuk Guru (PIN Keamanan) <span class="req">*</span></label>
+              <div style="position: relative;">
+                <input type="password" id="docTeacherCode" class="form-control" required placeholder="Ketik PIN / Kode Masuk Guru" style="padding-right: 40px; font-family: monospace; font-weight: 700;">
+                <button type="button" onclick="toggleDocCodeVisibility()" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--color-text-muted);" title="Lihat/Sembunyikan Kode">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <span id="docCodeHint" style="font-size: 0.72rem; color: var(--color-text-muted); display: block; margin-top: 3px;">
+                🔒 Wajib kode valid: Hanya dewan guru resmi MA Al-Ikhlash yang dapat mempublikasikan / mengedit dokumentasi.
+              </span>
+            </div>
+          </div>
+
+          <!-- 2. DATA DETAIL KEGIATAN -->
           <div class="form-group" style="margin-bottom: 1rem;">
             <label class="form-label">Judul Kegiatan <span class="req">*</span></label>
             <input type="text" id="docTitle" class="form-control" required placeholder="Contoh: Upacara Hari Santri Nasional">
@@ -1768,9 +1825,16 @@
             <input type="date" id="docDate" class="form-control" required>
           </div>
           <div class="form-group" style="margin-bottom: 1rem;">
-            <label class="form-label">Pilih Foto Kegiatan (File Lokal)</label>
-            <input type="file" id="docFileInput" class="form-control" accept="image/*">
-            <span style="font-size: 0.75rem; color: var(--color-text-light);">*Jika tidak memilih gambar, akan menggunakan gambar standar kurikulum.</span>
+            <label class="form-label">Pilih Foto / Video Kegiatan (File Lokal / Kamera HP)</label>
+            <input type="file" id="docFileInput" class="form-control" accept="image/*,video/*">
+            <span style="font-size: 0.72rem; color: #15803d; font-weight: 600; display: block; margin-top: 4px;">
+              ☁️ Berkas foto/video otomatis dikonversi dan disimpan ke Google Drive menjadi tautan publik resmi di Spreadsheet!
+            </span>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Atau Masukkan Tautan Google Drive / Video (Opsional)</label>
+            <input type="url" id="docDriveUrl" class="form-control" placeholder="https://drive.google.com/file/d/... atau tautan video">
+            <span style="font-size: 0.72rem; color: var(--color-text-light);">*Jika berkas foto/video Anda sudah berada di Google Drive, Anda dapat langsung menempelkan tautan link di sini.</span>
           </div>
           <div class="form-group">
             <label class="form-label">Deskripsi / Ringkasan Acara</label>
@@ -1779,7 +1843,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" onclick="closeModal('modalAddDoc')">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan Dokumentasi</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitDoc">Simpan Dokumentasi</button>
         </div>
       </form>
     </div>
@@ -1945,7 +2009,7 @@
     </div>
   </footer>
 
-  <!-- File JavaScript Aplikasi (dengan Cache Buster v=8.2) -->
-  <script src="js/app.js?v=8.2"></script>
+  <!-- File JavaScript Aplikasi (dengan Cache Buster v=12.0 - Verifikasi Guru & Edit Dokumentasi) -->
+  <script src="js/app.js?v=12.0"></script>
 </body>
 </html>
