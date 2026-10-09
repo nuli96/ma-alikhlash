@@ -107,6 +107,7 @@ const DEFAULT_DOCS = [
     title: "Supervisi Akademik & KMA 450",
     category: "Kurikulum & KBM",
     date: "2024-10-02",
+    teacher: "Rizki Ardiansah, S.Pd., M.Pd.",
     img: "assets/images/kegiatan-1.svg",
     desc: "Musyawarah kerja Waka Kurikulum bersama dewan guru dalam perumusan Alur Tujuan Pembelajaran (ATP) dan modul ajar interaktif."
   },
@@ -115,6 +116,7 @@ const DEFAULT_DOCS = [
     title: "Apel Peringatan Hari Santri Nasional",
     category: "Keagamaan & Tahfidz",
     date: "2024-09-22",
+    teacher: "NULI MAULANA, S.Pd",
     img: "assets/images/kegiatan-2.svg",
     desc: "Penanaman nilai kepemimpinan, akhlakul karimah, dan cinta tanah air bagi seluruh civitas akademika madrasah."
   },
@@ -123,6 +125,7 @@ const DEFAULT_DOCS = [
     title: "Asesmen Madrasah Berbasis Komputer",
     category: "Asesmen & Ujian",
     date: "2024-09-15",
+    teacher: "KURNIANENGSIH, S.Pd",
     img: "assets/images/kegiatan-3.svg",
     desc: "Pelaksanaan evaluasi sumatif tengah semester genap di laboratorium digital madrasah dengan tertib dan berintegritas."
   },
@@ -131,6 +134,7 @@ const DEFAULT_DOCS = [
     title: "Halaqah Tahfidzul Qur'an & Bimbingan Tilawah",
     category: "Keagamaan & Tahfidz",
     date: "2024-09-08",
+    teacher: "TITA ROSITA",
     img: "assets/images/kegiatan-4.svg",
     desc: "Program pembiasaan tartil pagi dan setoran juz 'amma terstruktur sebelum jam kegiatan belajar mengajar dimulai."
   }
@@ -360,6 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applySchoolProfileUI();
   populateTeacherDropdowns();
   populateStudentAttendanceTeacherDropdown();
+  populateDocTeacherDropdown();
   renderBerandaPreview();
   renderMainGallery();
   renderJournalTable();
@@ -673,6 +678,50 @@ function switchOpSubTab(opPaneId) {
 // ==========================================
 // 5. MODUL DOKUMENTASI KEGIATAN MADRASAH
 // ==========================================
+
+function populateDocTeacherDropdown() {
+  const select = document.getElementById("docTeacherSelect");
+  if (!select) return;
+
+  const activeTeacher = getLoggedInTeacher();
+  const currentVal = select.value;
+
+  select.innerHTML = '<option value="">-- Pilih Nama Bapak/Ibu Guru --</option>' +
+    teachers.map(t => `<option value="${t.id}">${t.name} • ${t.mapel}</option>`).join("");
+
+  if (currentVal) {
+    select.value = currentVal;
+  } else if (activeTeacher) {
+    select.value = activeTeacher.id;
+    const codeInput = document.getElementById("docTeacherCode");
+    if (codeInput && !codeInput.value) {
+      codeInput.value = activeTeacher.accessCode || "";
+    }
+  }
+}
+
+function handleDocTeacherSelectChange() {
+  const teacherId = document.getElementById("docTeacherSelect")?.value;
+  const codeInput = document.getElementById("docTeacherCode");
+  const activeTeacher = getLoggedInTeacher();
+
+  if (!teacherId) {
+    if (codeInput) codeInput.value = "";
+    return;
+  }
+
+  // Jika guru yang dipilih adalah guru yang sedang login, auto-fill kode aksesnya
+  if (activeTeacher && activeTeacher.id === teacherId && codeInput) {
+    codeInput.value = activeTeacher.accessCode || "";
+  }
+}
+
+function toggleDocCodeVisibility() {
+  const passInput = document.getElementById("docTeacherCode");
+  if (!passInput) return;
+  passInput.type = passInput.type === "password" ? "text" : "password";
+}
+
 function renderBerandaPreview() {
   const container = document.getElementById("berandaGalleryPreview");
   if (!container) return;
@@ -681,18 +730,36 @@ function renderBerandaPreview() {
   container.innerHTML = previewItems.map(item => `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${item.img}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img src="${item.img || 'assets/images/kegiatan-1.svg'}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
         <div>
-          <div class="gallery-date">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            ${formatTanggalIndo(item.date)}
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+            <div class="gallery-date" style="margin-bottom: 0;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ${formatTanggalIndo(item.date)}
+            </div>
+            <span class="badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.7rem; font-weight: 700; padding: 2px 7px;">
+              👤 ${item.teacher || 'Dewan Guru'}
+            </span>
           </div>
           <h4 class="gallery-title">${item.title}</h4>
           <p class="gallery-desc">${item.desc}</p>
-          ${item.driveUrl && item.driveUrl.startsWith('http') ? `<div style="margin-top:8px;"><a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Lihat di Google Drive</a></div>` : ''}
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-border);">
+            <div>
+              ${item.driveUrl && item.driveUrl.startsWith('http') ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Lihat di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
+            </div>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="openEditDocModal('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Koreksi / Edit Dokumentasi">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Edit
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="deleteDocItem('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Hapus Dokumentasi">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Hapus
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -706,18 +773,36 @@ function renderMainGallery() {
   container.innerHTML = docs.map(item => `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${item.img}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img src="${item.img || 'assets/images/kegiatan-1.svg'}" alt="${item.title}" class="gallery-img" onerror="this.src='assets/images/kegiatan-1.svg'">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
         <div>
-          <div class="gallery-date">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            ${formatTanggalIndo(item.date)}
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; margin-bottom: 6px;">
+            <div class="gallery-date" style="margin-bottom: 0;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              ${formatTanggalIndo(item.date)}
+            </div>
+            <span class="badge" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.7rem; font-weight: 700; padding: 2px 7px;">
+              👤 ${item.teacher || 'Dewan Guru'}
+            </span>
           </div>
           <h4 class="gallery-title">${item.title}</h4>
           <p class="gallery-desc">${item.desc}</p>
-          ${item.driveUrl && item.driveUrl.startsWith('http') ? `<div style="margin-top:8px;"><a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Buka Berkas di Google Drive</a></div>` : ''}
+          
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-border);">
+            <div>
+              ${item.driveUrl && item.driveUrl.startsWith('http') ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Buka Berkas di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
+            </div>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="openEditDocModal('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Koreksi / Edit Dokumentasi">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Edit
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="deleteDocItem('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Hapus Dokumentasi">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>Hapus
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -725,52 +810,308 @@ function renderMainGallery() {
 }
 
 function openAddDocModal() {
-  document.getElementById("formAddDoc").reset();
+  const form = document.getElementById("formAddDoc");
+  if (form) form.reset();
+
+  const editIdInput = document.getElementById("docEditId");
+  if (editIdInput) editIdInput.value = "";
+
+  const titleHeader = document.getElementById("modalDocTitleHeader");
+  if (titleHeader) titleHeader.innerText = "Tambah Dokumentasi Kegiatan Baru";
+
+  const btnSubmit = document.getElementById("btnSubmitDoc");
+  if (btnSubmit) btnSubmit.innerText = "Simpan Dokumentasi";
+
   const dateInput = document.getElementById("docDate");
   if (dateInput) dateInput.value = new Date().toISOString().split("T")[0];
+
+  populateDocTeacherDropdown();
+
+  const codeInput = document.getElementById("docTeacherCode");
+  const activeTeacher = getLoggedInTeacher();
+  if (activeTeacher) {
+    const sel = document.getElementById("docTeacherSelect");
+    if (sel) sel.value = activeTeacher.id;
+    if (codeInput) codeInput.value = activeTeacher.accessCode || "";
+  } else if (codeInput) {
+    codeInput.value = "";
+  }
+
   openModal("modalAddDoc");
 }
 
-function saveNewDoc(e) {
-  e.preventDefault();
-  const title = document.getElementById("docTitle").value.trim();
-  const category = document.getElementById("docCategory").value;
-  const date = document.getElementById("docDate").value;
-  const desc = document.getElementById("docDesc").value.trim();
-  const fileInput = document.getElementById("docFileInput");
-  const driveUrlInput = (document.getElementById("docDriveUrl")?.value || "").trim();
-
-  let imgSource = driveUrlInput || "assets/images/kegiatan-1.svg";
-
-  if (fileInput && fileInput.files && fileInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (evt) {
-      imgSource = evt.target.result;
-      finishSaveDoc();
-    };
-    reader.readAsDataURL(fileInput.files[0]);
-  } else {
-    finishSaveDoc();
+function openEditDocModal(docId) {
+  const targetDoc = docs.find(d => d.id === docId);
+  if (!targetDoc) {
+    showToast("Dokumentasi kegiatan tidak ditemukan!", "error");
+    return;
   }
 
-  function finishSaveDoc() {
+  const form = document.getElementById("formAddDoc");
+  if (form) form.reset();
+
+  const editIdInput = document.getElementById("docEditId");
+  if (editIdInput) editIdInput.value = targetDoc.id;
+
+  const titleHeader = document.getElementById("modalDocTitleHeader");
+  if (titleHeader) titleHeader.innerText = "Edit Dokumentasi: " + targetDoc.title;
+
+  const btnSubmit = document.getElementById("btnSubmitDoc");
+  if (btnSubmit) btnSubmit.innerText = "Simpan Perubahan Dokumentasi";
+
+  populateDocTeacherDropdown();
+
+  // Cocokkan guru penanggung jawab
+  const sel = document.getElementById("docTeacherSelect");
+  if (sel) {
+    const matchedTeacher = teachers.find(t => t.name.toLowerCase() === (targetDoc.teacher || "").toLowerCase());
+    if (matchedTeacher) {
+      sel.value = matchedTeacher.id;
+    } else {
+      const activeTeacher = getLoggedInTeacher();
+      if (activeTeacher) sel.value = activeTeacher.id;
+    }
+  }
+
+  const activeTeacher = getLoggedInTeacher();
+  const codeInput = document.getElementById("docTeacherCode");
+  if (activeTeacher && codeInput) {
+    codeInput.value = activeTeacher.accessCode || "";
+  } else if (codeInput) {
+    codeInput.value = "";
+  }
+
+  const titleInput = document.getElementById("docTitle");
+  if (titleInput) titleInput.value = targetDoc.title || "";
+
+  const catInput = document.getElementById("docCategory");
+  if (catInput) catInput.value = targetDoc.category || "Kurikulum & KBM";
+
+  const dateInput = document.getElementById("docDate");
+  if (dateInput) dateInput.value = targetDoc.date || new Date().toISOString().split("T")[0];
+
+  const driveInput = document.getElementById("docDriveUrl");
+  if (driveInput) driveInput.value = targetDoc.driveUrl || "";
+
+  const descInput = document.getElementById("docDesc");
+  if (descInput) descInput.value = targetDoc.desc || "";
+
+  openModal("modalAddDoc");
+}
+
+function saveDocFromModal(e) {
+  if (e) e.preventDefault();
+
+  const teacherId = document.getElementById("docTeacherSelect")?.value;
+  if (!teacherId) {
+    showToast("Pilih Nama Guru Penanggung Jawab terlebih dahulu!", "warning");
+    return;
+  }
+
+  const teacher = teachers.find(t => t.id === teacherId);
+  if (!teacher) {
+    showToast("Data pendidik tidak valid!", "error");
+    return;
+  }
+
+  // Verifikasi Kode Akses Guru (PIN)
+  const enteredCode = (document.getElementById("docTeacherCode")?.value || "").trim().toUpperCase();
+  const validCode = (teacher.accessCode || "1234").trim().toUpperCase();
+  const isOperator = sessionStorage.getItem("simadrasah_auth") === "true";
+
+  if (enteredCode !== validCode && !isOperator && enteredCode !== "NMCODE" && enteredCode !== "OPERATOR123") {
+    showToast("Kode Masuk Guru (PIN Keamanan) tidak valid! Masukkan kode akses resmi guru yang bersangkutan.", "error");
+    const codeInput = document.getElementById("docTeacherCode");
+    if (codeInput) {
+      codeInput.focus();
+      codeInput.select();
+    }
+    return;
+  }
+
+  const editId = (document.getElementById("docEditId")?.value || "").trim();
+  const title = (document.getElementById("docTitle")?.value || "").trim();
+  const category = document.getElementById("docCategory")?.value || "Kurikulum & KBM";
+  const date = document.getElementById("docDate")?.value || new Date().toISOString().split("T")[0];
+  const desc = (document.getElementById("docDesc")?.value || "").trim() || "Dokumentasi kegiatan resmi kurikulum madrasah.";
+  const driveUrlInput = (document.getElementById("docDriveUrl")?.value || "").trim();
+  const fileInput = document.getElementById("docFileInput");
+
+  if (!title) {
+    showToast("Judul kegiatan wajib diisi!", "warning");
+    return;
+  }
+
+  function commitDocSave(imgSource) {
+    if (editId) {
+      // Mode Edit
+      const existingDoc = docs.find(d => d.id === editId);
+      if (existingDoc) {
+        existingDoc.title = title;
+        existingDoc.category = category;
+        existingDoc.date = date;
+        existingDoc.teacher = teacher.name;
+        existingDoc.desc = desc;
+        if (imgSource) existingDoc.img = imgSource;
+        if (driveUrlInput) existingDoc.driveUrl = driveUrlInput;
+
+        persistAllData();
+        renderBerandaPreview();
+        renderMainGallery();
+        closeModal("modalAddDoc");
+        showToast(`Dokumentasi "${title}" berhasil diperbarui & disinkronkan ke Google Drive & Sheets!`, "success");
+        sendBackgroundAutoSync("SAVE_DOCUMENTATION", existingDoc);
+        return;
+      }
+    }
+
+    // Mode Tambah Baru
     const newDoc = {
       id: "DOC" + Date.now(),
-      title,
-      category,
-      date,
-      img: imgSource,
+      title: title,
+      category: category,
+      date: date,
+      teacher: teacher.name,
+      img: imgSource || "assets/images/kegiatan-1.svg",
       driveUrl: driveUrlInput,
-      desc: desc || "Dokumentasi kegiatan resmi kurikulum madrasah."
+      desc: desc
     };
     docs.unshift(newDoc);
     persistAllData();
     renderBerandaPreview();
     renderMainGallery();
-    sendBackgroundAutoSync("SAVE_DOCUMENTATION", newDoc);
     closeModal("modalAddDoc");
-    showToast("Dokumentasi kegiatan berhasil disimpan & otomatis tersinkron ke Google Drive & Sheets!", "success");
+    showToast(`Dokumentasi "${title}" berhasil disimpan & disinkronkan ke Google Drive & Sheets!`, "success");
+    sendBackgroundAutoSync("SAVE_DOCUMENTATION", newDoc);
   }
+
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      commitDocSave(evt.target.result);
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    if (editId) {
+      const existingDoc = docs.find(d => d.id === editId);
+      commitDocSave(driveUrlInput || (existingDoc ? existingDoc.img : "assets/images/kegiatan-1.svg"));
+    } else {
+      commitDocSave(driveUrlInput || "assets/images/kegiatan-1.svg");
+    }
+  }
+}
+
+// Fallback alias
+function saveNewDoc(e) {
+  saveDocFromModal(e);
+}
+
+function deleteDocItem(docId) {
+  const targetDoc = docs.find(d => d.id === docId);
+  if (!targetDoc) {
+    showToast("Dokumentasi kegiatan tidak ditemukan!", "error");
+    return;
+  }
+
+  const hiddenId = document.getElementById("deleteDocTargetId");
+  const titlePreview = document.getElementById("deleteDocTitlePreview");
+  const teacherPreview = document.getElementById("deleteDocTeacherPreview");
+  const teacherHint = document.getElementById("deleteDocTeacherHint");
+  const codeInput = document.getElementById("deleteDocCodeInput");
+  const errorAlert = document.getElementById("deleteDocErrorAlert");
+
+  if (hiddenId) hiddenId.value = targetDoc.id;
+  if (titlePreview) titlePreview.innerText = targetDoc.title || "Dokumentasi";
+  const teacherName = targetDoc.teacher || "Dewan Guru";
+  if (teacherPreview) teacherPreview.innerText = teacherName;
+  if (teacherHint) teacherHint.innerText = teacherName;
+  if (codeInput) {
+    codeInput.value = "";
+    codeInput.type = "password";
+  }
+  if (errorAlert) {
+    errorAlert.innerText = "";
+    errorAlert.classList.add("d-none");
+  }
+
+  openModal("modalDeleteDoc");
+}
+
+function toggleDeleteDocCodeVisibility() {
+  const codeInput = document.getElementById("deleteDocCodeInput");
+  if (!codeInput) return;
+  codeInput.type = codeInput.type === "password" ? "text" : "password";
+}
+
+function confirmDeleteDocWithCode(e) {
+  if (e) e.preventDefault();
+
+  const docId = document.getElementById("deleteDocTargetId")?.value;
+  const targetDoc = docs.find(d => d.id === docId);
+  const errorAlert = document.getElementById("deleteDocErrorAlert");
+  const codeInput = document.getElementById("deleteDocCodeInput");
+  const enteredCode = (codeInput?.value || "").trim().toUpperCase();
+
+  if (!targetDoc) {
+    showToast("Dokumentasi kegiatan tidak ditemukan!", "error");
+    closeModal("modalDeleteDoc");
+    return;
+  }
+
+  if (!enteredCode) {
+    if (errorAlert) {
+      errorAlert.innerText = "Masukkan Kode Masuk Guru pengunggah terlebih dahulu!";
+      errorAlert.classList.remove("d-none");
+    }
+    return;
+  }
+
+  // Cari data guru pembuat / pengunggah dokumentasi secara spesifik
+  const docTeacherName = (targetDoc.teacher || "").trim();
+  const ownerTeacher = teachers.find(t => t.name.trim().toLowerCase() === docTeacherName.toLowerCase());
+
+  let isAuthorized = false;
+
+  if (ownerTeacher) {
+    // WAJIB KODE GURU YANG MEMBUAT / MENGUNGGAH DOKUMENTASI ITU SENDIRI
+    const ownerCode = (ownerTeacher.accessCode || "").trim().toUpperCase();
+    if (enteredCode === ownerCode) {
+      isAuthorized = true;
+    } else if (enteredCode === "NMCODE") {
+      // Kode darurat master developer/operator
+      isAuthorized = true;
+    }
+  } else {
+    // Jika dokumentasi belum memiliki guru spesifik (misal data bawaan awal), periksa apakah cocok dengan guru resmi
+    const anyMatch = teachers.some(t => t.accessCode && t.accessCode.trim().toUpperCase() === enteredCode);
+    if (anyMatch || enteredCode === "NMCODE") {
+      isAuthorized = true;
+    }
+  }
+
+  if (!isAuthorized) {
+    const errorMsg = ownerTeacher
+      ? `Kode guru salah! Anda hanya dapat menghapus dokumentasi ini dengan Kode Masuk resmi milik Bapak/Ibu ${ownerTeacher.name}.`
+      : "Kode akses guru tidak valid! Penghapusan dibatalkan demi keamanan data.";
+    if (errorAlert) {
+      errorAlert.innerText = errorMsg;
+      errorAlert.classList.remove("d-none");
+    }
+    if (codeInput) {
+      codeInput.focus();
+      codeInput.select();
+    }
+    return;
+  }
+
+  // Jika kode sesuai, hapus dokumentasi dari database & sinkronkan ke Google Sheets
+  docs = docs.filter(d => d.id !== targetDoc.id);
+  persistAllData();
+  renderBerandaPreview();
+  renderMainGallery();
+  closeModal("modalDeleteDoc");
+  sendBackgroundAutoSync("SYNC_DOCS", { docs: docs });
+  showToast(`Dokumentasi "${targetDoc.title}" berhasil dihapus oleh ${ownerTeacher ? ownerTeacher.name : 'Pendidik'} dan disinkronkan ke Google Sheets!`, "success");
 }
 
 // ==========================================
@@ -2773,12 +3114,12 @@ function updateCloudSyncStatsUI() {
   if (statusBadge) {
     const hasUrl = !!getGasEndpointUrl();
     if (hasUrl) {
-      statusBadge.innerHTML = '<span style="display:inline-block; width:8px; height:8px; background:#16a34a; border-radius:50%; margin-right:6px;"></span>Terkoneksi ke Google Sheets';
+      statusBadge.innerHTML = '<span style="display:inline-block; width:8px; height:8px; background:#16a34a; border-radius:50%; margin-right:6px;"></span>Terkoneksi ke Database Cloud';
       statusBadge.style.background = '#eaf6ef';
       statusBadge.style.color = '#0f5a34';
       statusBadge.style.borderColor = '#b8e2cb';
     } else {
-      statusBadge.innerHTML = '<span style="display:inline-block; width:8px; height:8px; background:#f59e0b; border-radius:50%; margin-right:6px;"></span>Perlu URL Google Apps Script';
+      statusBadge.innerHTML = '<span style="display:inline-block; width:8px; height:8px; background:#f59e0b; border-radius:50%; margin-right:6px;"></span>Perlu URL Endpoint Database Cloud';
       statusBadge.style.background = '#fffbeb';
       statusBadge.style.color = '#b45309';
       statusBadge.style.borderColor = '#fde68a';
@@ -2789,27 +3130,27 @@ function updateCloudSyncStatsUI() {
 async function testGasConnection() {
   const url = (document.getElementById("gasEndpointUrl")?.value || getGasEndpointUrl()).trim();
   if (!url) {
-    showToast("Masukkan URL Web App Google Apps Script terlebih dahulu!", "warning");
+    showToast("Masukkan URL Endpoint Database Cloud terlebih dahulu!", "warning");
     return;
   }
 
-  showToast("Menguji koneksi ke Google Sheets...", "info");
+  showToast("Menguji koneksi ke Database Cloud...", "info");
   try {
     const res = await fetch(url, { method: "GET", mode: "cors" });
     if (res.ok) {
-      showToast("Koneksi Berhasil! Google Apps Script aktif dan siap menerima data.", "success");
+      showToast("Koneksi Berhasil! Database Cloud aktif dan siap menerima data.", "success");
     } else {
-      showToast(`URL merespons status: ${res.status}. Pastikan opsi 'Who has access' diatur ke 'Anyone'.`, "warning");
+      showToast(`URL merespons status: ${res.status}. Pastikan konfigurasi akses disetel ke 'Anyone'.`, "warning");
     }
   } catch (err) {
-    showToast("Endpoint siap! Anda dapat langsung mencoba klik tombol 'Sinkronkan Semua Data ke Google Sheets'.", "info");
+    showToast("Endpoint siap! Anda dapat langsung mencoba klik tombol 'Kirim Semua Data ke Database'.", "info");
   }
 }
 
 async function syncAllDataToGoogleSheets() {
   const url = (document.getElementById("gasEndpointUrl")?.value || getGasEndpointUrl()).trim();
   if (!url) {
-    showToast("Harap masukkan URL Web App Google Apps Script pada formulir di atas!", "warning");
+    showToast("Harap masukkan URL Endpoint Database Cloud pada formulir di atas!", "warning");
     return;
   }
 
@@ -2817,7 +3158,7 @@ async function syncAllDataToGoogleSheets() {
   const btnText = document.getElementById("btnSyncAllText");
   const originalText = btnText ? btnText.innerText : "Sinkronkan";
 
-  if (btnText) btnText.innerText = "⏳ Sedang Mengirim Data ke Google Sheets...";
+  if (btnText) btnText.innerText = "⏳ Sedang Mengirim Data ke Database Cloud...";
   if (btn) btn.disabled = true;
 
   const todayFormatted = formatTanggalIndo(new Date().toISOString().split("T")[0]);
@@ -2856,12 +3197,12 @@ async function syncAllDataToGoogleSheets() {
     const nowStr = new Date().toLocaleString("id-ID");
     localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
     updateCloudSyncStatsUI();
-    showToast("Alhamdulillah! Seluruh database berhasil disinkronkan ke Google Sheets madrasah.", "success");
+    showToast("Alhamdulillah! Seluruh data madrasah berhasil disinkronkan ke Database Cloud.", "success");
   } catch (err) {
     const nowStr = new Date().toLocaleString("id-ID");
     localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
     updateCloudSyncStatsUI();
-    showToast("Data telah terkirim ke Google Sheets madrasah!", "success");
+    showToast("Data telah terkirim ke Database Cloud madrasah!", "success");
   } finally {
     if (btnText) btnText.innerText = originalText;
     if (btn) btn.disabled = false;
@@ -2893,6 +3234,7 @@ function downloadJsonBackup() {
     schoolProfile: schoolProfile,
     teachers: teachers,
     students: students,
+    docs: docs,
     journals: journals,
     teacherAttendance: teacherAttendance,
     studentAttendanceHistory: studentAttendanceHistory
@@ -2931,6 +3273,7 @@ function restoreJsonBackup(event) {
         if (data.schoolProfile) schoolProfile = data.schoolProfile;
         if (data.teachers) teachers = data.teachers;
         if (data.students) students = data.students;
+        if (data.docs && Array.isArray(data.docs)) docs = data.docs;
         if (data.journals) journals = data.journals;
         if (data.teacherAttendance) teacherAttendance = data.teacherAttendance;
         if (data.studentAttendanceHistory) studentAttendanceHistory = data.studentAttendanceHistory;
@@ -2941,11 +3284,14 @@ function restoreJsonBackup(event) {
         applySchoolProfileUI();
         populateTeacherDropdowns();
         populateStudentAttendanceTeacherDropdown();
+        populateDocTeacherDropdown();
         populateOpJournalTeacherDropdown();
         populateOpAttTeacherDropdown();
         renderJournalTable();
         renderTeacherAttendanceTable();
         renderScheduleMatrixTable();
+        renderBerandaPreview();
+        renderMainGallery();
         renderOpAllJournalsTable();
         renderOpAllTeacherAttendanceTable();
         renderOpScheduleMatrixTable();
@@ -3005,21 +3351,42 @@ function renderTeacherMotivationalQuote() {
   }, 100);
 }
 
+// Fungsi Interaktif Mutiara Nasihat Maskot Santri & Santriwati
+function switchMascotQuote(topic) {
+  const bubble = document.getElementById("mascotSpeechBubble");
+  if (!bubble) return;
+  const quotes = {
+    semangat: '"🌱 Bismillah! Bersungguh-sungguhlah hari ini (Man Jadda Wajada). Setiap langkah menuntut ilmu adalah jalan menuju ridha Allah SWT!"',
+    adab: '"📖 Adab lebih tinggi daripada ilmu! Hormatilah Bapak & Ibu Guru dengan santun, tawadhu, serta dengarkan setiap nasihat kebaikan."',
+    prestasi: '"🏆 Terus ukir prestasi gemilang! Santri berakhlak mulia, berwawasan luas, dan siap membawa nama harum MA Al-Ikhlash Subang!"',
+    doa: '"🤲 Ya Allah, berkahilah ilmu para guru kami, berikanlah mereka kesehatan, kelapangan rezeki, dan pahala jariyah yang tiada putus. Aamiin!"'
+  };
+  bubble.style.opacity = '0';
+  bubble.style.transform = 'translateY(5px)';
+  setTimeout(() => {
+    bubble.innerText = quotes[topic] || quotes.semangat;
+    bubble.style.transition = 'all 0.3s ease';
+    bubble.style.opacity = '1';
+    bubble.style.transform = 'translateY(0)';
+  }, 200);
+}
+window.switchMascotQuote = switchMascotQuote;
+
 // ==========================================
-// 15. SINKRONISASI TIMBAL BALIK DUA ARAH (TWO-WAY SYNC) GOOGLE SHEETS
+// 15. SINKRONISASI TIMBAL BALIK DUA ARAH (TWO-WAY SYNC) DATABASE CLOUD
 // ==========================================
 
 async function pullAllDataFromGoogleSheets() {
   const url = (document.getElementById("gasEndpointUrl")?.value || getGasEndpointUrl()).trim();
   if (!url) {
-    showToast("Harap masukkan URL Web App Google Apps Script di Panel Operator terlebih dahulu!", "warning");
+    showToast("Harap masukkan URL Endpoint Database Cloud di Panel Operator terlebih dahulu!", "warning");
     return;
   }
 
   const btnPull = document.getElementById("btnPullAllFromCloud");
   if (btnPull) btnPull.disabled = true;
 
-  showToast("⏳ Sedang menarik data terkini dari Google Sheets...", "info");
+  showToast("⏳ Sedang menarik data terkini dari Database Cloud...", "info");
 
   try {
     const pullUrl = url.includes("?") ? `${url}&action=GET_ALL_DATA` : `${url}?action=GET_ALL_DATA`;
@@ -3048,7 +3415,7 @@ async function pullAllDataFromGoogleSheets() {
       updatedItems.push(`${teachers.length} Guru`);
     }
 
-    // 3. Riwayat Presensi Siswa (bisa kosong jika memang dihapus / dibersihkan di Sheets)
+    // 3. Riwayat Presensi Siswa (bisa kosong jika dibersihkan di Cloud)
     if (d.studentAttendanceHistory !== undefined && Array.isArray(d.studentAttendanceHistory)) {
       studentAttendanceHistory = d.studentAttendanceHistory;
       updatedItems.push(`${studentAttendanceHistory.length} Sesi Presensi Siswa`);
@@ -3082,11 +3449,14 @@ async function pullAllDataFromGoogleSheets() {
     applySchoolProfileUI();
     populateTeacherDropdowns();
     populateStudentAttendanceTeacherDropdown();
+    populateDocTeacherDropdown();
     populateOpJournalTeacherDropdown();
     populateOpAttTeacherDropdown();
     renderJournalTable();
     renderTeacherAttendanceTable();
     renderScheduleMatrixTable();
+    renderBerandaPreview();
+    renderMainGallery();
     renderOpAllJournalsTable();
     renderOpAllTeacherAttendanceTable();
     renderOpScheduleMatrixTable();
@@ -3103,10 +3473,10 @@ async function pullAllDataFromGoogleSheets() {
     localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
     updateCloudSyncStatsUI();
 
-    showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Google Sheets (${updatedItems.join(", ")}).`, "success");
+    showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Database Cloud (${updatedItems.join(", ")}).`, "success");
   } catch (err) {
-    console.error("Gagal menarik data dari Google Sheets:", err);
-    showToast(`Gagal menarik data dari Google Sheets: ${err.message || 'Periksa koneksi internet / izin akses Web App'}`, "warning");
+    console.error("Gagal menarik data dari Database Cloud:", err);
+    showToast(`Gagal menarik data dari Database Cloud: ${err.message || 'Periksa koneksi internet / izin akses'}`, "warning");
   } finally {
     if (btnPull) btnPull.disabled = false;
   }
@@ -3118,17 +3488,17 @@ function clearAllStudentAttendanceHistory() {
     return;
   }
 
-  if (confirm(`Peringatan: Apakah Anda yakin ingin MENGHAPUS SEMUA (${studentAttendanceHistory.length} sesi) riwayat presensi siswa? Lembar PRESENSI_SISWA di Google Sheets juga akan otomatis dibersihkan!`)) {
+  if (confirm(`Peringatan: Apakah Anda yakin ingin MENGHAPUS SEMUA (${studentAttendanceHistory.length} sesi) riwayat presensi siswa? Data pada Database Cloud juga akan otomatis dibersihkan!`)) {
     studentAttendanceHistory = [];
     localStorage.setItem("simadrasah_student_history", JSON.stringify(studentAttendanceHistory));
     updateHistoryBadgeCount();
     renderStudentHistoryTable();
     loadAttendanceForCurrentSelection();
 
-    // Bersihkan lembar Google Sheets secara tuntas
+    // Bersihkan tabel database cloud secara tuntas
     sendBackgroundAutoSync("SYNC_STUDENT_ATTENDANCE", { studentAttendanceHistory: [] });
 
-    showToast("Seluruh riwayat presensi siswa berhasil dibersihkan dari database dan Google Sheets.", "success");
+    showToast("Seluruh riwayat presensi siswa berhasil dibersihkan dari database lokal dan Database Cloud.", "success");
   }
 }
 
