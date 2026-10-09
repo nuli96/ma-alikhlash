@@ -227,15 +227,15 @@ SIMADRASAH kini telah terintegrasi dengan **Pusat Sinkronisasi Google Sheets & B
 ```
 PROJECT WEBSITE SEKOLAH/
 ├── index.html                   # Halaman utama portal SIMADRASAH
+├── logo.jpeg                    # Lambang resmi warna asli Yayasan Al-Ikhlash
 ├── PETUNJUK_PENGGUNAAN.md       # Buku panduan lengkap (berkas ini)
 ├── google_apps_script.js        # Skrip endpoint siap pakai untuk Google Sheets & Drive
 ├── css/
-│   └── style.css               # Desain visual tema hijau madrasah & putih sejuk
+│   └── style.css               # Desain visual tema hijau madrasah & responsif mobile HP
 ├── js/
 │   └── app.js                  # Logika presensi kamera, Admin Gate, & Cloud Sync API
 └── assets/
-    └── images/                 # Folder lokal lambang & dokumentasi madrasah
-        ├── logo-madrasah.svg   # Lambang resmi Yayasan Al-Ikhlash (vektor tajam)
+    └── images/                 # Folder lokal dokumentasi kegiatan madrasah
         ├── kegiatan-1.svg      # Dokumentasi Supervisi KMA 450
         ├── kegiatan-2.svg      # Dokumentasi Apel Hari Santri
         ├── kegiatan-3.svg      # Dokumentasi Asesmen Berbasis Komputer

@@ -38,7 +38,7 @@ const DEFAULT_PROFILE = {
   skIjinOperasional: "962 TAHUN 2023",
   skIjinOperasionalTgl: "2023-11-03",
   aktaPendirian: "1901-01-01",
-  logo: "assets/images/logo-madrasah.svg"
+  logo: "logo.jpeg"
 };
 
 const DEFAULT_TEACHERS = [
@@ -285,8 +285,8 @@ const DEFAULT_STUDENT_HISTORY = [
 // ==========================================
 // 2. STATE MANAGEMENT & LOCAL STORAGE
 // ==========================================
-// Versioning: memastikan pembaruan profil MA AL-IKHLASH, kode akses guru, & riwayat presensi otomatis aktif
-const SYSTEM_DATA_VERSION = "v7_ma_al_ikhlash_with_date_reports";
+// Versioning: memastikan pembaruan profil MA AL-IKHLASH, logo resmi logo.jpeg, & tata letak HP otomatis aktif
+const SYSTEM_DATA_VERSION = "v8_ma_al_ikhlash_logo_jpeg_mobile";
 if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
   localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
   localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
@@ -298,6 +298,11 @@ if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
 }
 
 let schoolProfile = JSON.parse(localStorage.getItem("simadrasah_profile")) || DEFAULT_PROFILE;
+// Pastikan selalu menggunakan logo resmi logo.jpeg jika sebelumnya tersimpan logo svg lama
+if (!schoolProfile.logo || schoolProfile.logo.includes("logo-madrasah.svg") || schoolProfile.logo === "assets/images/logo-madrasah.svg") {
+  schoolProfile.logo = "logo.jpeg";
+  localStorage.setItem("simadrasah_profile", JSON.stringify(schoolProfile));
+}
 let teachers = JSON.parse(localStorage.getItem("simadrasah_teachers")) || DEFAULT_TEACHERS;
 let students = JSON.parse(localStorage.getItem("simadrasah_students")) || DEFAULT_STUDENTS;
 let docs = JSON.parse(localStorage.getItem("simadrasah_docs")) || DEFAULT_DOCS;
@@ -419,8 +424,14 @@ function applySchoolProfileUI() {
   if (footerTitle) footerTitle.innerText = schoolProfile.name;
   if (footerAddr) footerAddr.innerText = schoolProfile.address;
 
-  if (mainLogo) mainLogo.src = schoolProfile.logo;
-  if (opLogo) opLogo.src = schoolProfile.logo;
+  if (mainLogo) {
+    mainLogo.src = schoolProfile.logo || "logo.jpeg";
+    mainLogo.onerror = function () { this.src = "logo.jpeg"; };
+  }
+  if (opLogo) {
+    opLogo.src = schoolProfile.logo || "logo.jpeg";
+    opLogo.onerror = function () { this.src = "logo.jpeg"; };
+  }
 
   // Nilai form operator
   const profName = document.getElementById("profSchoolName");
@@ -2164,10 +2175,10 @@ function handleLogoUpload(e) {
 }
 
 function resetDefaultLogo() {
-  schoolProfile.logo = "assets/images/logo-madrasah.svg";
+  schoolProfile.logo = "logo.jpeg";
   persistAllData();
   applySchoolProfileUI();
-  showToast("Logo telah dikembalikan ke logo standar madrasah.", "info");
+  showToast("Logo telah dikembalikan ke logo resmi madrasah.", "info");
 }
 
 function saveSchoolProfile(e) {

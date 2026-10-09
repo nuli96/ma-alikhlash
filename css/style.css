@@ -74,18 +74,29 @@ body {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
 }
 
 .top-bar-info {
   display: flex;
-  gap: 1.25rem;
+  gap: 1rem;
   align-items: center;
 }
 
 .top-bar-info span {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
+}
+
+.live-clock-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  letter-spacing: 0.02em;
 }
 
 .app-header {
@@ -110,28 +121,31 @@ body {
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.875rem;
   text-decoration: none;
   color: inherit;
 }
 
 .logo-wrapper {
-  width: 54px;
-  height: 54px;
-  background: var(--color-primary-subtle);
-  border: 2px solid var(--color-primary-border);
+  width: 58px;
+  height: 58px;
+  background: #ffffff;
+  border: 1.5px solid rgba(15, 90, 52, 0.2);
   border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  padding: 2px;
 }
 
 .logo-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  border-radius: calc(var(--radius-md) - 2px);
 }
 
 .brand-info h1 {
@@ -146,6 +160,7 @@ body {
   font-size: 0.775rem;
   color: var(--color-text-muted);
   font-weight: 500;
+  line-height: 1.3;
 }
 
 .badge-kurikulum {
@@ -154,10 +169,9 @@ body {
   color: var(--color-gold);
   border: 1px solid #f6d89b;
   font-size: 0.7rem;
-  padding: 1px 7px;
+  padding: 2px 8px;
   border-radius: 9999px;
   font-weight: 700;
-  margin-top: 2px;
 }
 
 /* Navigasi Utama */
@@ -973,31 +987,285 @@ body {
   color: #ffffff;
 }
 
-/* Responsive Breakpoints */
+/* Responsive Breakpoints & Mobile Optimization */
 @media (max-width: 992px) {
   .camera-card-layout {
     grid-template-columns: 1fr;
   }
-  .header-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .main-nav {
-    width: 100%;
-    overflow-x: auto;
-  }
-  .academic-banner {
-    flex-direction: column;
-    gap: 1.25rem;
-    align-items: flex-start;
-  }
-  .banner-stats {
-    width: 100%;
-    justify-content: space-between;
-  }
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+}
+
+/* Optimasi Tampilan Smartphone (HP Android & iOS) */
+@media (max-width: 860px) {
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Top Bar Bersih & Rapi di Layar HP */
+  .top-notification-bar {
+    padding: 6px 12px;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .top-bar-info {
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.725rem;
+    flex-wrap: wrap;
+  }
+
+  .top-bar-kemenag .kemenag-title {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-size: 0.725rem;
+  }
+
+  .live-clock-pill {
+    font-size: 0.725rem;
+    padding: 1px 6px;
+  }
+
+  /* Header Madrasah Berformat 2 Baris Presisi */
+  .header-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px 10px;
+    padding: 8px 12px;
+    align-items: center;
+  }
+
+  .brand-section {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .logo-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 9px;
+    padding: 1px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .brand-info {
+    min-width: 0;
+  }
+
+  .brand-info h1 {
+    font-size: 1.025rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .brand-info p {
+    font-size: 0.7rem;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-actions {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-self: center;
+  }
+
+  .btn-operator-chip {
+    padding: 5px 9px;
+    font-size: 0.75rem;
+    gap: 4px;
+    border-radius: var(--radius-md);
+    white-space: nowrap;
+  }
+
+  /* Tab Menu Utama Berbentuk Pill Carousel Halus di HP */
+  .main-nav {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    width: 100%;
+    margin-top: 2px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 4px;
+    gap: 5px;
+    background: #edf3f0;
+    border-radius: var(--radius-md);
+  }
+
+  .main-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .nav-link svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Konten Utama */
+  .main-wrapper {
+    padding: 0 10px;
+    margin: 1rem auto 2.5rem auto;
+  }
+
+  /* Banner Sambutan & 3 Kotak Statistik Pas 100% di HP */
+  .academic-banner {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1.25rem;
+  }
+
+  .banner-content h2 {
+    font-size: 1.15rem;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
+  }
+
+  .banner-content p {
+    font-size: 0.825rem;
+    line-height: 1.45;
+  }
+
+  .banner-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 6px;
+  }
+
+  .stat-box {
+    min-width: 0;
+    padding: 0.5rem 0.25rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .stat-box .stat-num {
+    font-size: 1.25rem;
+  }
+
+  .stat-box .stat-label {
+    font-size: 0.625rem;
+    letter-spacing: 0;
+  }
+
+  /* Sub-Navigasi Pill Swipeable di HP */
+  .subnav-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 6px;
+    gap: 6px;
+  }
+
+  .subnav-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subnav-btn {
+    flex: 0 0 auto;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    gap: 5px;
+  }
+
+  /* Form & Modals */
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  .modal-backdrop {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .modal-dialog {
+    max-height: 94vh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .modal-header, .modal-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .card-header {
+    padding: 0.85rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .toast-container {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .toast {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/* Smartphone Layar Kecil (360px - 420px) */
+@media (max-width: 480px) {
+  .brand-info h1 {
+    font-size: 0.925rem;
+  }
+
+  .brand-info p {
+    font-size: 0.65rem;
+  }
+
+  .logo-wrapper {
+    width: 44px;
+    height: 44px;
+  }
+
+  .camera-actions {
+    flex-direction: column;
+  }
+
+  .camera-actions .btn {
+    width: 100%;
+  }
+
+  .stat-card {
+    padding: 10px 12px;
   }
 }
 
