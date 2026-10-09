@@ -494,14 +494,30 @@ function readAllDataFromSpreadsheet(ss) {
       var row = dVals[i];
       var title = String(row[3] || "").trim();
       if (!title) continue;
-      var driveLink = String(row[6] || "").trim();
+
+      var teacherName = "-";
+      var desc = "-";
+      var driveLink = "";
+
+      // Jika kolom >= 8 (Format Resmi Baru: No, ID, Tanggal, Judul, Kategori, Guru, Deskripsi, DriveUrl)
+      if (row.length >= 8) {
+        teacherName = String(row[5] || "-").trim();
+        desc = String(row[6] || "-").trim();
+        driveLink = String(row[7] || "").trim();
+      } else {
+        // Format kompatibilitas lama 7 kolom
+        desc = String(row[5] || "-").trim();
+        driveLink = String(row[6] || "").trim();
+      }
+
       var imgSrc = (driveLink && driveLink !== "-" && driveLink.indexOf("http") === 0) ? driveLink : "assets/images/kegiatan-1.svg";
       docs.push({
         id: String(row[1] || ("DOC" + (i + 1))),
         date: String(row[2] || "-"),
         title: title,
         category: String(row[4] || "Kurikulum & KBM"),
-        desc: String(row[5] || "-"),
+        teacher: teacherName,
+        desc: desc,
         img: imgSrc,
         driveUrl: driveLink
       });
@@ -697,7 +713,7 @@ function syncStudentHistorySheet(ss, history) {
 function syncDocsSheet(ss, docs) {
   var headers = [
     "No", "ID Kegiatan", "Tanggal Kegiatan", "Judul Kegiatan", "Kategori Kurikulum",
-    "Deskripsi & Ringkasan Kegiatan", "Tautan Foto / Video Google Drive"
+    "Guru Penanggung Jawab", "Deskripsi & Ringkasan Kegiatan", "Tautan Foto / Video Google Drive"
   ];
   var sheet = getOrCreateSheet(ss, "DOKUMENTASI_KEGIATAN", headers);
   sheet.clearContents();
@@ -709,12 +725,14 @@ function syncDocsSheet(ss, docs) {
     var d = docs[i];
     var fileSource = d.img || d.file || d.photo || d.driveUrl || "";
     var driveLink = saveDocFileToDrive(d.title, fileSource);
+    var teacherName = d.teacher || d.recordedBy || "-";
     rows.push([
       i + 1,
       d.id || ("DOC" + (i + 1)),
       d.date || "-",
       d.title || "-",
       d.category || "-",
+      teacherName,
       d.desc || "-",
       driveLink
     ]);
@@ -817,6 +835,11 @@ function saveSelfiePhotoToDrive(teacherName, base64Photo) {
 
 function normalizeDocsSheet(sheet, expectedHeaders) {
   var lastCol = sheet.getLastColumn();
+  if (lastCol === 0) {
+    sheet.appendRow(expectedHeaders);
+    formatHeaderRow(sheet, expectedHeaders.length);
+    return;
+  }
   if (lastCol < expectedHeaders.length) {
     sheet.getRange(1, 1, 1, expectedHeaders.length).setValues([expectedHeaders]);
     formatHeaderRow(sheet, expectedHeaders.length);
