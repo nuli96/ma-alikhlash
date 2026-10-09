@@ -447,20 +447,113 @@ function applySchoolProfileUI() {
   if (profAddr) profAddr.value = schoolProfile.address;
 }
 
-// Update Angka Statistik Beranda
+// Update Angka Statistik, Grafik Visual, & Matriks Beranda
 function updateTopStatistics() {
+  const totalGuru = teachers.length;
+  const totalSiswa = students.length;
+
+  // 1. Data Presensi Guru Hari Ini (Berdasarkan teacherAttendance)
+  const presentTeachers = new Set(teacherAttendance.map(t => t.teacherId || t.teacherName)).size;
+  const guruPercentage = totalGuru > 0 ? Math.round((presentTeachers / totalGuru) * 100) : 0;
+  const guruBelumHadir = Math.max(0, totalGuru - presentTeachers);
+  const donutDegrees = Math.round((guruPercentage / 100) * 360);
+
+  // Update Donut Chart Dewan Guru
+  const elDonut = document.getElementById("teacherDonutChart");
+  if (elDonut) {
+    elDonut.style.background = `conic-gradient(#15803d 0deg, #15803d ${donutDegrees}deg, #e2e8f0 ${donutDegrees}deg, #e2e8f0 360deg)`;
+  }
+  const elTeacherPercent = document.getElementById("chartTeacherPercent");
+  if (elTeacherPercent) elTeacherPercent.innerText = `${guruPercentage}%`;
+
+  const elHadirCount = document.getElementById("chartTeacherHadirCount");
+  if (elHadirCount) elHadirCount.innerText = `${presentTeachers} Guru`;
+
+  const elBelumCount = document.getElementById("chartTeacherBelumCount");
+  if (elBelumCount) elBelumCount.innerText = `${guruBelumHadir} Guru`;
+
+  const elTeacherTotal = document.getElementById("chartTeacherTotal");
+  if (elTeacherTotal) elTeacherTotal.innerText = `${totalGuru} Guru`;
+
+  // 2. Data Distribusi Siswa per Rombongan Belajar (Bar Chart)
+  let c1 = 0, c2 = 0, c3 = 0;
+  students.forEach(s => {
+    const cls = (s.class || "").toLowerCase();
+    if (cls.includes("1") || cls.includes("x") || cls.includes("sepuluh")) {
+      c1++;
+    } else if (cls.includes("2") || cls.includes("xi") || cls.includes("sebelas")) {
+      c2++;
+    } else if (cls.includes("3") || cls.includes("xii") || cls.includes("dua belas")) {
+      c3++;
+    } else {
+      c1++;
+    }
+  });
+
+  const p1 = totalSiswa > 0 ? Math.round((c1 / totalSiswa) * 100) : 0;
+  const p2 = totalSiswa > 0 ? Math.round((c2 / totalSiswa) * 100) : 0;
+  const p3 = totalSiswa > 0 ? Math.round((c3 / totalSiswa) * 100) : 0;
+
+  const elBar1Count = document.getElementById("barClass1Count");
+  const elBar1Fill = document.getElementById("barFillClass1");
+  if (elBar1Count) elBar1Count.innerText = `${c1} Siswa (${p1}%)`;
+  if (elBar1Fill) elBar1Fill.style.width = `${p1}%`;
+
+  const elBar2Count = document.getElementById("barClass2Count");
+  const elBar2Fill = document.getElementById("barFillClass2");
+  if (elBar2Count) elBar2Count.innerText = `${c2} Siswa (${p2}%)`;
+  if (elBar2Fill) elBar2Fill.style.width = `${p2}%`;
+
+  const elBar3Count = document.getElementById("barClass3Count");
+  const elBar3Fill = document.getElementById("barFillClass3");
+  if (elBar3Count) elBar3Count.innerText = `${c3} Siswa (${p3}%)`;
+  if (elBar3Fill) elBar3Fill.style.width = `${p3}%`;
+
+  // 3. Tabel Matriks Realisasi Kurikulum
+  const elTableGuru = document.getElementById("tableGuruCount");
+  if (elTableGuru) elTableGuru.innerText = `${totalGuru} Pendidik`;
+
+  const elTableSiswa = document.getElementById("tableSiswaCount");
+  if (elTableSiswa) elTableSiswa.innerText = `${totalSiswa} Siswa`;
+
+  const elTableRatio = document.getElementById("tablePresensiRatio");
+  if (elTableRatio) elTableRatio.innerText = `${presentTeachers} / ${totalGuru} Hadir`;
+
+  const elTableBadge = document.getElementById("tablePresensiBadge");
+  if (elTableBadge) {
+    if (guruPercentage >= 100) {
+      elTableBadge.className = "badge badge-hadir";
+      elTableBadge.innerText = "Lengkap (100%)";
+    } else if (guruPercentage > 0) {
+      elTableBadge.className = "badge badge-izin";
+      elTableBadge.innerText = `Berjalan (${guruPercentage}%)`;
+    } else {
+      elTableBadge.className = "badge";
+      elTableBadge.style.background = "#f1f5f9";
+      elTableBadge.style.color = "#64748b";
+      elTableBadge.innerText = "Belum Ada";
+    }
+  }
+
+  const elTablePresensiProgress = document.getElementById("tablePresensiProgress");
+  if (elTablePresensiProgress) elTablePresensiProgress.style.width = `${guruPercentage}%`;
+
+  const elTablePresensiPercent = document.getElementById("tablePresensiPercent");
+  if (elTablePresensiPercent) elTablePresensiPercent.innerText = `${guruPercentage}%`;
+
+  const elTableJurnal = document.getElementById("tableJurnalTotal");
+  if (elTableJurnal) {
+    const totalJurnal = Array.isArray(journals) ? journals.length : 0;
+    elTableJurnal.innerText = `${totalJurnal} Rekaman`;
+  }
+
+  // 4. Kompatibilitas mundur elemen teks angka lama
   const statGuru = document.getElementById("statTotalGuru");
   const statSiswa = document.getElementById("statTotalSiswa");
   const statPresensi = document.getElementById("statPresensiGuruHariIni");
-
-  if (statGuru) statGuru.innerText = teachers.length;
-  if (statSiswa) statSiswa.innerText = students.length;
-
-  if (statPresensi) {
-    const presentTeachers = new Set(teacherAttendance.map(t => t.teacherId)).size;
-    const percentage = teachers.length > 0 ? Math.round((presentTeachers / teachers.length) * 100) : 0;
-    statPresensi.innerText = `${percentage}%`;
-  }
+  if (statGuru) statGuru.innerText = totalGuru;
+  if (statSiswa) statSiswa.innerText = totalSiswa;
+  if (statPresensi) statPresensi.innerText = `${guruPercentage}%`;
 }
 
 // ==========================================
@@ -923,6 +1016,7 @@ function submitTeacherActivity(e) {
   persistAllData();
   renderJournalTable();
   renderOpAllJournalsTable();
+  updateTopStatistics();
   sendBackgroundAutoSync("SAVE_TEACHER_JOURNAL", newJournal);
 
   document.getElementById("formTeacherActivity").reset();
