@@ -175,7 +175,13 @@ body {
 }
 
 /* Navigasi Utama */
-.main-nav {
+.main-nav-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.main-nav-grid {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -218,26 +224,127 @@ body {
   flex-shrink: 0;
 }
 
-/* Tombol Akses Cepat Operator */
-.header-actions {
+/* Tombol Akses Operator Admin */
+.nav-admin-bottom {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
 }
 
 .btn-operator-chip {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   background: #ffffff;
-  border: 1px solid var(--color-primary-border);
+  border: 1.5px solid var(--color-primary-border);
   color: var(--color-primary-dark);
   font-size: 0.825rem;
-  font-weight: 600;
-  padding: 6px 12px;
+  font-weight: 700;
+  padding: 7px 14px;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-operator-chip:hover {
+  background: var(--color-primary-subtle);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 5px rgba(15, 90, 52, 0.15);
+}
+
+/* Sub-Navigasi Absensi Guru (List ke Bawah Rapi & Jelas) */
+.teacher-subnav-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-bottom: 1.5rem !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  width: 100% !important;
+}
+
+.teacher-list-btn {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 11px 16px !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  border: 1.5px solid var(--color-border) !important;
+  background: #ffffff !important;
+  color: var(--color-text-main) !important;
+  text-align: left !important;
+  transition: all 0.18s ease !important;
+  box-shadow: var(--shadow-sm) !important;
+  cursor: pointer !important;
+}
+
+.teacher-list-btn:hover {
+  background: var(--color-primary-subtle) !important;
+  border-color: var(--color-primary-border) !important;
+  color: var(--color-primary-dark) !important;
+}
+
+.teacher-list-btn.active {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 8px rgba(15, 90, 52, 0.25) !important;
+}
+
+.teacher-list-btn.active svg {
+  stroke: #ffffff !important;
+}
+
+/* Sub-Navigasi Kehadiran Siswa (Grid Rapi) */
+.subnav-siswa-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 8px !important;
+  margin-bottom: 1.25rem !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+  width: 100% !important;
+}
+
+.subnav-siswa-btn {
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 14px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  border: 1.5px solid var(--color-border) !important;
+  background: #ffffff !important;
+  color: var(--color-text-main) !important;
+  box-shadow: var(--shadow-sm) !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+}
+
+.subnav-siswa-btn:hover {
+  background: var(--color-primary-subtle) !important;
+  border-color: var(--color-primary-border) !important;
+  color: var(--color-primary-dark) !important;
+}
+
+.subnav-siswa-btn.active {
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary-dark) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 3px 6px rgba(15, 90, 52, 0.2) !important;
+}
+
+.subnav-siswa-btn.active svg {
+  stroke: #ffffff !important;
 }
 
 .btn-operator-chip:hover {
@@ -1032,166 +1139,160 @@ body {
     padding: 1px 6px;
   }
 
-  /* Header Madrasah Berformat 2 Baris Presisi */
+  /* Header Madrasah di Layar HP: Nama Sekolah Full Width & Terlihat Jelas */
   .header-container {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    gap: 8px 10px;
-    padding: 8px 12px;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 12px;
+    align-items: stretch;
   }
 
   .brand-section {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    gap: 10px;
-    min-width: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
   .logo-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 9px;
-    padding: 1px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    padding: 2px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
   }
 
   .brand-info {
+    flex: 1;
     min-width: 0;
   }
 
   .brand-info h1 {
-    font-size: 1.025rem;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--color-primary-dark);
+    white-space: normal;
+    word-break: normal;
   }
 
   .brand-info p {
-    font-size: 0.7rem;
-    line-height: 1.25;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .header-actions {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    align-self: center;
-  }
-
-  .btn-operator-chip {
-    padding: 5px 9px;
-    font-size: 0.75rem;
-    gap: 4px;
-    border-radius: var(--radius-md);
-    white-space: nowrap;
-  }
-
-  /* Tab Menu Utama Berbentuk Pill Carousel Halus di HP */
-  .main-nav {
-    grid-column: 1 / -1;
-    grid-row: 2 / 3;
-    width: 100%;
+    font-size: 0.72rem;
+    line-height: 1.3;
+    color: var(--color-text-muted);
+    white-space: normal;
     margin-top: 2px;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 4px;
-    gap: 5px;
-    background: #edf3f0;
-    border-radius: var(--radius-md);
   }
 
-  .main-nav::-webkit-scrollbar {
-    display: none;
+  /* Navigasi Menu Utama di HP: Grid 2 Kolom Sesuai Urutan */
+  .main-nav-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+  }
+
+  .main-nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    width: 100%;
+    background: transparent;
+    padding: 0;
+    border: none;
   }
 
   .nav-link {
-    flex: 0 0 auto;
-    padding: 6px 12px;
-    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 6px;
-    border-radius: var(--radius-sm);
+    padding: 9px 8px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: #ffffff;
+    color: var(--color-text-main);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    white-space: normal;
+  }
+
+  .nav-link.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary-dark);
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(15, 90, 52, 0.25);
   }
 
   .nav-link svg {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
   }
 
-  /* Konten Utama */
-  .main-wrapper {
-    padding: 0 10px;
-    margin: 1rem auto 2.5rem auto;
-  }
-
-  /* Banner Sambutan & 3 Kotak Statistik Pas 100% di HP */
-  .academic-banner {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.25rem 1rem;
-    border-radius: var(--radius-lg);
-    margin-bottom: 1.25rem;
-  }
-
-  .banner-content h2 {
-    font-size: 1.15rem;
-    line-height: 1.3;
-    margin-bottom: 0.25rem;
-  }
-
-  .banner-content p {
-    font-size: 0.825rem;
-    line-height: 1.45;
-  }
-
-  .banner-stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  /* Tombol Admin / Operator di Paling Bawah Menu Navigasi */
+  .nav-admin-bottom {
     width: 100%;
-    gap: 6px;
   }
 
-  .stat-box {
-    min-width: 0;
-    padding: 0.5rem 0.25rem;
-    border-radius: var(--radius-sm);
+  .btn-operator-chip.full-width {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 14px;
+    font-size: 0.825rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    background: #fbfdfc;
+    border: 1.5px solid var(--color-primary-border);
+    color: var(--color-primary-dark);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   }
 
-  .stat-box .stat-num {
-    font-size: 1.25rem;
+  /* Sub-Navigasi Guru di HP: List ke Bawah Rapi & Jelas (Tidak Memusingkan) */
+  .teacher-subnav-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+    overflow-x: visible !important;
+    white-space: normal !important;
   }
 
-  .stat-box .stat-label {
-    font-size: 0.625rem;
-    letter-spacing: 0;
+  .teacher-list-btn {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 11px 14px !important;
+    font-size: 0.85rem !important;
+    white-space: normal !important;
+    text-align: left !important;
   }
 
-  /* Sub-Navigasi Pill Swipeable di HP */
-  .subnav-pills {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 6px;
-    gap: 6px;
+  /* Sub-Navigasi Kehadiran Siswa di HP: Grid 2 Kolom Rapi */
+  .subnav-siswa-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    width: 100% !important;
+    overflow-x: visible !important;
+    white-space: normal !important;
   }
 
-  .subnav-pills::-webkit-scrollbar {
-    display: none;
-  }
-
-  .subnav-btn {
-    flex: 0 0 auto;
-    padding: 6px 12px;
-    font-size: 0.8rem;
-    gap: 5px;
+  .subnav-siswa-btn {
+    width: 100% !important;
+    padding: 9px 6px !important;
+    font-size: 0.775rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.25 !important;
   }
 
   /* Form & Modals */
