@@ -52,6 +52,12 @@
 
 3. **Portal Pendidik & Kehadiran Guru**:
    - Gerbang keamanan autentikasi kode masuk guru.
+   - **Geotagging GPS Realtime & Validasi Radius 500 Meter**:
+     - Sensor GPS HP guru mendeteksi titik koordinat lintang & bujur secara realtime saat membuka formulir presensi.
+     - Sistem otomatis menghitung jarak akurat terhadap titik koordinat resmi MA Al-Ikhlash (`Lat: -6.4600709, Long: 107.7299263`) menggunakan rumus Haversine bumi.
+     - Presensi masuk/pulang harian wajib berada di dalam radius maksimal 500 meter (tombol presensi terkunci otomatis jika berada di luar jangkauan sekolah).
+     - Pengecualian cerdas untuk jenis presensi *Tugas Dinas Luar / MGMP / Pelatihan* dan *Izin / Sakit* yang tetap dapat dikirim dari luar radius dengan titik lokasi tetap terekam ke database.
+     - Tersedia tombol *Cek Ulang GPS* dan kontrol pengaturan di Panel Operator (*Mode Ketat* vs *Mode Uji Coba* untuk fleksibilitas testing).
    - **Presensi Mandiri Pendidik**: Pengambilan foto selfie kehadiran melalui kamera langsung atau berkas foto disertai pencatatan jam tepat waktu/terlambat otomatis.
    - **Jurnal KBM Harian**: Pencatatan materi ajar, mata pelajaran, rombel kelas, topik pembelajaran, dan evaluasi hasil belajar.
    - **Matriks Pembagian Tugas Mengajar**: Distribusi 17 kode guru resmi dewan pendidik sesuai SK madrasah.

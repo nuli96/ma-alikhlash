@@ -793,7 +793,7 @@
 
                     <div class="form-group">
                       <label class="form-label">Jenis Presensi <span class="req">*</span></label>
-                      <select id="attendanceType" class="form-select" required>
+                      <select id="attendanceType" class="form-select" required onchange="handleAttendanceTypeChange()">
                         <option value="Datang (Pagi)">Presensi Masuk / Datang (Pagi)</option>
                         <option value="Pulang (Sore)">Presensi Selesai Tugas / Pulang</option>
                         <option value="Dinas Luar">Tugas Dinas Luar / MGMP / Pelatihan</option>
@@ -807,14 +807,40 @@
                     </div>
                   </div>
 
-                  <div style="background: var(--color-primary-subtle); border: 1px solid var(--color-primary-border); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 1.25rem;">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                      <span style="font-size: 0.825rem; font-weight: 700; color: var(--color-primary-dark);">Status Lokasi Geotagging:</span>
-                      <span class="badge badge-hadir">Radius Area Madrasah (Tervalidasi)</span>
+                  <!-- Widget Status Lokasi Geotagging GPS Realtime (Radius 500 Meter) -->
+                  <div id="geotagStatusContainer" class="geotag-container">
+                    <div class="geotag-header">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="geoIconSvg" style="color: var(--color-primary); flex-shrink: 0;">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">Status Geotagging GPS:</span>
+                      </div>
+                      <span id="geoStatusBadge" class="geotag-badge geotag-badge-loading">
+                        <span class="pulse-dot" style="background:#eab308; animation:pulseYellowDot 1.5s infinite;"></span>
+                        <span>Mendeteksi Lokasi GPS...</span>
+                      </span>
+                    </div>
+
+                    <div class="geotag-coords-bar">
+                      <div id="geoCoordsText">
+                        Titik Anda: <code id="geoCoordsVal">-</code> • Jarak: <strong id="geoDistanceVal">-</strong> <span id="geoRadiusLimitText">(Batas: 500m)</span>
+                      </div>
+                      <button type="button" class="btn btn-outline btn-sm" id="btnRefreshGps" style="padding: 3px 10px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 5px;" onclick="detectTeacherGpsLocation(true)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                        <span>Cek Ulang GPS</span>
+                      </button>
+                    </div>
+
+                    <!-- Peringatan jika di luar radius -->
+                    <div id="geoWarningAlert" class="d-none" style="margin-top: 10px; background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 0.775rem; display: flex; align-items: flex-start; gap: 8px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      <span id="geoWarningText">Anda terdeteksi berada di luar jangkauan madrasah (&gt; 500 meter). Presensi masuk/pulang harian wajib dilakukan di lingkungan madrasah. Jika sedang bertugas dinas di luar, silakan pilih Jenis Presensi 'Tugas Dinas Luar'.</span>
                     </div>
                   </div>
 
-                  <button type="submit" class="btn btn-primary" style="width: 100%;">
+                  <button type="submit" id="btnSubmitTeacherAttendance" class="btn btn-primary" style="width: 100%;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                     Kirim &amp; Rekam Presensi Pendidik
                   </button>
@@ -1649,6 +1675,39 @@
               </div>
             </div>
 
+            <!-- Kartu Pengaturan Geotagging GPS Madrasah -->
+            <div class="card" style="margin-bottom: 1.25rem;">
+              <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <span style="font-weight: 700; color: var(--color-primary-dark);">Pengaturan Geotagging GPS &amp; Radius Presensi Guru</span>
+                <span id="opGpsRadiusBadge" class="badge" style="background:#eaf6ef; color:#0f5a34; border:1px solid #b8e2cb;">Radius: 500m (Aktif)</span>
+              </div>
+              <div class="card-body">
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px;">
+                  Sistem menghitung jarak lokasi GPS guru terhadap koordinat MA Al-Ikhlash secara otomatis menggunakan rumus Haversine. Presensi harian dibatasi sesuai radius maksimal berikut:
+                </p>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label">Titik Koordinat GPS Madrasah (Latitude, Longitude) <span class="req">*</span></label>
+                    <input type="text" id="profGpsCoords" class="form-control" value="-6.4600709, 107.7299263" placeholder="-6.4600709, 107.7299263">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Radius Maksimal Presensi (Meter) <span class="req">*</span></label>
+                    <input type="number" id="profGpsRadius" class="form-control" value="500" min="50" max="5000">
+                  </div>
+                  <div class="form-group full-width">
+                    <label class="form-label">Mode Validasi Radius Presensi</label>
+                    <select id="profGpsMode" class="form-select">
+                      <option value="strict">Ketat (Wajib &le; 500 Meter - Tombol presensi dikunci jika di luar radius)</option>
+                      <option value="flexible">Mode Uji Coba / Fleksibel (Peringatan saja - Tetap bisa absen dari luar sekolah)</option>
+                    </select>
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 5px;">
+                      *Gunakan <strong>Mode Uji Coba</strong> apabila Anda atau penguji sedang berada di rumah / luar sekolah dan ingin menguji sistem presensi.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Form Pengaturan Profil Madrasah -->
             <form id="formSchoolProfile" onsubmit="saveSchoolProfile(event)">
               <div class="form-grid">
@@ -2211,7 +2270,7 @@
     </div>
   </footer>
 
-  <!-- File JavaScript Aplikasi (dengan Cache Buster v=15.0 - Auto-Sync Sempurna & Penghapusan Residu Dummy) -->
-  <script src="js/app.js?v=15.0"></script>
+  <!-- File JavaScript Aplikasi (dengan Cache Buster v=16.0 - Geotagging GPS Realtime Radius 500M) -->
+  <script src="js/app.js?v=16.0"></script>
 </body>
 </html>

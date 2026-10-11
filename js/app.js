@@ -41,6 +41,14 @@ const DEFAULT_PROFILE = {
   logo: "logo.jpeg"
 };
 
+// Konfigurasi Standar Titik Geotagging GPS Madrasah (Radius 500 Meter)
+const DEFAULT_GEOTAG_CONFIG = {
+  schoolLat: -6.4600709,
+  schoolLng: 107.7299263,
+  radiusMeters: 500,
+  mode: "strict" // 'strict' (wajib <= 500m) | 'flexible' (mode uji coba / fleksibel)
+};
+
 const DEFAULT_TEACHERS = [
   { id: "G01", code: "1, 2", name: "TITA ROSITA", nip: "19830514 200801 2 005", mapel: "Alqur'an hadist, Akidah akhlak", role: "Guru PAI", subjects: ["Alqur'an hadist", "Akidah akhlak"], accessCode: "TITA123" },
   { id: "G02", code: "3, 4", name: "MIMI MUTIARA, S.Pd", nip: "-", mapel: "SKI, Fikih", role: "Guru PAI", subjects: ["SKI", "Fikih"], accessCode: "MIMI123" },
@@ -306,6 +314,7 @@ let docs = JSON.parse(localStorage.getItem("simadrasah_docs")) || DEFAULT_DOCS;
 let journals = JSON.parse(localStorage.getItem("simadrasah_journals")) || [];
 let teacherAttendance = JSON.parse(localStorage.getItem("simadrasah_teacher_attendance")) || [];
 let studentAttendanceHistory = JSON.parse(localStorage.getItem("simadrasah_student_history")) || DEFAULT_STUDENT_HISTORY;
+let geotagConfig = JSON.parse(localStorage.getItem("simadrasah_geotag_config")) || DEFAULT_GEOTAG_CONFIG;
 
 let currentSelectedClass = "Kelas 1";
 let currentAzFilter = "ALL";
@@ -329,6 +338,7 @@ function persistAllData() {
   localStorage.setItem("simadrasah_journals", JSON.stringify(journals));
   localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify(teacherAttendance));
   localStorage.setItem("simadrasah_student_history", JSON.stringify(studentAttendanceHistory));
+  localStorage.setItem("simadrasah_geotag_config", JSON.stringify(geotagConfig));
 }
 
 // ==========================================
@@ -370,6 +380,11 @@ document.addEventListener("DOMContentLoaded", () => {
   updateTeacherGateUI();
   initCloudSyncUI();
   initTeacherMotivationQuotes();
+
+  // Inisialisasi awal deteksi lokasi Geotagging GPS
+  if (document.getElementById("geotagStatusContainer")) {
+    detectTeacherGpsLocation(false);
+  }
 
   // Set default date input for doc
   const dateInput = document.getElementById("docDate");
@@ -468,6 +483,22 @@ function applySchoolProfileUI() {
   if (profNpsn) profNpsn.value = schoolProfile.npsn;
   if (profAkr) profAkr.value = schoolProfile.akreditasi;
   if (profAddr) profAddr.value = schoolProfile.address;
+
+  // Nilai form pengaturan Geotagging GPS Madrasah
+  const profGpsCoords = document.getElementById("profGpsCoords");
+  const profGpsRadius = document.getElementById("profGpsRadius");
+  const profGpsMode = document.getElementById("profGpsMode");
+  const opGpsRadiusBadge = document.getElementById("opGpsRadiusBadge");
+
+  if (profGpsCoords) profGpsCoords.value = `${geotagConfig.schoolLat}, ${geotagConfig.schoolLng}`;
+  if (profGpsRadius) profGpsRadius.value = geotagConfig.radiusMeters || 500;
+  if (profGpsMode) profGpsMode.value = geotagConfig.mode || "strict";
+  if (opGpsRadiusBadge) {
+    const isFlex = geotagConfig.mode === "flexible";
+    opGpsRadiusBadge.innerText = `Radius: ${geotagConfig.radiusMeters || 500}m (${isFlex ? 'Mode Uji Coba' : 'Ketat'})`;
+    opGpsRadiusBadge.style.background = isFlex ? '#fef9c3' : '#eaf6ef';
+    opGpsRadiusBadge.style.color = isFlex ? '#a16207' : '#0f5a34';
+  }
 }
 
 // Update Angka Statistik, Grafik Visual, & Matriks Beranda
@@ -612,6 +643,11 @@ function switchMainTab(tabId, subTabId = null) {
     autoSyncFromCloudOnStartup();
   }
 
+  // Jika membuka tab Guru, trigger deteksi GPS secara otomatis
+  if (tabId === "tab-guru") {
+    detectTeacherGpsLocation(false);
+  }
+
   // Jika ada subtab khusus
   if (subTabId && tabId === "tab-guru") {
     switchTeacherSubTab(subTabId);
@@ -624,6 +660,11 @@ function switchTeacherSubTab(subId) {
   document.querySelectorAll(".teacher-sub-pane").forEach(pane => pane.classList.add("d-none"));
   const targetPane = document.getElementById(subId);
   if (targetPane) targetPane.classList.remove("d-none");
+
+  // Jika membuka sub-presensi selfie, perbarui GPS
+  if (subId === "sub-selfie") {
+    detectTeacherGpsLocation(false);
+  }
 
   // Active status pada subnav pills
   const mapBtn = {
@@ -1365,6 +1406,256 @@ function handleSelfieUpload(e) {
   reader.readAsDataURL(file);
 }
 
+// ==========================================
+// GEOTAGGING GPS & VALIDASI RADIUS 500 METER
+// ==========================================
+let currentTeacherGps = {
+  lat: null,
+  lng: null,
+  accuracy: null,
+  distance: null,
+  isInside: false,
+  status: "idle", // 'idle' | 'detecting' | 'valid' | 'outside' | 'error'
+  errorMsg: "",
+  lastChecked: null
+};
+
+// Rumus Haversine: Menghitung jarak bumi antara 2 titik koordinat (dalam satuan meter)
+function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // Radius bumi dalam meter
+  const toRad = deg => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
+}
+
+function formatDistanceText(meters) {
+  if (meters === null || meters === undefined || isNaN(meters)) return "-";
+  if (meters < 1000) return `${meters} Meter`;
+  return `${(meters / 1000).toFixed(2)} KM`;
+}
+
+// Deteksi sinyal GPS lokasi guru dari satelit / sensor HP
+function detectTeacherGpsLocation(forceToast = false) {
+  const badge = document.getElementById("geoStatusBadge");
+  const btnRefresh = document.getElementById("btnRefreshGps");
+
+  if (!navigator.geolocation) {
+    currentTeacherGps.status = "error";
+    currentTeacherGps.errorMsg = "Browser perangkat tidak mendukung sensor GPS.";
+    updateGeotagUI();
+    if (forceToast) showToast("Perangkat atau browser tidak mendukung fitur Geolocation GPS.", "warning");
+    return;
+  }
+
+  currentTeacherGps.status = "detecting";
+  if (badge) {
+    badge.className = "geotag-badge geotag-badge-loading";
+    badge.innerHTML = '<span class="pulse-dot" style="background:#eab308; animation:pulseYellowDot 1.5s infinite;"></span><span>Mendeteksi Lokasi GPS...</span>';
+  }
+  if (btnRefresh) btnRefresh.disabled = true;
+
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      const acc = Math.round(position.coords.accuracy || 0);
+
+      const targetLat = geotagConfig.schoolLat || -6.4600709;
+      const targetLng = geotagConfig.schoolLng || 107.7299263;
+      const maxRadius = geotagConfig.radiusMeters || 500;
+
+      const dist = calculateHaversineDistance(lat, lng, targetLat, targetLng);
+      const isInside = dist <= maxRadius;
+
+      currentTeacherGps = {
+        lat: lat,
+        lng: lng,
+        accuracy: acc,
+        distance: dist,
+        isInside: isInside,
+        status: isInside ? "valid" : "outside",
+        errorMsg: "",
+        lastChecked: new Date()
+      };
+
+      if (btnRefresh) btnRefresh.disabled = false;
+      updateGeotagUI();
+
+      if (forceToast) {
+        if (isInside) {
+          showToast(`✓ Lokasi GPS Terdeteksi! Anda berada di area madrasah (Jarak: ${formatDistanceText(dist)}).`, "success");
+        } else {
+          showToast(`⚠️ Lokasi GPS: Anda berada di luar radius madrasah (Jarak: ${formatDistanceText(dist)}, batas: ${maxRadius}m).`, "warning");
+        }
+      }
+    },
+    error => {
+      if (btnRefresh) btnRefresh.disabled = false;
+      let msg = "Gagal membaca sinyal GPS.";
+      if (error.code === error.PERMISSION_DENIED) {
+        msg = "Izin akses lokasi ditolak oleh browser/pengguna.";
+      } else if (error.code === error.POSITION_UNAVAILABLE) {
+        msg = "Informasi lokasi GPS tidak tersedia pada perangkat saat ini.";
+      } else if (error.code === error.TIMEOUT) {
+        msg = "Waktu permintaan sinyal GPS habis (timeout).";
+      }
+
+      currentTeacherGps.status = "error";
+      currentTeacherGps.errorMsg = msg;
+      updateGeotagUI();
+
+      if (forceToast) {
+        showToast(`GPS: ${msg}. Harap aktifkan GPS HP dan beri izin lokasi.`, "warning");
+      }
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 15000
+    }
+  );
+}
+
+function handleAttendanceTypeChange() {
+  updateGeotagUI();
+}
+
+function updateGeotagUI() {
+  const container = document.getElementById("geotagStatusContainer");
+  const badge = document.getElementById("geoStatusBadge");
+  const coordsVal = document.getElementById("geoCoordsVal");
+  const distVal = document.getElementById("geoDistanceVal");
+  const alertBox = document.getElementById("geoWarningAlert");
+  const alertText = document.getElementById("geoWarningText");
+  const submitBtn = document.getElementById("btnSubmitTeacherAttendance");
+  const radiusLimitText = document.getElementById("geoRadiusLimitText");
+
+  if (!container || !badge) return;
+
+  const attTypeSelect = document.getElementById("attendanceType");
+  const attType = attTypeSelect ? attTypeSelect.value : "Datang (Pagi)";
+  const isDinasOrIzin = attType.includes("Dinas") || attType.includes("Izin") || attType.includes("Sakit");
+  const maxRadius = geotagConfig.radiusMeters || 500;
+  const isStrict = geotagConfig.mode !== "flexible";
+
+  if (radiusLimitText) {
+    radiusLimitText.innerText = `(Batas: ${maxRadius}m)`;
+  }
+
+  // Tampilkan koordinat dan jarak ke tampilan
+  if (currentTeacherGps.lat !== null) {
+    if (coordsVal) coordsVal.innerText = `${currentTeacherGps.lat.toFixed(6)}, ${currentTeacherGps.lng.toFixed(6)}`;
+    if (distVal) distVal.innerText = formatDistanceText(currentTeacherGps.distance);
+  } else {
+    if (coordsVal) coordsVal.innerText = "-";
+    if (distVal) distVal.innerText = "-";
+  }
+
+  // KONDISI 1: Guru memilih Dinas Luar atau Izin / Sakit (Tetap diizinkan)
+  if (isDinasOrIzin) {
+    container.className = "geotag-container dinas";
+    const distText = currentTeacherGps.distance !== null ? ` (~${formatDistanceText(currentTeacherGps.distance)})` : "";
+    badge.className = "geotag-badge geotag-badge-dinas";
+    badge.innerHTML = `<span>🔵 ${attType.includes("Dinas") ? "Tugas Dinas Luar" : "Izin/Sakit"}${distText} • Disetujui</span>`;
+    if (alertBox) alertBox.classList.add("d-none");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.title = "Kirim presensi dinas luar / izin";
+    }
+    return;
+  }
+
+  // KONDISI 2: Sedang mencari sinyal GPS
+  if (currentTeacherGps.status === "detecting") {
+    container.className = "geotag-container";
+    badge.className = "geotag-badge geotag-badge-loading";
+    badge.innerHTML = '<span class="pulse-dot" style="background:#eab308; animation:pulseYellowDot 1.5s infinite;"></span><span>Mendeteksi Lokasi GPS...</span>';
+    if (alertBox) alertBox.classList.add("d-none");
+    if (submitBtn && isStrict) {
+      submitBtn.disabled = true;
+      submitBtn.title = "Menunggu verifikasi lokasi GPS...";
+    }
+    return;
+  }
+
+  // KONDISI 3: GPS Error / Izin Ditolak
+  if (currentTeacherGps.status === "error" || currentTeacherGps.lat === null) {
+    container.className = "geotag-container outside";
+    badge.className = "geotag-badge geotag-badge-error";
+    badge.innerHTML = '<span>⚠️ Izin GPS Belum Aktif</span>';
+
+    if (alertBox && alertText) {
+      alertBox.classList.remove("d-none");
+      alertText.innerHTML = `<strong>Akses GPS Diperlukan:</strong> ${currentTeacherGps.errorMsg || 'Lokasi tidak terbaca'}. Harap aktifkan GPS HP Anda dan klik tombol <strong>'Cek Ulang GPS'</strong> di atas.`;
+    }
+
+    if (submitBtn) {
+      if (isStrict) {
+        submitBtn.disabled = true;
+        submitBtn.title = "Aktifkan GPS HP untuk mengirim presensi.";
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.title = "Mode Uji Coba: GPS belum terbaca namun presensi tetap diizinkan.";
+      }
+    }
+    return;
+  }
+
+  // KONDISI 4: Berada di Dalam Radius (<= 500m)
+  if (currentTeacherGps.isInside) {
+    container.className = "geotag-container valid";
+    badge.className = "geotag-badge geotag-badge-valid";
+    badge.innerHTML = `<span>🟢 Di Area Madrasah (~${formatDistanceText(currentTeacherGps.distance)}) • Tervalidasi</span>`;
+    if (alertBox) alertBox.classList.add("d-none");
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.title = "Lokasi terverifikasi di area madrasah. Siap kirim presensi.";
+    }
+    return;
+  }
+
+  // KONDISI 5: Berada di Luar Radius (> 500m)
+  if (!currentTeacherGps.isInside) {
+    if (isStrict) {
+      // Mode Ketat: Blokir submit
+      container.className = "geotag-container outside";
+      badge.className = "geotag-badge geotag-badge-outside";
+      badge.innerHTML = `<span>🔴 Di Luar Jangkauan (~${formatDistanceText(currentTeacherGps.distance)}) • Batas ${maxRadius}m</span>`;
+
+      if (alertBox && alertText) {
+        alertBox.classList.remove("d-none");
+        alertText.innerHTML = `<strong>Di Luar Radius Madrasah:</strong> Anda terdeteksi berjarak <strong>${formatDistanceText(currentTeacherGps.distance)}</strong> dari MA Al-Ikhlash (Batas radius maksimal: ${maxRadius} meter). Presensi masuk/pulang harian wajib dilakukan di lingkungan madrasah. Jika sedang bertugas dinas di luar sekolah, silakan pilih <em>'Tugas Dinas Luar'</em> pada pilihan Jenis Presensi.`;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.title = `Presensi terkunci: Anda berada ${formatDistanceText(currentTeacherGps.distance)} di luar radius madrasah.`;
+      }
+    } else {
+      // Mode Fleksibel / Uji Coba: Peringatan saja, tombol tetap bisa diklik
+      container.className = "geotag-container flexible";
+      badge.className = "geotag-badge geotag-badge-flexible";
+      badge.innerHTML = `<span>🟡 Mode Uji Coba: Luar Radius (~${formatDistanceText(currentTeacherGps.distance)})</span>`;
+
+      if (alertBox && alertText) {
+        alertBox.classList.remove("d-none");
+        alertText.innerHTML = `<strong>Mode Uji Coba Aktif:</strong> Anda berjarak <strong>${formatDistanceText(currentTeacherGps.distance)}</strong> dari madrasah. Tombol presensi tetap diizinkan untuk keperluan testing sistem dari rumah.`;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.title = "Mode Uji Coba aktif: Presensi diizinkan.";
+      }
+    }
+  }
+}
+
 function submitTeacherAttendance(e) {
   e.preventDefault();
   const teacherId = document.getElementById("teacherSelect").value;
@@ -1374,6 +1665,25 @@ function submitTeacherAttendance(e) {
   if (!teacherId) {
     showToast("Pilih nama guru terlebih dahulu!", "warning");
     return;
+  }
+
+  const isDinasOrIzin = attendanceType.includes("Dinas") || attendanceType.includes("Izin") || attendanceType.includes("Sakit");
+  const isStrict = geotagConfig.mode !== "flexible";
+
+  // Validasi Ketat Geotagging GPS jika bukan Dinas Luar / Izin
+  if (!isDinasOrIzin && isStrict) {
+    if (currentTeacherGps.status === "detecting") {
+      showToast("Sedang mendeteksi sinyal GPS. Mohon tunggu beberapa detik...", "info");
+      return;
+    }
+    if (currentTeacherGps.status === "error" || currentTeacherGps.lat === null) {
+      showToast("Izin lokasi GPS wajib diaktifkan untuk presensi di madrasah! Klik tombol 'Cek Ulang GPS'.", "warning");
+      return;
+    }
+    if (!currentTeacherGps.isInside) {
+      showToast(`Presensi ditolak! Posisi Anda berada di luar radius madrasah (${formatDistanceText(currentTeacherGps.distance)} dari sekolah, batas: ${geotagConfig.radiusMeters}m).`, "warning");
+      return;
+    }
   }
 
   const teacher = teachers.find(t => t.id === teacherId);
@@ -1388,6 +1698,21 @@ function submitTeacherAttendance(e) {
     attendanceStatus = "Terlambat";
   }
 
+  // Ringkasan Lokasi & Jarak Geotagging
+  let locationSummary = "-";
+  if (currentTeacherGps.distance !== null) {
+    const distText = formatDistanceText(currentTeacherGps.distance);
+    if (isDinasOrIzin) {
+      locationSummary = `Dinas/Izin (${distText})`;
+    } else if (currentTeacherGps.isInside) {
+      locationSummary = `Area Madrasah (~${distText})`;
+    } else {
+      locationSummary = `Luar Radius (${distText})`;
+    }
+  } else {
+    locationSummary = "GPS Nonaktif";
+  }
+
   const record = {
     id: "TA" + Date.now(),
     date: dateFormatted,
@@ -1398,7 +1723,13 @@ function submitTeacherAttendance(e) {
     time: timeStr,
     type: attendanceType,
     status: attendanceStatus,
-    notes: notes || "Presensi mandiri pendidik via portal",
+    notes: (notes ? `${notes} • ` : "") + `Lokasi: ${locationSummary}`,
+    location: {
+      lat: currentTeacherGps.lat,
+      lng: currentTeacherGps.lng,
+      distance: currentTeacherGps.distance,
+      isInside: currentTeacherGps.isInside
+    },
     photo: currentCapturedSelfieData || "assets/images/logo-madrasah.svg"
   };
 
@@ -1416,7 +1747,7 @@ function submitTeacherAttendance(e) {
   const previewPhoto = document.getElementById("capturedPhotoImg");
   if (previewPhoto) previewPhoto.style.display = "none";
 
-  showToast(`Presensi berhasil disimpan untuk ${teacher.name}!`, "success");
+  showToast(`Presensi berhasil disimpan untuk ${teacher.name} (${locationSummary})!`, "success");
   switchTeacherSubTab("sub-rekap-guru");
 }
 
@@ -2775,9 +3106,26 @@ function saveSchoolProfile(e) {
   schoolProfile.akreditasi = document.getElementById("profAkreditasi").value.trim();
   schoolProfile.address = document.getElementById("profAddress").value.trim();
 
+  // Simpan Pengaturan Geotagging GPS Madrasah
+  const coordsInput = (document.getElementById("profGpsCoords")?.value || "").split(",");
+  if (coordsInput.length === 2) {
+    const lat = parseFloat(coordsInput[0].trim());
+    const lng = parseFloat(coordsInput[1].trim());
+    if (!isNaN(lat) && !isNaN(lng)) {
+      geotagConfig.schoolLat = lat;
+      geotagConfig.schoolLng = lng;
+    }
+  }
+  const radInput = parseInt(document.getElementById("profGpsRadius")?.value || "500", 10);
+  if (!isNaN(radInput) && radInput > 0) {
+    geotagConfig.radiusMeters = radInput;
+  }
+  geotagConfig.mode = document.getElementById("profGpsMode")?.value || "strict";
+
   persistAllData();
   applySchoolProfileUI();
-  showToast("Identitas madrasah berhasil diperbarui!", "success");
+  updateGeotagUI();
+  showToast("Identitas & pengaturan Geotagging GPS madrasah berhasil diperbarui!", "success");
 }
 
 function resetToInitialData() {

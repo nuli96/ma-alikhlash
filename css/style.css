@@ -2139,3 +2139,110 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
+/* ==========================================
+   GEOTAGGING GPS & VALIDASI RADIUS 500M
+   ========================================== */
+.geotag-container {
+  background: #f8fafc;
+  border: 1.5px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.geotag-container.valid {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.geotag-container.outside {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.geotag-container.dinas {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.geotag-container.flexible {
+  background: #fefce8;
+  border-color: #fef08a;
+}
+
+.geotag-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.geotag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.775rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+}
+
+.geotag-badge-valid {
+  background: #eaf6ef;
+  color: #0f5a34;
+  border: 1px solid #b8e2cb;
+}
+
+.geotag-badge-outside {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.geotag-badge-dinas {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.geotag-badge-loading {
+  background: #fefce8;
+  color: #854d0e;
+  border: 1px solid #fef08a;
+}
+
+.geotag-badge-error {
+  background: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+.geotag-badge-flexible {
+  background: #fef9c3;
+  color: #a16207;
+  border: 1px solid #fde047;
+}
+
+.geotag-coords-bar {
+  margin-top: 10px;
+  font-size: 0.775rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 8px;
+}
+
+@keyframes pulseYellowDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(234, 179, 8, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+}
+
