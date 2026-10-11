@@ -308,6 +308,28 @@ function doPost(e) {
       });
     }
 
+    // AKSI 9: SINKRONISASI PENUH JURNAL KBM (SYNC_JOURNALS)
+    if (action === "SYNC_JOURNALS") {
+      var journalsList = data.journals || [];
+      syncJournalsSheet(ss, journalsList);
+      return responseJson({
+        status: "success",
+        action: "SYNC_JOURNALS",
+        message: "Seluruh jurnal mengajar berhasil disinkronkan ke lembar JURNAL_KBM."
+      });
+    }
+
+    // AKSI 10: SINKRONISASI PENUH PRESENSI GURU (SYNC_TEACHER_ATTENDANCE)
+    if (action === "SYNC_TEACHER_ATTENDANCE") {
+      var attList = data.teacherAttendance || [];
+      syncTeacherAttendanceSheet(ss, attList);
+      return responseJson({
+        status: "success",
+        action: "SYNC_TEACHER_ATTENDANCE",
+        message: "Seluruh presensi guru berhasil disinkronkan ke lembar PRESENSI_GURU."
+      });
+    }
+
     return responseJson({ status: "error", message: "Aksi tidak dikenali: " + action });
 
   } catch (error) {
@@ -821,10 +843,12 @@ function formatHeaderRow(sheet, numCols) {
 
 function convertDriveLinkToDirectUrl(link) {
   if (!link || typeof link !== "string" || link === "-") return "-";
-  if (link.indexOf("lh3.googleusercontent.com") !== -1) return link;
-  var match = link.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || link.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  var match = link.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+              link.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+              link.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/) ||
+              link.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/);
   if (match && match[1]) {
-    return "https://lh3.googleusercontent.com/d/" + match[1];
+    return "https://drive.google.com/thumbnail?id=" + match[1] + "&sz=w1200";
   }
   return link;
 }
@@ -841,7 +865,7 @@ function saveSelfiePhotoToDrive(teacherName, base64Photo) {
     var file = folder.createFile(blob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
     var fileId = file.getId();
-    return "https://lh3.googleusercontent.com/d/" + fileId;
+    return "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w600";
   } catch (e) {
     return "Gagal simpan foto: " + e.toString();
   }
@@ -898,7 +922,7 @@ function saveDocFileToDrive(docTitle, base64OrUrl) {
       var file = folder.createFile(blob);
       file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       var fileId = file.getId();
-      return "https://lh3.googleusercontent.com/d/" + fileId;
+      return "https://drive.google.com/thumbnail?id=" + fileId + "&sz=w1200";
     } catch (e) {
       return "Gagal unggah ke Drive: " + e.toString();
     }

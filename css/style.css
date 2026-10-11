@@ -2023,3 +2023,119 @@ body {
   color: #14532d;
   font-weight: 700;
 }
+
+/* ========================================================
+   INDIKATOR AUTO-SYNC CLOUD DUA ARAH REALTIME (MULTI-DEVICE)
+   ======================================================== */
+.live-sync-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #15803d;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(22, 163, 74, 0.08);
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.live-sync-pill.syncing {
+  background: #f0f9ff;
+  border-color: #7dd3fc;
+  color: #0369a1;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.1);
+}
+
+.live-sync-pill.error {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+  display: inline-block;
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+  animation: pulseGreenDot 2s infinite cubic-bezier(0.66, 0, 0, 1);
+  flex-shrink: 0;
+}
+
+.live-sync-pill.syncing .pulse-dot {
+  background: #0284c7;
+  box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7);
+  animation: pulseBlueDot 1s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+.live-sync-pill.error .pulse-dot {
+  background: #dc2626;
+  box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  animation: pulseRedDot 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulseGreenDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
+  }
+}
+
+@keyframes pulseBlueDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(2, 132, 199, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(2, 132, 199, 0);
+  }
+}
+
+@keyframes pulseRedDot {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+  }
+}
+
+.header-live-sync-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(240, 253, 244, 0.95);
+  border: 1px solid rgba(134, 239, 172, 0.8);
+  color: #14532d;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.725rem;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+

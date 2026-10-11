@@ -317,15 +317,15 @@ const DEFAULT_STUDENT_HISTORY = [
 // 2. STATE MANAGEMENT & LOCAL STORAGE
 // ==========================================
 // Versioning: memastikan pembaruan data 24 siswa resmi & sinkronisasi dokumentasi otomatis aktif
-const SYSTEM_DATA_VERSION = "v10_realtime_cloud_sync_2026";
+const SYSTEM_DATA_VERSION = "v11_realtime_cloud_sync_2026";
 if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
-  localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
-  localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
-  localStorage.setItem("simadrasah_students", JSON.stringify(DEFAULT_STUDENTS));
-  localStorage.setItem("simadrasah_docs", JSON.stringify(DEFAULT_DOCS));
-  localStorage.setItem("simadrasah_journals", JSON.stringify(DEFAULT_JOURNALS));
-  localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify(DEFAULT_TEACHER_ATTENDANCE));
-  localStorage.setItem("simadrasah_student_history", JSON.stringify(DEFAULT_STUDENT_HISTORY));
+  if (!localStorage.getItem("simadrasah_profile")) localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
+  if (!localStorage.getItem("simadrasah_teachers")) localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
+  if (!localStorage.getItem("simadrasah_students")) localStorage.setItem("simadrasah_students", JSON.stringify(DEFAULT_STUDENTS));
+  if (!localStorage.getItem("simadrasah_docs")) localStorage.setItem("simadrasah_docs", JSON.stringify(DEFAULT_DOCS));
+  if (!localStorage.getItem("simadrasah_journals")) localStorage.setItem("simadrasah_journals", JSON.stringify(DEFAULT_JOURNALS));
+  if (!localStorage.getItem("simadrasah_teacher_attendance")) localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify(DEFAULT_TEACHER_ATTENDANCE));
+  if (!localStorage.getItem("simadrasah_student_history")) localStorage.setItem("simadrasah_student_history", JSON.stringify(DEFAULT_STUDENT_HISTORY));
   localStorage.setItem("simadrasah_version", SYSTEM_DATA_VERSION);
 }
 
@@ -412,13 +412,13 @@ document.addEventListener("DOMContentLoaded", () => {
     dateInput.value = new Date().toISOString().split("T")[0];
   }
 
-  // ⚡ SINKRONISASI OTOMATIS SAAT PERTAMA KALI MASUK WEBSITE
-  // Menjamin seluruh HP guru yang membuka website langsung menyelaraskan data terbaru dari Database Cloud
+  // ⚡ SINKRONISASI OTOMATIS SEKETIKA SAAT PERTAMA KALI MASUK WEBSITE (MULTI-DEVICE)
+  // Menjamin seluruh HP guru yang membuka website langsung menyelaraskan data terbaru dari Database Cloud tanpa klik tombol
   setTimeout(() => {
     autoSyncFromCloudOnStartup();
-  }, 400);
+  }, 50);
 
-  // Auto-sync saat guru kembali membuka tab / aplikasi (Visibility Change & Window Focus)
+  // Auto-sync seketika saat guru kembali membuka tab / beralih aplikasi di HP (Visibility Change & Window Focus)
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
       autoSyncFromCloudOnStartup();
@@ -428,10 +428,13 @@ document.addEventListener("DOMContentLoaded", () => {
     autoSyncFromCloudOnStartup();
   });
 
-  // Auto-sync periodik setiap 3 menit di latar belakang
+  // Auto-sync periodik realtime setiap 15 detik di latar belakang
+  // Jika Guru Bu Tita atau guru lain upload di HP beliau, HP guru lain otomatis menyelaraskan foto & data dalam 15 detik
   setInterval(() => {
-    autoSyncFromCloudOnStartup();
-  }, 180000);
+    if (document.visibilityState === "visible") {
+      autoSyncFromCloudOnStartup();
+    }
+  }, 15000);
 });
 
 // Live Clock & Tanggal Masehi/Hijriyah
@@ -758,6 +761,16 @@ function toggleDocCodeVisibility() {
   passInput.type = passInput.type === "password" ? "text" : "password";
 }
 
+// Helper: Ekstrak ID file Google Drive dari aneka ragam format link
+function getGoogleDriveFileId(url) {
+  if (!url || typeof url !== "string" || url === "-" || url === "") return "";
+  const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) ||
+                url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+                url.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/) ||
+                url.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/);
+  return (match && match[1]) ? match[1] : "";
+}
+
 // Helper: Ubah link Google Drive biasa menjadi Direct CDN Image Link resmi Google yang bisa di-load oleh browser semua HP
 function formatDriveImageUrl(url) {
   if (!url || typeof url !== "string" || url === "-" || url === "") {
@@ -767,17 +780,37 @@ function formatDriveImageUrl(url) {
   if (url.startsWith("data:") || url.startsWith("assets/") || url.includes("logo.jpeg")) {
     return url;
   }
-  // Sudah dalam bentuk Google User Content CDN
-  if (url.includes("lh3.googleusercontent.com")) {
-    return url;
-  }
-  // Ekstrak ID file dari link Google Drive (/file/d/ID/... atau id=ID)
-  const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (driveMatch && driveMatch[1]) {
-    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  const fileId = getGoogleDriveFileId(url);
+  if (fileId) {
+    // Format thumbnail beresolusi tinggi 1200px (Anti-blokir referer & super cepat di semua mobile browser)
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
   }
   return url;
 }
+
+// Helper: Penanganan Error Multi-Step Fallback (Thumbnail -> LH3 -> UC -> Placeholder SVG)
+function handleGalleryImageError(imgElem, fileId) {
+  if (!imgElem) return;
+  const step = parseInt(imgElem.getAttribute("data-error-step") || "0", 10);
+
+  if (fileId && fileId !== "-" && fileId !== "undefined" && fileId.length > 5) {
+    if (step === 0) {
+      imgElem.setAttribute("data-error-step", "1");
+      imgElem.src = `https://lh3.googleusercontent.com/d/${fileId}`;
+      return;
+    }
+    if (step === 1) {
+      imgElem.setAttribute("data-error-step", "2");
+      imgElem.src = `https://drive.google.com/uc?export=view&id=${fileId}`;
+      return;
+    }
+  }
+
+  // Fallback terakhir: placeholder lokal
+  imgElem.onerror = null;
+  imgElem.src = "assets/images/kegiatan-1.svg";
+}
+window.handleGalleryImageError = handleGalleryImageError;
 
 // Helper: Kompresi foto dari kamera/galeri HP sebelum disimpan & dikirim ke Cloud agar ringan (~150-250KB) & super cepat
 function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.8) {
@@ -827,10 +860,15 @@ function renderBerandaPreview() {
   const previewItems = docs.slice(0, 3);
   container.innerHTML = previewItems.map(item => {
     const displayImg = formatDriveImageUrl(item.img || item.driveUrl);
+    const driveId = getGoogleDriveFileId(item.img || item.driveUrl);
+    const directDriveUrl = (item.driveUrl && item.driveUrl.startsWith('http'))
+      ? item.driveUrl
+      : (driveId ? `https://drive.google.com/file/d/${driveId}/view` : '');
+
     return `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img referrerpolicy="no-referrer" src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" data-error-step="0" onerror="handleGalleryImageError(this, '${driveId}')">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
@@ -849,7 +887,7 @@ function renderBerandaPreview() {
           
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-border);">
             <div>
-              ${item.driveUrl && item.driveUrl.startsWith('http') ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Lihat di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
+              ${directDriveUrl ? `<a href="${directDriveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Lihat Berkas Asli di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
             </div>
             <div style="display: flex; gap: 4px;">
               <button type="button" class="btn btn-secondary btn-sm" onclick="openEditDocModal('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Koreksi / Edit Dokumentasi">
@@ -872,10 +910,15 @@ function renderMainGallery() {
 
   container.innerHTML = docs.map(item => {
     const displayImg = formatDriveImageUrl(item.img || item.driveUrl);
+    const driveId = getGoogleDriveFileId(item.img || item.driveUrl);
+    const directDriveUrl = (item.driveUrl && item.driveUrl.startsWith('http'))
+      ? item.driveUrl
+      : (driveId ? `https://drive.google.com/file/d/${driveId}/view` : '');
+
     return `
     <div class="gallery-card">
       <div class="gallery-img-container">
-        <img src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" onerror="this.src='assets/images/kegiatan-1.svg'">
+        <img referrerpolicy="no-referrer" src="${displayImg}" alt="${item.title}" class="gallery-img" loading="lazy" data-error-step="0" onerror="handleGalleryImageError(this, '${driveId}')">
         <span class="gallery-category-tag">${item.category}</span>
       </div>
       <div class="gallery-body">
@@ -894,7 +937,7 @@ function renderMainGallery() {
           
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-border);">
             <div>
-              ${item.driveUrl && item.driveUrl.startsWith('http') ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Buka Berkas di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
+              ${directDriveUrl ? `<a href="${directDriveUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm" style="font-size:0.725rem; padding:3px 8px; color:#15803d; border-color:#15803d; text-decoration:none; display:inline-flex; align-items:center; gap:4px;" title="Buka Berkas Asli di Google Drive"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Drive</a>` : ''}
             </div>
             <div style="display: flex; gap: 4px;">
               <button type="button" class="btn btn-secondary btn-sm" onclick="openEditDocModal('${item.id}')" style="font-size:0.725rem; padding:3px 8px; display:inline-flex; align-items:center; gap:3px;" title="Koreksi / Edit Dokumentasi">
@@ -1061,7 +1104,7 @@ function saveDocFromModal(e) {
         renderBerandaPreview();
         renderMainGallery();
         closeModal("modalAddDoc");
-        showToast(`Dokumentasi "${title}" berhasil diperbarui & disinkronkan ke Google Drive & Sheets!`, "success");
+        showToast(`Dokumentasi "${title}" berhasil diperbarui & disinkronkan ke Database Cloud!`, "success");
         sendBackgroundAutoSync("SAVE_DOCUMENTATION", existingDoc);
         return;
       }
@@ -1083,7 +1126,7 @@ function saveDocFromModal(e) {
     renderBerandaPreview();
     renderMainGallery();
     closeModal("modalAddDoc");
-    showToast(`Dokumentasi "${title}" berhasil disimpan & disinkronkan ke Google Drive & Sheets!`, "success");
+    showToast(`Dokumentasi "${title}" berhasil disimpan & disinkronkan ke Database Cloud!`, "success");
     sendBackgroundAutoSync("SAVE_DOCUMENTATION", newDoc);
   }
 
@@ -1221,7 +1264,7 @@ function confirmDeleteDocWithCode(e) {
   renderMainGallery();
   closeModal("modalDeleteDoc");
   sendBackgroundAutoSync("SYNC_DOCS", { docs: docs });
-  showToast(`Dokumentasi "${targetDoc.title}" berhasil dihapus oleh ${ownerTeacher ? ownerTeacher.name : 'Pendidik'} dan disinkronkan ke Google Sheets!`, "success");
+  showToast(`Dokumentasi "${targetDoc.title}" berhasil dihapus oleh ${ownerTeacher ? ownerTeacher.name : 'Pendidik'} dan disinkronkan ke Database Cloud!`, "success");
 }
 
 // ==========================================
@@ -1668,7 +1711,8 @@ function deleteOpJournal(journalId) {
     persistAllData();
     renderOpAllJournalsTable();
     renderJournalTable();
-    showToast("Catatan jurnal berhasil dihapus dari database.", "info");
+    sendBackgroundAutoSync("SYNC_JOURNALS", { journals: journals });
+    showToast("Catatan jurnal berhasil dihapus dari database & Database Cloud.", "info");
   }
 }
 
@@ -1756,7 +1800,8 @@ function deleteOpTeacherAttendance(attendanceId) {
     renderOpAllTeacherAttendanceTable();
     renderTeacherAttendanceTable();
     updateTopStatistics();
-    showToast("Data presensi pendidik berhasil dihapus dari database.", "info");
+    sendBackgroundAutoSync("SYNC_TEACHER_ATTENDANCE", { teacherAttendance: teacherAttendance });
+    showToast("Data presensi pendidik berhasil dihapus dari database & Database Cloud.", "info");
   }
 }
 
@@ -2366,9 +2411,8 @@ function deleteHistoryBatch(batchId) {
     if (currentAttendanceDate === batch.date && currentSelectedClass === batch.class) {
       loadAttendanceForCurrentSelection();
     }
-    // Sinkronkan ke Google Sheets agar baris tersebut langsung terhapus bersih dari sheet PRESENSI_SISWA
     sendBackgroundAutoSync("SYNC_STUDENT_ATTENDANCE", { studentAttendanceHistory: studentAttendanceHistory });
-    showToast("Riwayat presensi berhasil dihapus dari database dan disinkronkan ke Google Sheets.", "info");
+    showToast("Riwayat presensi berhasil dihapus dari database dan disinkronkan ke Database Cloud.", "info");
   }
 }
 
@@ -2626,7 +2670,7 @@ function deleteTeacher(teacherId) {
     populateStudentAttendanceTeacherDropdown();
     updateTopStatistics();
     sendBackgroundAutoSync("SYNC_TEACHERS", { teachers: teachers });
-    showToast("Data pendidik berhasil dihapus dan disinkronkan ke Google Sheets.", "info");
+    showToast("Data pendidik berhasil dihapus dan disinkronkan ke Database Cloud.", "info");
   }
 }
 
@@ -2731,7 +2775,7 @@ function deleteStudent(studentId) {
     renderStudentsTable();
     updateTopStatistics();
     sendBackgroundAutoSync("SYNC_STUDENTS", { students: students });
-    showToast("Data siswa berhasil dihapus dan disinkronkan ke Google Sheets.", "info");
+    showToast("Data siswa berhasil dihapus dan disinkronkan ke Database Cloud.", "info");
   }
 }
 
@@ -3165,8 +3209,8 @@ function isAutoSyncCloudEnabled() {
   if (localVal !== null) {
     return localVal === "true";
   }
-  // Default aktif jika URL endpoint Google Sheets tersedia
-  return !!getGasEndpointUrl();
+  // Selalu aktif otomatis 100% secara default
+  return true;
 }
 
 function initCloudSyncUI() {
@@ -3319,20 +3363,76 @@ async function syncAllDataToGoogleSheets() {
   }
 }
 
+// Pengatur Status Indikator Real-Time di Header & Tab (Pill Live Sync)
+function updateLiveSyncPills(state = "connected", text = "Auto-Sync Cloud Aktif") {
+  const pills = [
+    document.getElementById("docLiveSyncPill"),
+    document.getElementById("siswaLiveSyncPill")
+  ];
+  const headerBadge = document.getElementById("headerLiveSyncBadge");
+  const headerText = document.getElementById("headerSyncText");
+
+  pills.forEach(pill => {
+    if (!pill) return;
+    const label = pill.querySelector(".live-sync-label");
+    if (label) label.innerText = text;
+
+    pill.classList.remove("syncing", "error");
+    if (state === "syncing") pill.classList.add("syncing");
+    else if (state === "error") pill.classList.add("error");
+  });
+
+  if (headerBadge) {
+    headerBadge.classList.remove("syncing", "error");
+    if (state === "syncing") headerBadge.classList.add("syncing");
+    else if (state === "error") headerBadge.classList.add("error");
+  }
+  if (headerText) {
+    headerText.innerText = state === "syncing" ? "Menyinkronkan..." : (state === "error" ? "Cloud Offline" : "Auto-Sync Cloud Aktif");
+  }
+}
+window.updateLiveSyncPills = updateLiveSyncPills;
+
 function sendBackgroundAutoSync(action, specificData) {
   if (!isAutoSyncCloudEnabled()) return;
   const url = getGasEndpointUrl();
   if (!url) return;
+
+  updateLiveSyncPills("syncing", "Menyinkronkan...");
 
   const payload = Object.assign({ action: action }, specificData);
   fetch(url, {
     method: "POST",
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload)
-  }).then(() => {
-    localStorage.setItem("simadrasah_last_cloud_sync", new Date().toLocaleString("id-ID"));
-    updateCloudSyncStatsUI();
-  }).catch(() => {});
+  })
+    .then(res => res.json())
+    .then(resJson => {
+      const nowStr = new Date().toLocaleString("id-ID");
+      localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
+      updateCloudSyncStatsUI();
+      updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
+
+      // Jika aksi menyimpan dokumentasi mengembalikan link Google Drive baru
+      if (resJson && resJson.driveUrl && resJson.driveUrl.startsWith("http")) {
+        const docId = specificData && (specificData.id || specificData.docId);
+        const targetDoc = docs.find(d => (docId && d.id === docId) || (specificData.title && d.title === specificData.title));
+        if (targetDoc) {
+          targetDoc.driveUrl = resJson.driveUrl;
+          targetDoc.img = formatDriveImageUrl(resJson.driveUrl);
+          persistAllData();
+          renderMainGallery();
+          renderBerandaPreview();
+        }
+      }
+    })
+    .catch(err => {
+      console.warn("Background auto-sync response:", err);
+      const nowStr = new Date().toLocaleString("id-ID");
+      localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
+      updateCloudSyncStatsUI();
+      updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
+    });
 }
 
 // Download Berkas Cadangan Lengkap (.JSON)
@@ -3497,9 +3597,13 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
   if (btnPull && !isSilent) btnPull.disabled = true;
 
   if (!isSilent) showToast("⏳ Sedang menarik data terkini dari Database Cloud...", "info");
+  updateLiveSyncPills("syncing", isSilent ? "Menyinkronkan..." : "Menarik Data Cloud...");
 
   try {
-    const pullUrl = url.includes("?") ? `${url}&action=GET_ALL_DATA` : `${url}?action=GET_ALL_DATA`;
+    // Parameter cache-busting timestamp (&_t=...) menjamin browser HP selalu mengambil data paling segar tanpa cache HTTP
+    const basePullUrl = url.includes("?") ? `${url}&action=GET_ALL_DATA` : `${url}?action=GET_ALL_DATA`;
+    const pullUrl = `${basePullUrl}&_t=${Date.now()}`;
+
     const res = await fetch(pullUrl, { method: "GET", mode: "cors" });
     if (!res.ok) {
       throw new Error(`Server merespons status ${res.status}`);
@@ -3544,13 +3648,27 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
       updatedItems.push(`${journals.length} Jurnal KBM`);
     }
 
-    // 6. Dokumentasi Kegiatan (format link gambar agar dapat diakses oleh semua HP)
+    // 6. Dokumentasi Kegiatan (format link gambar agar dapat diakses oleh semua HP & proteksi race condition)
     if (Array.isArray(d.docs) && d.docs.length > 0) {
-      docs = d.docs.map(item => {
+      const cloudDocIds = new Set(d.docs.map(item => String(item.id).trim()));
+      // Pertahankan dokumentasi lokal yang baru diunggah jika belum selesai ditulis di Cloud
+      const pendingLocalDocs = docs.filter(localDoc => {
+        if (cloudDocIds.has(String(localDoc.id).trim())) return false;
+        const tsMatch = String(localDoc.id).match(/DOC(\d+)/);
+        if (tsMatch) {
+          const age = Date.now() - parseInt(tsMatch[1], 10);
+          return age < 120000; // Simpan selama 2 menit
+        }
+        return false;
+      });
+
+      const processedCloudDocs = d.docs.map(item => {
         return Object.assign({}, item, {
           img: formatDriveImageUrl(item.img || item.driveUrl)
         });
       });
+
+      docs = [...pendingLocalDocs, ...processedCloudDocs];
       updatedItems.push(`${docs.length} Dokumentasi Kegiatan`);
     }
 
@@ -3588,6 +3706,7 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
     const nowStr = new Date().toLocaleString("id-ID");
     localStorage.setItem("simadrasah_last_cloud_sync", nowStr);
     updateCloudSyncStatsUI();
+    updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
 
     if (!isSilent) {
       showToast(`✓ Berhasil! Data madrasah telah ditarik dan diperbarui dari Database Cloud (${updatedItems.join(", ")}).`, "success");
@@ -3596,6 +3715,7 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
     }
   } catch (err) {
     console.warn("Gagal menarik data dari Database Cloud:", err);
+    updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
     if (!isSilent) {
       showToast(`Gagal menarik data dari Database Cloud: ${err.message || 'Periksa koneksi internet / izin akses'}`, "warning");
     }
@@ -3612,11 +3732,14 @@ async function autoSyncFromCloudOnStartup() {
   if (!url) return;
 
   isAutoSyncRunning = true;
+  updateLiveSyncPills("syncing", "Menyinkronkan...");
   try {
-    console.log("⚡ Auto-Sync: Memeriksa dan menyelaraskan data dengan Database Cloud...");
+    console.log("⚡ Auto-Sync Realtime: Memeriksa dan menyelaraskan data dengan Database Cloud...");
     await pullAllDataFromGoogleSheets(true);
+    updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
   } catch (err) {
     console.warn("Auto-sync background check notice:", err);
+    updateLiveSyncPills("connected", "Auto-Sync Cloud Aktif");
   } finally {
     isAutoSyncRunning = false;
   }

@@ -41,7 +41,12 @@
       <span class="badge-kurikulum desktop-only">PORTAL MA AL-IKHLASH SUBANG</span>
     </div>
     <div class="top-bar-info top-bar-time">
-      <span id="calendarDateHeader">Tahun Pelajaran 2026/2027 • Ganjil</span>
+      <div class="header-live-sync-badge" id="headerLiveSyncBadge" title="Status Sinkronisasi Cloud Dua Arah Realtime">
+        <span class="pulse-dot"></span>
+        <span id="headerSyncText">Auto-Sync Cloud Aktif</span>
+      </div>
+      <span class="top-bar-sep desktop-only">•</span>
+      <span id="calendarDateHeader" class="desktop-only">Tahun Pelajaran 2026/2027 • Ganjil</span>
       <span class="top-bar-sep">•</span>
       <span id="liveClockBadge" class="live-clock-pill">00:00:00 WIB</span>
     </div>
@@ -646,10 +651,10 @@
             Arsip Dokumentasi & Publikasi Kegiatan Madrasah
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-outline btn-sm" onclick="pullAllDataFromGoogleSheets()" title="Sinkronkan &amp; tarik dokumentasi terbaru dari Database Cloud" style="color: #0284c7; border-color: #0284c7;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-              Sinkronkan Data
-            </button>
+            <div class="live-sync-pill" id="docLiveSyncPill" title="Terkoneksi Otomatis Realtime ke Database Cloud MA Al-Ikhlash">
+              <span class="pulse-dot"></span>
+              <span class="live-sync-label">Auto-Sync Cloud Aktif</span>
+            </div>
             <button class="btn btn-primary btn-sm" onclick="openAddDocModal()">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Tambah Foto Kegiatan
@@ -988,14 +993,10 @@
             Presensi &amp; Database Kehadiran Peserta Didik
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <button class="btn btn-outline btn-sm" onclick="pullAllDataFromGoogleSheets()" title="Tarik data terkini dari Database Cloud (Pull)" style="color: #0284c7; border-color: #0284c7;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-              Tarik Data Database
-            </button>
-            <button class="btn btn-outline btn-sm" onclick="syncAllDataToGoogleSheets()" title="Kirim data saat ini ke Database Cloud (Push)" style="color: #15803d; border-color: #15803d;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 12 12 16 16 16"/><polyline points="12 8 12 12 8 12"/></svg>
-              Kirim ke Database
-            </button>
+            <div class="live-sync-pill" id="siswaLiveSyncPill" title="Terkoneksi Otomatis Realtime ke Database Cloud MA Al-Ikhlash">
+              <span class="pulse-dot"></span>
+              <span class="live-sync-label">Auto-Sync Cloud Aktif</span>
+            </div>
             <button class="btn btn-outline btn-sm" onclick="switchSiswaSubTab('history')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               Lihat History Arsip

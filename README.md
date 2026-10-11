@@ -72,9 +72,13 @@
    - Manajemen & koreksi data peserta didik (NISN, Nama, Rombel, Gender, Alamat).
    - Pengaturan identitas madrasah & pembaruan logo resmi (*logo.jpeg*).
 
-6. **Sinkronisasi Timbal Balik Dua Arah (*Two-Way Sync*) dengan Google Spreadsheet**:
-   - **Push (Web ke Spreadsheet)**: Penghapusan riwayat di web otomatis membersihkan sheet `PRESENSI_SISWA`. Pengisian presensi harian masuk ke sheet dengan 10 kolom presisi tanpa pergeseran kolom. Seluruh 24 data siswa resmi tersinkron ke sheet `DATA_SISWA`.
-   - **Pull (Spreadsheet ke Web)**: Tombol *Tarik Data Terkini dari Sheets* memungkinkan website mengambil data terbaru yang diedit langsung di Spreadsheet secara instan.
+6. **Sistem Auto-Sync Cloud 100% Otomatis & Real-Time (Multi-Device)**:
+   - **Murni Otomatis Tanpa Tombol Manual**: Dewan guru tidak perlu menekan tombol sinkronisasi manual. Seluruh data diselaraskan di latar belakang secara otomatis.
+   - **Silent Auto-Pull saat Pertama Masuk**: Begitu HP guru membuka website, sistem dalam 50 milidetik langsung menarik data paling mutakhir dari Database Cloud.
+   - **Multi-Device Live Sync (Polling 15 Detik)**: Ketika satu guru (misal Bu Tita) mengunggah dokumentasi kegiatan atau presensi di HP beliau, HP guru lain otomatis menyelaraskan dan menampilkan foto/data tersebut dalam hitungan detik.
+   - **Anti-Blokir Gambar Google Drive**: Tautan foto Google Drive disajikan dalam thumbnail beresolusi tinggi (`sz=w1200`) dengan proteksi `referrerpolicy="no-referrer"` dan mekanisme *cascading multi-step fallback*, memastikan foto dapat dibuka secara langsung di seluruh peramban HP Android dan iPhone.
+   - **Penyelarasan Input Otomatis**: Setiap kali data presensi siswa, presensi guru selfie, jurnal KBM, atau dokumentasi disimpan, data seketika terkirim ke Database Cloud.
+   - **Indikator Status Real-Time**: Dilengkapi *Live Sync Pill* (`🟢 Auto-Sync Cloud Aktif` / `🔄 Menyinkronkan...`) di header dan masing-masing tab kegiatan.
 
 ---
 
