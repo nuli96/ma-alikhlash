@@ -426,6 +426,8 @@ function readAllDataFromSpreadsheet(ss) {
       });
     }
     result.journals = journals;
+  } else {
+    result.journals = [];
   }
 
   // 5. Sheet PRESENSI_GURU
@@ -450,6 +452,8 @@ function readAllDataFromSpreadsheet(ss) {
       });
     }
     result.teacherAttendance = teacherAtt;
+  } else {
+    result.teacherAttendance = [];
   }
 
   // 6. Sheet PRESENSI_SISWA (Kelompokkan baris menjadi kumpulan sesi riwayat)
@@ -547,7 +551,9 @@ function readAllDataFromSpreadsheet(ss) {
         driveUrl: directDrive !== "-" ? directDrive : driveLink
       });
     }
-    if (docs.length > 0) result.docs = docs;
+    result.docs = docs;
+  } else {
+    result.docs = [];
   }
 
   return result;

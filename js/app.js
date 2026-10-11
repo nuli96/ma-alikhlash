@@ -149,67 +149,9 @@ const DEFAULT_DOCS = [
   }
 ];
 
-const DEFAULT_JOURNALS = [
-  {
-    id: "J01",
-    date: "08 Oktober 2026",
-    dateIso: "2026-10-08",
-    time: "07.30 - 08.50 WIB",
-    teacher: "TITA ROSITA",
-    classSubject: "Kelas 1 • Alqur'an hadist",
-    topic: "Kaidah Tajwid: Hukum Bacaan Mad Thabi'i pada Surat Pendek",
-    notes: "Seluruh siswa antusias melafalkan contoh ayat. 2 siswa perlu bimbingan tajwid lanjutan pada makhraj huruf."
-  },
-  {
-    id: "J02",
-    date: "08 Oktober 2026",
-    dateIso: "2026-10-08",
-    time: "09.15 - 10.35 WIB",
-    teacher: "MIMI MUTIARA, S.Pd",
-    classSubject: "Kelas 2 • Fikih",
-    topic: "Ketentuan dan Tata Cara Shalat Sunnah Rawatib",
-    notes: "Diskusi studi kasus interaktif berjalan tertib. Siswa menyusun komitmen ibadah harian di lembar refleksi."
-  },
-  {
-    id: "J03",
-    date: "08 Oktober 2026",
-    dateIso: "2026-10-08",
-    time: "10.50 - 12.10 WIB",
-    teacher: "NULI MAULANA, S.Pd",
-    classSubject: "Kelas 3 • Bahasa Arab",
-    topic: "Hiwar (Percakapan): Peralatan Sekolah (Al-Adawat Al-Madrasiyyah)",
-    notes: "Praktik percakapan berpasangan di depan kelas berjalan lancar dan interaktif."
-  }
-];
+const DEFAULT_JOURNALS = [];
 
-const DEFAULT_TEACHER_ATTENDANCE = [
-  {
-    id: "TA01",
-    date: "08 Oktober 2026",
-    dateIso: "2026-10-08",
-    teacherId: "G01",
-    teacherName: "TITA ROSITA",
-    nip: "19830514 200801 2 005",
-    time: "06:45 WIB",
-    type: "Datang (Pagi)",
-    status: "Tepat Waktu",
-    notes: "Hadir piket KBM Alqur'an hadist & briefing pagi",
-    photo: "assets/images/logo-madrasah.svg"
-  },
-  {
-    id: "TA02",
-    date: "08 Oktober 2026",
-    dateIso: "2026-10-08",
-    teacherId: "G02",
-    teacherName: "MIMI MUTIARA, S.Pd",
-    nip: "-",
-    time: "06:55 WIB",
-    type: "Datang (Pagi)",
-    status: "Tepat Waktu",
-    notes: "Mempersiapkan media ajar modul Fikih kelas 2",
-    photo: "assets/images/logo-madrasah.svg"
-  }
-];
+const DEFAULT_TEACHER_ATTENDANCE = [];
 
 // ==========================================
 // ARSIP & RIWAYAT DATABASE KEHADIRAN SISWA
@@ -316,15 +258,38 @@ const DEFAULT_STUDENT_HISTORY = [
 // ==========================================
 // 2. STATE MANAGEMENT & LOCAL STORAGE
 // ==========================================
-// Versioning: memastikan pembaruan data 24 siswa resmi & sinkronisasi dokumentasi otomatis aktif
-const SYSTEM_DATA_VERSION = "v11_realtime_cloud_sync_2026";
+// Versioning: memastikan pembaruan data bersih & pembersihan residu dummy agar sinkron 100% dengan database
+const SYSTEM_DATA_VERSION = "v12_realtime_cloud_sync_2026";
 if (localStorage.getItem("simadrasah_version") !== SYSTEM_DATA_VERSION) {
   if (!localStorage.getItem("simadrasah_profile")) localStorage.setItem("simadrasah_profile", JSON.stringify(DEFAULT_PROFILE));
   if (!localStorage.getItem("simadrasah_teachers")) localStorage.setItem("simadrasah_teachers", JSON.stringify(DEFAULT_TEACHERS));
   if (!localStorage.getItem("simadrasah_students")) localStorage.setItem("simadrasah_students", JSON.stringify(DEFAULT_STUDENTS));
   if (!localStorage.getItem("simadrasah_docs")) localStorage.setItem("simadrasah_docs", JSON.stringify(DEFAULT_DOCS));
-  if (!localStorage.getItem("simadrasah_journals")) localStorage.setItem("simadrasah_journals", JSON.stringify(DEFAULT_JOURNALS));
-  if (!localStorage.getItem("simadrasah_teacher_attendance")) localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify(DEFAULT_TEACHER_ATTENDANCE));
+
+  // Pembersihan residu data dummy jurnal bawaan lama (J01, J02, J03) agar otomatis kosong jika di Spreadsheet kosong
+  try {
+    const existingJournals = JSON.parse(localStorage.getItem("simadrasah_journals") || "[]");
+    const isOldDummyJournals = !Array.isArray(existingJournals) ||
+      (existingJournals.length === 3 && existingJournals.some(j => j.id === "J01" || j.id === "J02" || j.id === "J03"));
+    if (isOldDummyJournals || !localStorage.getItem("simadrasah_journals")) {
+      localStorage.setItem("simadrasah_journals", JSON.stringify([]));
+    }
+  } catch (e) {
+    localStorage.setItem("simadrasah_journals", JSON.stringify([]));
+  }
+
+  // Pembersihan residu data dummy presensi guru bawaan lama (TA01, TA02)
+  try {
+    const existingTA = JSON.parse(localStorage.getItem("simadrasah_teacher_attendance") || "[]");
+    const isOldDummyTA = !Array.isArray(existingTA) ||
+      (existingTA.length === 2 && existingTA.some(t => t.id === "TA01" || t.id === "TA02"));
+    if (isOldDummyTA || !localStorage.getItem("simadrasah_teacher_attendance")) {
+      localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify([]));
+    }
+  } catch (e) {
+    localStorage.setItem("simadrasah_teacher_attendance", JSON.stringify([]));
+  }
+
   if (!localStorage.getItem("simadrasah_student_history")) localStorage.setItem("simadrasah_student_history", JSON.stringify(DEFAULT_STUDENT_HISTORY));
   localStorage.setItem("simadrasah_version", SYSTEM_DATA_VERSION);
 }
@@ -338,8 +303,8 @@ if (!schoolProfile.logo || schoolProfile.logo.includes("logo-madrasah.svg") || s
 let teachers = JSON.parse(localStorage.getItem("simadrasah_teachers")) || DEFAULT_TEACHERS;
 let students = JSON.parse(localStorage.getItem("simadrasah_students")) || DEFAULT_STUDENTS;
 let docs = JSON.parse(localStorage.getItem("simadrasah_docs")) || DEFAULT_DOCS;
-let journals = JSON.parse(localStorage.getItem("simadrasah_journals")) || DEFAULT_JOURNALS;
-let teacherAttendance = JSON.parse(localStorage.getItem("simadrasah_teacher_attendance")) || DEFAULT_TEACHER_ATTENDANCE;
+let journals = JSON.parse(localStorage.getItem("simadrasah_journals")) || [];
+let teacherAttendance = JSON.parse(localStorage.getItem("simadrasah_teacher_attendance")) || [];
 let studentAttendanceHistory = JSON.parse(localStorage.getItem("simadrasah_student_history")) || DEFAULT_STUDENT_HISTORY;
 
 let currentSelectedClass = "Kelas 1";
@@ -3637,19 +3602,19 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
     }
 
     // 4. Presensi Mandiri Guru
-    if (Array.isArray(d.teacherAttendance)) {
+    if (d.teacherAttendance !== undefined && Array.isArray(d.teacherAttendance)) {
       teacherAttendance = d.teacherAttendance;
       updatedItems.push(`${teacherAttendance.length} Presensi Guru`);
     }
 
     // 5. Jurnal KBM
-    if (Array.isArray(d.journals)) {
+    if (d.journals !== undefined && Array.isArray(d.journals)) {
       journals = d.journals;
       updatedItems.push(`${journals.length} Jurnal KBM`);
     }
 
     // 6. Dokumentasi Kegiatan (format link gambar agar dapat diakses oleh semua HP & proteksi race condition)
-    if (Array.isArray(d.docs) && d.docs.length > 0) {
+    if (d.docs !== undefined && Array.isArray(d.docs)) {
       const cloudDocIds = new Set(d.docs.map(item => String(item.id).trim()));
       // Pertahankan dokumentasi lokal yang baru diunggah jika belum selesai ditulis di Cloud
       const pendingLocalDocs = docs.filter(localDoc => {
