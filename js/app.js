@@ -328,6 +328,7 @@ let currentAttendanceTeacher = localStorage.getItem("simadrasah_last_student_tea
 let currentSessionStatusMap = {}; // id -> { status: "H"|"S"|"I"|"A"|"", notes: string }
 let currentBatchSavedRecord = null;
 let pendingTeacherSubTab = null;
+let pendingTeacherTarget = { tab: "tab-guru", subTab: null };
 
 // Simpan state ke LocalStorage
 function persistAllData() {
@@ -378,6 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateTopStatistics();
   updateOperatorButtonStatus();
   updateTeacherGateUI();
+  applyTeacherSessionToSiswaTab();
   initCloudSyncUI();
   initTeacherMotivationQuotes();
 
@@ -622,7 +624,13 @@ function switchMainTab(tabId, subTabId = null) {
 
   // Pengaman Teacher Gate: menu Absensi Guru wajib terautentikasi guru terdaftar
   if (tabId === "tab-guru" && !isTeacherLoggedIn()) {
-    handleTeacherAccess(subTabId);
+    handleTeacherAccess("tab-guru", subTabId);
+    return;
+  }
+
+  // Pengaman Kunci Keamanan Presensi Siswa: wajib terautentikasi guru terdaftar (atau operator) demi integritas database siswa
+  if (tabId === "tab-siswa" && !isTeacherLoggedIn() && !isOperatorLoggedIn()) {
+    handleTeacherAccess("tab-siswa", subTabId);
     return;
   }
 
@@ -641,6 +649,11 @@ function switchMainTab(tabId, subTabId = null) {
   // Jika membuka tab Dokumentasi Kegiatan atau Kehadiran Siswa, perbarui data secara otomatis di background
   if (tabId === "tab-dokumentasi" || tabId === "tab-siswa") {
     autoSyncFromCloudOnStartup();
+  }
+
+  // Sinkronkan sesi guru pengisi saat membuka tab siswa
+  if (tabId === "tab-siswa") {
+    applyTeacherSessionToSiswaTab();
   }
 
   // Jika membuka tab Guru, trigger deteksi GPS secara otomatis
@@ -2510,6 +2523,12 @@ function clearCurrentAttendanceSelection() {
 
 // Alur 5: Klik Simpan / Perbarui Presensi ke Database & Riwayat
 function saveCurrentStudentAttendanceBatch() {
+  if (!isTeacherLoggedIn() && !isOperatorLoggedIn()) {
+    showToast("Akses dikunci! Silakan masukkan kode guru (PIN) terlebih dahulu demi keamanan database siswa.", "warning");
+    handleTeacherAccess("tab-siswa");
+    return;
+  }
+
   if (!currentAttendanceTeacher) {
     showToast("Pilih nama guru yang mengisi absensi terlebih dahulu!", "warning");
     const select = document.getElementById("studentAttendanceTeacherSelect");
@@ -2696,6 +2715,12 @@ function editHistoryBatch(batchId) {
 }
 
 function deleteHistoryBatch(batchId) {
+  if (!isTeacherLoggedIn() && !isOperatorLoggedIn()) {
+    showToast("Akses dikunci! Masukkan kode guru (PIN) terlebih dahulu untuk menghapus riwayat.", "warning");
+    handleTeacherAccess("tab-siswa");
+    return;
+  }
+
   const batch = studentAttendanceHistory.find(b => b.id === batchId);
   if (!batch) return;
 
@@ -3322,14 +3347,49 @@ function getLoggedInTeacher() {
   }
 }
 
-function handleTeacherAccess(subTabId = null) {
+function handleTeacherAccess(targetTab = "tab-guru", subTabId = null) {
+  // Kompatibilitas mundur jika argumen pertama adalah sub-tab guru
+  if (targetTab && targetTab.startsWith("sub-")) {
+    subTabId = targetTab;
+    targetTab = "tab-guru";
+  }
+
+  pendingTeacherTarget = { tab: targetTab || "tab-guru", subTab: subTabId };
   pendingTeacherSubTab = subTabId;
-  if (isTeacherLoggedIn()) {
-    switchMainTab("tab-guru", subTabId);
+
+  // Jika sudah terautentikasi guru, atau jika operator login dan membuka tab siswa
+  if (isTeacherLoggedIn() || (targetTab === "tab-siswa" && isOperatorLoggedIn())) {
+    if (targetTab === "tab-siswa") {
+      switchMainTab("tab-siswa");
+    } else {
+      switchMainTab("tab-guru", subTabId);
+    }
     return;
   }
 
   populateTeacherGateDropdown();
+
+  // Kustomisasi teks modal sesuai konteks pemanggilan (Absensi Guru vs Presensi Siswa)
+  const modalTitle = document.getElementById("teacherGateModalTitle");
+  const modalSubtitle = document.getElementById("teacherGateModalSubtitle");
+  const modalDesc = document.getElementById("teacherGateModalDesc");
+  const btnSubmit = document.getElementById("btnTeacherGateSubmit");
+
+  if (targetTab === "tab-siswa") {
+    if (modalTitle) modalTitle.innerText = "Kunci Keamanan Presensi Siswa";
+    if (modalSubtitle) modalSubtitle.innerText = "Verifikasi Pendidik Pengisi Kehadiran";
+    if (modalDesc) modalDesc.innerText = "Demi keamanan dan integritas database siswa, silakan pilih nama Bapak/Ibu Guru dan masukkan kode masuk (PIN) resmi sebelum mengisi atau melihat kehadiran santri.";
+    if (btnSubmit) {
+      btnSubmit.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Buka Presensi Siswa`;
+    }
+  } else {
+    if (modalTitle) modalTitle.innerText = "Pintu Masuk Absensi Guru";
+    if (modalSubtitle) modalSubtitle.innerText = "Autentikasi Dewan Guru MA Al-Ikhlash";
+    if (modalDesc) modalDesc.innerText = "Untuk menjaga keamanan data presensi dan jurnal mengajar, silakan pilih nama Bapak/Ibu Guru dan masukkan kode masuk yang terdaftar di madrasah.";
+    if (btnSubmit) {
+      btnSubmit.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Masuk Absensi Guru`;
+    }
+  }
 
   const alertBox = document.getElementById("teacherGateAlert");
   const codeInput = document.getElementById("teacherGateCode");
@@ -3381,11 +3441,22 @@ function handleTeacherLogin(event) {
     closeModal("modalTeacherGate");
     if (alertBox) alertBox.classList.add("d-none");
 
+    // Tetapkan guru yang login sebagai guru pengisi presensi siswa aktif
+    currentAttendanceTeacher = teacher.name;
+    localStorage.setItem("simadrasah_last_student_teacher", teacher.name);
+
     updateTeacherGateUI();
+    applyTeacherSessionToSiswaTab();
     showToast(`Autentikasi berhasil! Selamat bertugas, ${teacher.name}.`, "success");
 
-    const targetSub = pendingTeacherSubTab || "sub-selfie";
-    switchMainTab("tab-guru", targetSub);
+    const target = pendingTeacherTarget || { tab: "tab-guru", subTab: "sub-selfie" };
+    if (target.tab === "tab-siswa") {
+      switchMainTab("tab-siswa");
+    } else {
+      const targetSub = target.subTab || pendingTeacherSubTab || "sub-selfie";
+      switchMainTab("tab-guru", targetSub);
+    }
+    pendingTeacherTarget = { tab: "tab-guru", subTab: null };
     pendingTeacherSubTab = null;
   } else {
     if (alertBox && alertText) {
@@ -3400,9 +3471,33 @@ function handleTeacherLogin(event) {
   }
 }
 
+function applyTeacherSessionToSiswaTab() {
+  const teacher = getLoggedInTeacher();
+  const isOp = isOperatorLoggedIn();
+  const sessionBadge = document.getElementById("siswaTeacherSessionInfo");
+  const activeTeacherNameElem = document.getElementById("siswaActiveTeacherName");
+  const teacherSelect = document.getElementById("studentAttendanceTeacherSelect");
+
+  if (teacher) {
+    if (sessionBadge) sessionBadge.classList.remove("d-none");
+    if (activeTeacherNameElem) activeTeacherNameElem.innerText = teacher.name;
+    if (teacherSelect) {
+      teacherSelect.value = teacher.name;
+      currentAttendanceTeacher = teacher.name;
+    }
+  } else if (isOp) {
+    if (sessionBadge) sessionBadge.classList.remove("d-none");
+    if (activeTeacherNameElem) activeTeacherNameElem.innerText = "Operator Admin (Akses Penuh)";
+  } else {
+    if (sessionBadge) sessionBadge.classList.add("d-none");
+    if (activeTeacherNameElem) activeTeacherNameElem.innerText = "-";
+  }
+}
+
 function logoutTeacher() {
   sessionStorage.removeItem("simadrasah_teacher_session");
   updateTeacherGateUI();
+  applyTeacherSessionToSiswaTab();
   showToast("Sesi presensi guru telah ditutup dan dikunci.", "info");
   switchMainTab("tab-beranda");
 }
@@ -3420,6 +3515,7 @@ function updateTeacherGateUI() {
     if (teacherNameElem) teacherNameElem.innerText = "-";
   }
 
+  applyTeacherSessionToSiswaTab();
   populateTeacherDropdowns();
   renderJournalTable();
   renderTeacherAttendanceTable();
