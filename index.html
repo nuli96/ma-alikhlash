@@ -1019,10 +1019,10 @@
             Presensi &amp; Database Kehadiran Peserta Didik
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <div class="live-sync-pill" id="siswaLiveSyncPill" title="Terkoneksi Otomatis Realtime ke Database Cloud MA Al-Ikhlash">
-              <span class="pulse-dot"></span>
-              <span class="live-sync-label">Auto-Sync Cloud Aktif</span>
-            </div>
+            <button type="button" class="btn btn-outline btn-sm btn-sync-manual" id="btnSyncSiswaManual" onclick="syncStudentAttendanceManual()" title="Klik untuk menyinkronkan data kehadiran siswa dengan Database Cloud secara Manual">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="syncSiswaIcon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span id="syncSiswaBtnLabel">Sinkronkan Database (Manual)</span>
+            </button>
             <button class="btn btn-outline btn-sm" onclick="switchSiswaSubTab('history')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
               Lihat History Arsip
@@ -2282,7 +2282,7 @@
     </div>
   </footer>
 
-  <!-- File JavaScript Aplikasi (dengan Cache Buster v=17.0 - Kunci Keamanan Presensi Siswa & Geotagging GPS Realtime) -->
-  <script src="js/app.js?v=17.0"></script>
+  <!-- File JavaScript Aplikasi (dengan Cache Buster v=18.0 - Sinkronisasi Manual Presensi Siswa & Kunci Keamanan) -->
+  <script src="js/app.js?v=18.0"></script>
 </body>
 </html>

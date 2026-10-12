@@ -646,8 +646,9 @@ function switchMainTab(tabId, subTabId = null) {
   });
   if (activeBtn) activeBtn.classList.add("active");
 
-  // Jika membuka tab Dokumentasi Kegiatan atau Kehadiran Siswa, perbarui data secara otomatis di background
-  if (tabId === "tab-dokumentasi" || tabId === "tab-siswa") {
+  // Jika membuka tab Dokumentasi Kegiatan, perbarui data secara otomatis di background
+  // Tab Kehadiran Siswa menggunakan sinkronisasi manual agar proses absensi tidak tereset otomatis
+  if (tabId === "tab-dokumentasi") {
     autoSyncFromCloudOnStartup();
   }
 
@@ -2597,6 +2598,77 @@ function saveCurrentStudentAttendanceBatch() {
   loadAttendanceForCurrentSelection();
 }
 
+// Cek apakah guru saat ini sedang memilih status atau mengisi catatan kehadiran yang belum disimpan
+function checkIfStudentAttendanceHasUnsavedChanges() {
+  const classStudents = students.filter(s => s.class === currentSelectedClass);
+  if (!classStudents.length) return false;
+
+  if (!currentBatchSavedRecord) {
+    // Belum pernah disimpan ke database: jika ada salah satu siswa yang sudah dipilih H/S/I/A atau diisi catatan
+    return classStudents.some(s => {
+      const sess = currentSessionStatusMap[s.id];
+      return sess && (sess.status || (sess.notes && sess.notes.trim() !== ""));
+    });
+  } else {
+    // Sudah pernah ada data tersimpan: bandingkan apakah pilihan saat ini berbeda dari riwayat tersimpan
+    return classStudents.some(s => {
+      const sess = currentSessionStatusMap[s.id] || { status: "", notes: "" };
+      const currentStat = sess.status || "";
+      const currentNotes = (sess.notes || "").trim();
+      const rec = currentBatchSavedRecord.records.find(r => r.id === s.id || r.nisn === s.nisn);
+      const savedStat = (rec && rec.status !== "-") ? (rec.status || "") : "";
+      const savedNotes = (rec && rec.notes ? rec.notes : "").trim();
+      return currentStat !== savedStat || currentNotes !== savedNotes;
+    });
+  }
+}
+
+// Tombol Sinkronisasi Manual Khusus Tab Kehadiran Siswa
+async function syncStudentAttendanceManual() {
+  const btn = document.getElementById("btnSyncSiswaManual");
+  const label = document.getElementById("syncSiswaBtnLabel");
+  const icon = document.getElementById("syncSiswaIcon");
+
+  // Periksa apakah guru sedang mengisi presensi yang belum disimpan
+  if (checkIfStudentAttendanceHasUnsavedChanges()) {
+    const konfirmasi = confirm(
+      "Perhatian:\nTerdapat pilihan kehadiran siswa yang sedang diisi dan belum disimpan ke database.\n\nMenyinkronkan data sekarang akan memuat data terkini dari Database Cloud dan membatalkan input yang belum disimpan.\n\nApakah Bapak/Ibu yakin ingin melanjutkan sinkronisasi manual?"
+    );
+    if (!konfirmasi) {
+      return;
+    }
+  }
+
+  const originalLabel = label ? label.innerText : "Sinkronkan Database (Manual)";
+  if (btn) btn.disabled = true;
+  if (label) label.innerText = "Menyinkronkan...";
+  if (icon) icon.classList.add("spin-icon");
+
+  showToast("⏳ Sedang menarik data presensi siswa terbaru dari Database Cloud...", "info");
+
+  try {
+    // Tarik data cloud dengan silent=false agar data presensi siswa diperbarui
+    await pullAllDataFromGoogleSheets(false);
+    // Muat ulang data presensi kelas dan tanggal yang sedang aktif
+    loadAttendanceForCurrentSelection();
+    renderStudentHistoryTable();
+    updateHistoryBadgeCount();
+
+    if (label) label.innerText = "✓ Tersinkronkan";
+    showToast("✓ Sukses! Data kehadiran siswa telah disinkronkan dengan Database Cloud.", "success");
+  } catch (err) {
+    if (label) label.innerText = "Gagal Sinkron";
+    showToast(`Gagal menyinkronkan data: ${err.message || 'Periksa koneksi internet'}`, "warning");
+  } finally {
+    setTimeout(() => {
+      if (btn) btn.disabled = false;
+      if (label) label.innerText = originalLabel;
+      if (icon) icon.classList.remove("spin-icon");
+    }, 2500);
+  }
+}
+window.syncStudentAttendanceManual = syncStudentAttendanceManual;
+
 // Render Tabel Database Riwayat Arsip Presensi Tersimpan
 function renderStudentHistoryTable() {
   const tbody = document.getElementById("studentHistoryTableBody");
@@ -3775,8 +3847,7 @@ async function syncAllDataToGoogleSheets() {
 // Pengatur Status Indikator Real-Time di Header & Tab (Pill Live Sync)
 function updateLiveSyncPills(state = "connected", text = "Auto-Sync Cloud Aktif") {
   const pills = [
-    document.getElementById("docLiveSyncPill"),
-    document.getElementById("siswaLiveSyncPill")
+    document.getElementById("docLiveSyncPill")
   ];
   const headerBadge = document.getElementById("headerLiveSyncBadge");
   const headerText = document.getElementById("headerSyncText");
@@ -4106,10 +4177,16 @@ async function pullAllDataFromGoogleSheets(isSilent = false) {
     renderOpTeachersTable();
     renderOpTeacherCodesTable();
     renderOpStudentsTable();
-    renderStudentsTable();
-    loadAttendanceForCurrentSelection();
     renderStudentHistoryTable();
     updateHistoryBadgeCount();
+
+    // Hanya muat ulang tabel input kehadiran aktif jika BUKAN auto-sync latar belakang (isSilent),
+    // atau jika pengguna saat ini tidak sedang aktif berada di tab Kehadiran Siswa
+    const isSiswaTabActive = !document.getElementById("tab-siswa")?.classList.contains("d-none");
+    if (!isSilent || !isSiswaTabActive) {
+      loadAttendanceForCurrentSelection();
+    }
+
     updateTopStatistics();
 
     const nowStr = new Date().toLocaleString("id-ID");
@@ -4139,6 +4216,13 @@ async function autoSyncFromCloudOnStartup() {
   if (isAutoSyncRunning) return;
   const url = getGasEndpointUrl();
   if (!url) return;
+
+  // Jika guru sedang berada di tab Kehadiran Siswa, tunda auto-sync background agar tidak mengganggu proses absensi
+  const isSiswaActive = !document.getElementById("tab-siswa")?.classList.contains("d-none");
+  if (isSiswaActive) {
+    console.log("⏸️ Auto-sync background ditangguhkan: Guru sedang berada di tab Kehadiran Siswa.");
+    return;
+  }
 
   isAutoSyncRunning = true;
   updateLiveSyncPills("syncing", "Menyinkronkan...");
