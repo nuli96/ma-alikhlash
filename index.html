@@ -791,19 +791,17 @@
                       <input type="text" id="teacherMapelPreview" class="form-control" readonly placeholder="Otomatis terisi">
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label">Jenis Presensi <span class="req">*</span></label>
+                    <div class="form-group full-width">
+                      <label class="form-label">Jenis Presensi &amp; Jam Jadwal Mengajar <span class="req">*</span></label>
                       <select id="attendanceType" class="form-select" required onchange="handleAttendanceTypeChange()">
-                        <option value="Datang (Pagi)">Presensi Masuk / Datang (Pagi)</option>
-                        <option value="Pulang (Sore)">Presensi Selesai Tugas / Pulang</option>
-                        <option value="Dinas Luar">Tugas Dinas Luar / MGMP / Pelatihan</option>
-                        <option value="Izin / Sakit">Izin / Sakit (Dengan Keterangan)</option>
+                        <!-- Dinamis via JS sesuai guru, hari, dan jadwal mengajar resmi -->
                       </select>
+                      <div id="attendanceScheduleHint"></div>
                     </div>
 
-                    <div class="form-group">
-                      <label class="form-label">Keterangan / Lokasi Tugas</label>
-                      <input type="text" id="attendanceNotes" class="form-control" placeholder="Contoh: Mengajar jam ke 1-4 / Hadir di Madrasah">
+                    <div class="form-group full-width">
+                      <label class="form-label">Keterangan / Materi / Catatan KBM</label>
+                      <input type="text" id="attendanceNotes" class="form-control" placeholder="Otomatis terisi sesuai jadwal atau isi catatan tambahan">
                     </div>
                   </div>
 
@@ -980,6 +978,9 @@
             <div id="teacherScheduleNotice" style="margin-bottom: 1rem;">
               <!-- Banner informasi personal guru dirender via JS -->
             </div>
+
+            <!-- Matriks Tabel Jadwal Pelajaran Mingguan Lengkap Sesuai Dokumen Resmi -->
+            <div id="weeklyTimetableContainer"></div>
 
             <div class="table-responsive">
               <table class="custom-table">
@@ -1472,12 +1473,12 @@
                   </label>
                   <select id="opAttFilterStatus" class="form-select" style="padding: 5px 10px; font-size: 0.825rem; min-width: 160px;" onchange="renderOpAllTeacherAttendanceTable()">
                     <option value="ALL">Semua Status / Tipe</option>
-                    <option value="Tepat Waktu">Tepat Waktu</option>
-                    <option value="Terlambat">Terlambat</option>
-                    <option value="Datang (Pagi)">Datang (Pagi)</option>
-                    <option value="Pulang (Sore)">Pulang (Sore)</option>
-                    <option value="Dinas Luar">Dinas Luar</option>
-                    <option value="Izin / Sakit">Izin / Sakit</option>
+                    <option value="Hadir Mengajar">Hadir Mengajar</option>
+                    <option value="Hadir Upacara">Hadir Upacara (Senin)</option>
+                    <option value="Dinas Luar">Tugas Dinas Luar</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Piket">Piket Guru</option>
                   </select>
                 </div>
               </div>
@@ -2282,7 +2283,7 @@
     </div>
   </footer>
 
-  <!-- File JavaScript Aplikasi (dengan Cache Buster v=18.0 - Sinkronisasi Manual Presensi Siswa & Kunci Keamanan) -->
-  <script src="js/app.js?v=18.0"></script>
+  <!-- File JavaScript Aplikasi (dengan Cache Buster v=19.0 - Presensi Pintar Sesuai Jam Mengajar & Hapus Warning Terlambat) -->
+  <script src="js/app.js?v=19.0"></script>
 </body>
 </html>

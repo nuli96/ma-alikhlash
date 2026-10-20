@@ -2272,4 +2272,127 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* Smart Schedule Hint Badge */
+.schedule-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eaf6ef;
+  border: 1px solid #b8e2cb;
+  color: #0f5a34;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.775rem;
+  font-weight: 600;
+  margin-top: 6px;
+  line-height: 1.4;
+  width: 100%;
+}
+
+/* Matriks Jadwal Mingguan Resmi */
+.weekly-timetable-container {
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.weekly-timetable-header {
+  background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+  color: #ffffff;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.weekly-timetable-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.timetable-table th, .timetable-table td {
+  border: 1px solid #cbd5e1;
+  padding: 6px 8px;
+}
+
+.timetable-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.timetable-table th.day-th {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary-dark);
+  font-weight: 800;
+}
+
+.timetable-table td.time-cell {
+  background: #f8fafc;
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.timetable-table td.upacara-cell {
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.timetable-table td.break-cell {
+  background: #f1f5f9;
+  color: #64748b;
+  font-weight: 700;
+  font-size: 0.725rem;
+  letter-spacing: 0.03em;
+}
+
+.timetable-table td.ekskul-cell {
+  background: #e0f2fe;
+  color: #0369a1;
+  font-weight: 700;
+}
+
+.timetable-code-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-border);
+  font-weight: 800;
+  font-size: 0.78rem;
+  margin: 1px;
+}
+
+.timetable-code-badge.highlight-my-code {
+  background: #16a34a !important;
+  color: #ffffff !important;
+  border-color: #15803d !important;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.4);
+  transform: scale(1.1);
+}
+
+
 

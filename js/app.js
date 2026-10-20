@@ -77,6 +77,230 @@ const SCHEDULE_MATRIX = [
   { left: { subject: "PKN", teacher: "KURNIANENGSIH, S.Pd", code: "9" }, right: { subject: "-", teacher: "-", code: "-" } }
 ];
 
+// Matriks Tabel Jadwal Pelajaran Mingguan Lengkap MA Al-Ikhlash Semester I (Sesuai Berkas Resmi)
+const WEEKLY_TIMETABLE_DATA = [
+  {
+    day: "Senin",
+    rows: [
+      { period: "1", time: "06.45 - 07.40", isBreak: false, isCeremony: true, label: "UPACARA BENDERA", classX: { code: "UPACARA", subject: "Upacara Bendera", teacher: "Seluruh Pendidik & Santri" }, classXI: { code: "UPACARA", subject: "Upacara Bendera", teacher: "Seluruh Pendidik & Santri" } },
+      { period: "2", time: "07.40 - 08.20", isBreak: false, classX: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" }, classXI: { code: "15", subject: "Informatika", teacher: "KURNIANENGSIH, S.Pd" } },
+      { period: "3", time: "08.20 - 09.00", isBreak: false, classX: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" }, classXI: { code: "15", subject: "Informatika", teacher: "KURNIANENGSIH, S.Pd" } },
+      { period: "4", time: "09.00 - 09.40", isBreak: false, classX: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" }, classXI: { code: "1", subject: "Alqur'an hadist", teacher: "TITA ROSITA" } },
+      { period: "-", time: "09.40 - 10.00", isBreak: true, label: "ISTIRAHAT 1" },
+      { period: "5", time: "10.00 - 10.40", isBreak: false, classX: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" }, classXI: { code: "1", subject: "Alqur'an hadist", teacher: "TITA ROSITA" } },
+      { period: "6", time: "10.40 - 11.20", isBreak: false, classX: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" }, classXI: { code: "13", subject: "Geografi", teacher: "ULVA MAULANA, S.Pd" } },
+      { period: "7", time: "11.20 - 12.00", isBreak: false, classX: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" }, classXI: { code: "13", subject: "Geografi", teacher: "ULVA MAULANA, S.Pd" } },
+      { period: "-", time: "12.00 - 12.30", isBreak: true, label: "SHOLAT DZUHUR & ISTIRAHAT 2" },
+      { period: "8", time: "12.30 - 13.10", isBreak: false, classX: { code: "13", subject: "Geografi", teacher: "ULVA MAULANA, S.Pd" }, classXI: { code: "2", subject: "Akidah akhlak", teacher: "TITA ROSITA" } },
+      { period: "9", time: "13.10 - 13.50", isBreak: false, classX: { code: "13", subject: "Geografi", teacher: "ULVA MAULANA, S.Pd" }, classXI: { code: "2", subject: "Akidah akhlak", teacher: "TITA ROSITA" } }
+    ]
+  },
+  {
+    day: "Selasa",
+    rows: [
+      { period: "1", time: "07.00 - 07.45", isBreak: false, classX: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." }, classXI: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" } },
+      { period: "2", time: "07.45 - 08.30", isBreak: false, classX: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." }, classXI: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" } },
+      { period: "3", time: "08.30 - 09.15", isBreak: false, classX: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." }, classXI: { code: "14", subject: "Sosiologi", teacher: "TIA RUMIASIH" } },
+      { period: "4", time: "09.15 - 10.00", isBreak: false, classX: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." }, classXI: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" } },
+      { period: "-", time: "10.00 - 10.15", isBreak: true, label: "ISTIRAHAT 1" },
+      { period: "5", time: "10.15 - 11.00", isBreak: false, classX: { code: "2", subject: "Akidah akhlak", teacher: "TITA ROSITA" }, classXI: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" } },
+      { period: "6", time: "11.00 - 11.45", isBreak: false, classX: { code: "2", subject: "Akidah akhlak", teacher: "TITA ROSITA" }, classXI: { code: "11", subject: "Ekonomi", teacher: "TIA RUMIASIH" } },
+      { period: "7", time: "11.45 - 12.30", isBreak: false, classX: { code: "1", subject: "Alqur'an hadist", teacher: "TITA ROSITA" }, classXI: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." } },
+      { period: "-", time: "12.30 - 13.00", isBreak: true, label: "SHOLAT DZUHUR & ISTIRAHAT 2" },
+      { period: "8", time: "13.00 - 13.45", isBreak: false, classX: { code: "1", subject: "Alqur'an hadist", teacher: "TITA ROSITA" }, classXI: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." } }
+    ]
+  },
+  {
+    day: "Rabu",
+    rows: [
+      { period: "1", time: "07.00 - 07.45", isBreak: false, classX: { code: "3", subject: "SKI", teacher: "MIMI MUTIARA, S.Pd" }, classXI: { code: "17", subject: "Tasauf", teacher: "ADI AHMAD ABADI, S.E / Drs. Dudung Lukman" } },
+      { period: "2", time: "07.45 - 08.30", isBreak: false, classX: { code: "3", subject: "SKI", teacher: "MIMI MUTIARA, S.Pd" }, classXI: { code: "17", subject: "Tasauf", teacher: "ADI AHMAD ABADI, S.E / Drs. Dudung Lukman" } },
+      { period: "3", time: "08.30 - 09.15", isBreak: false, classX: { code: "17", subject: "Tasauf", teacher: "ADI AHMAD ABADI, S.E / Drs. Dudung Lukman" }, classXI: { code: "12", subject: "Sejarah", teacher: "RIZKI BADRUSSALAM" } },
+      { period: "4", time: "09.15 - 10.00", isBreak: false, classX: { code: "17", subject: "Tasauf", teacher: "ADI AHMAD ABADI, S.E / Drs. Dudung Lukman" }, classXI: { code: "12", subject: "Sejarah", teacher: "RIZKI BADRUSSALAM" } },
+      { period: "-", time: "10.00 - 10.15", isBreak: true, label: "ISTIRAHAT 1" },
+      { period: "5", time: "10.15 - 11.00", isBreak: false, classX: { code: "12", subject: "Sejarah", teacher: "RIZKI BADRUSSALAM" }, classXI: { code: "3", subject: "SKI", teacher: "MIMI MUTIARA, S.Pd" } },
+      { period: "6", time: "11.00 - 11.45", isBreak: false, classX: { code: "12", subject: "Sejarah", teacher: "RIZKI BADRUSSALAM" }, classXI: { code: "3", subject: "SKI", teacher: "MIMI MUTIARA, S.Pd" } },
+      { period: "7", time: "11.45 - 12.30", isBreak: false, classX: { code: "4", subject: "Fikih", teacher: "MIMI MUTIARA, S.Pd" }, classXI: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." } },
+      { period: "-", time: "12.30 - 13.00", isBreak: true, label: "SHOLAT DZUHUR & ISTIRAHAT 2" },
+      { period: "8", time: "13.00 - 13.45", isBreak: false, classX: { code: "4", subject: "Fikih", teacher: "MIMI MUTIARA, S.Pd" }, classXI: { code: "6", subject: "Matematika", teacher: "Rizki Ardiansah, S.Pd., M.Pd." } }
+    ]
+  },
+  {
+    day: "Kamis",
+    rows: [
+      { period: "1", time: "07.00 - 07.45", isBreak: false, classX: { code: "16", subject: "PJOK", teacher: "ARI ARIANTO" }, classXI: { code: "16", subject: "PJOK", teacher: "ARI ARIANTO" } },
+      { period: "2", time: "07.45 - 08.30", isBreak: false, classX: { code: "16", subject: "PJOK", teacher: "ARI ARIANTO" }, classXI: { code: "16", subject: "PJOK", teacher: "ARI ARIANTO" } },
+      { period: "3", time: "08.30 - 09.15", isBreak: false, classX: { code: "5", subject: "Bahasa Arab", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "9", subject: "PKN", teacher: "KURNIANENGSIH, S.Pd" } },
+      { period: "4", time: "09.15 - 10.00", isBreak: false, classX: { code: "5", subject: "Bahasa Arab", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "9", subject: "PKN", teacher: "KURNIANENGSIH, S.Pd" } },
+      { period: "-", time: "10.00 - 10.15", isBreak: true, label: "ISTIRAHAT 1" },
+      { period: "5", time: "10.15 - 11.00", isBreak: false, classX: { code: "9", subject: "PKN", teacher: "KURNIANENGSIH, S.Pd" }, classXI: { code: "4", subject: "Fikih", teacher: "MIMI MUTIARA, S.Pd" } },
+      { period: "6", time: "11.00 - 11.45", isBreak: false, classX: { code: "9", subject: "PKN", teacher: "KURNIANENGSIH, S.Pd" }, classXI: { code: "4", subject: "Fikih", teacher: "MIMI MUTIARA, S.Pd" } },
+      { period: "7", time: "11.45 - 12.30", isBreak: false, classX: { code: "15", subject: "Informatika", teacher: "KURNIANENGSIH, S.Pd" }, classXI: { code: "5", subject: "Bahasa Arab", teacher: "NULI MAULANA, S.Pd" } },
+      { period: "-", time: "12.30 - 13.00", isBreak: true, label: "SHOLAT DZUHUR & ISTIRAHAT 2" },
+      { period: "8", time: "13.00 - 13.45", isBreak: false, classX: { code: "15", subject: "Informatika", teacher: "KURNIANENGSIH, S.Pd" }, classXI: { code: "5", subject: "Bahasa Arab", teacher: "NULI MAULANA, S.Pd" } }
+    ]
+  },
+  {
+    day: "Jum'at",
+    rows: [
+      { period: "1", time: "07.00 - 07.35", isBreak: false, classX: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" } },
+      { period: "2", time: "07.35 - 08.10", isBreak: false, classX: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" } },
+      { period: "3", time: "08.10 - 08.45", isBreak: false, classX: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" } },
+      { period: "4", time: "08.45 - 09.20", isBreak: false, classX: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" }, classXI: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" } },
+      { period: "-", time: "09.20 - 09.40", isBreak: true, label: "ISTIRAHAT" },
+      { period: "5", time: "09.40 - 10.15", isBreak: false, classX: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" }, classXI: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" } },
+      { period: "6", time: "10.15 - 10.50", isBreak: false, classX: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" }, classXI: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" } },
+      { period: "7", time: "10.50 - 11.25", isBreak: false, classX: { code: "10", subject: "Seni Budaya", teacher: "Cahaya Siti Riana, S.Pd" }, classXI: { code: "10", subject: "Seni Budaya", teacher: "Cahaya Siti Riana, S.Pd" } },
+      { period: "8", time: "11.25 - 12.00", isBreak: false, classX: { code: "10", subject: "Seni Budaya", teacher: "Cahaya Siti Riana, S.Pd" }, classXI: { code: "10", subject: "Seni Budaya", teacher: "Cahaya Siti Riana, S.Pd" } }
+    ]
+  },
+  {
+    day: "Sabtu",
+    rows: [
+      { period: "1-4", time: "07.30 - 11.00", isBreak: false, isExtracurricular: true, label: "EKSTRAKURIKULER (Pramuka, English Club, Sispala) & Pembinaan Karakter", classX: { code: "EKSKUL", subject: "Ekstrakurikuler", teacher: "Pembina Ekstrakurikuler & Dewan Guru" }, classXI: { code: "EKSKUL", subject: "Ekstrakurikuler", teacher: "Pembina Ekstrakurikuler & Dewan Guru" } }
+    ]
+  }
+];
+
+// Distribusi Slot Jam Mengajar Per Guru Sesuai Matriks Resmi
+const TEACHER_SCHEDULE_SLOTS = [
+  // Kode 1, 2: TITA ROSITA (ID: G01)
+  { teacherId: "G01", teacherName: "TITA ROSITA", code: "1", day: "Senin", period: "Jam 4-5", time: "09.00 - 10.40 WIB", subject: "Alqur'an hadist", class: "Kelas XI/XII", startMin: 540, endMin: 640 },
+  { teacherId: "G01", teacherName: "TITA ROSITA", code: "2", day: "Senin", period: "Jam 8-9", time: "12.30 - 13.50 WIB", subject: "Akidah akhlak", class: "Kelas XI/XII", startMin: 750, endMin: 830 },
+  { teacherId: "G01", teacherName: "TITA ROSITA", code: "2", day: "Selasa", period: "Jam 5-6", time: "10.15 - 11.45 WIB", subject: "Akidah akhlak", class: "Kelas X", startMin: 615, endMin: 705 },
+  { teacherId: "G01", teacherName: "TITA ROSITA", code: "1", day: "Selasa", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Alqur'an hadist", class: "Kelas X", startMin: 705, endMin: 825 },
+
+  // Kode 3, 4: MIMI MUTIARA, S.Pd (ID: G02)
+  { teacherId: "G02", teacherName: "MIMI MUTIARA, S.Pd", code: "3", day: "Rabu", period: "Jam 1-2", time: "07.00 - 08.30 WIB", subject: "SKI", class: "Kelas X", startMin: 420, endMin: 510 },
+  { teacherId: "G02", teacherName: "MIMI MUTIARA, S.Pd", code: "3", day: "Rabu", period: "Jam 5-6", time: "10.15 - 11.45 WIB", subject: "SKI", class: "Kelas XI/XII", startMin: 615, endMin: 705 },
+  { teacherId: "G02", teacherName: "MIMI MUTIARA, S.Pd", code: "4", day: "Rabu", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Fikih", class: "Kelas X", startMin: 705, endMin: 825 },
+  { teacherId: "G02", teacherName: "MIMI MUTIARA, S.Pd", code: "4", day: "Kamis", period: "Jam 5-6", time: "10.15 - 11.45 WIB", subject: "Fikih", class: "Kelas XI/XII", startMin: 615, endMin: 705 },
+
+  // Kode 5, 7: NULI MAULANA, S.Pd (ID: G03)
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "5", day: "Kamis", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Bahasa Arab", class: "Kelas X", startMin: 510, endMin: 600 },
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "5", day: "Kamis", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Bahasa Arab", class: "Kelas XI/XII", startMin: 705, endMin: 825 },
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jum'at", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Indonesia", class: "Kelas X", startMin: 420, endMin: 525 },
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jum'at", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Indonesia", class: "Kelas XI/XII", startMin: 525, endMin: 650 },
+
+  // Kode 6: Rizki Ardiansah, S.Pd., M.Pd. (ID: G04)
+  { teacherId: "G04", teacherName: "Rizki Ardiansah, S.Pd., M.Pd.", code: "6", day: "Selasa", period: "Jam 1-4", time: "07.00 - 10.00 WIB", subject: "Matematika", class: "Kelas X", startMin: 420, endMin: 600 },
+  { teacherId: "G04", teacherName: "Rizki Ardiansah, S.Pd., M.Pd.", code: "6", day: "Selasa", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Matematika", class: "Kelas XI/XII", startMin: 705, endMin: 825 },
+  { teacherId: "G04", teacherName: "Rizki Ardiansah, S.Pd., M.Pd.", code: "6", day: "Rabu", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Matematika", class: "Kelas XI/XII", startMin: 705, endMin: 825 },
+
+  // Kode 8, 10: Cahaya Siti Riana, S.Pd (ID: G05)
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jum'at", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Inggris", class: "Kelas XI/XII", startMin: 420, endMin: 525 },
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jum'at", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Inggris", class: "Kelas X", startMin: 525, endMin: 650 },
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "10", day: "Jum'at", period: "Jam 7-8", time: "10.50 - 12.00 WIB", subject: "Seni Budaya", class: "Kelas X, XI/XII", startMin: 650, endMin: 720 },
+
+  // Kode 9, 15: KURNIANENGSIH, S.Pd (ID: G06)
+  { teacherId: "G06", teacherName: "KURNIANENGSIH, S.Pd", code: "15", day: "Senin", period: "Jam 2-3", time: "07.40 - 09.00 WIB", subject: "Informatika", class: "Kelas XI/XII", startMin: 460, endMin: 540 },
+  { teacherId: "G06", teacherName: "KURNIANENGSIH, S.Pd", code: "9", day: "Kamis", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "PKN", class: "Kelas XI/XII", startMin: 510, endMin: 600 },
+  { teacherId: "G06", teacherName: "KURNIANENGSIH, S.Pd", code: "9", day: "Kamis", period: "Jam 5-6", time: "10.15 - 11.45 WIB", subject: "PKN", class: "Kelas X", startMin: 615, endMin: 705 },
+  { teacherId: "G06", teacherName: "KURNIANENGSIH, S.Pd", code: "15", day: "Kamis", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Informatika", class: "Kelas X", startMin: 705, endMin: 825 },
+
+  // Kode 11, 14: TIA RUMIASIH (ID: G07)
+  { teacherId: "G07", teacherName: "TIA RUMIASIH", code: "14", day: "Senin", period: "Jam 2-4", time: "07.40 - 09.40 WIB", subject: "Sosiologi", class: "Kelas X", startMin: 460, endMin: 580 },
+  { teacherId: "G07", teacherName: "TIA RUMIASIH", code: "11", day: "Senin", period: "Jam 5-7", time: "10.00 - 12.00 WIB", subject: "Ekonomi", class: "Kelas X", startMin: 600, endMin: 720 },
+  { teacherId: "G07", teacherName: "TIA RUMIASIH", code: "14", day: "Selasa", period: "Jam 1-3", time: "07.00 - 09.15 WIB", subject: "Sosiologi", class: "Kelas XI/XII", startMin: 420, endMin: 555 },
+  { teacherId: "G07", teacherName: "TIA RUMIASIH", code: "11", day: "Selasa", period: "Jam 4-6", time: "09.15 - 11.45 WIB", subject: "Ekonomi", class: "Kelas XI/XII", startMin: 555, endMin: 705 },
+
+  // Kode 12: RIZKI BADRUSSALAM (ID: G08)
+  { teacherId: "G08", teacherName: "RIZKI BADRUSSALAM", code: "12", day: "Rabu", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Sejarah", class: "Kelas XI/XII", startMin: 510, endMin: 600 },
+  { teacherId: "G08", teacherName: "RIZKI BADRUSSALAM", code: "12", day: "Rabu", period: "Jam 5-6", time: "10.15 - 11.45 WIB", subject: "Sejarah", class: "Kelas X", startMin: 615, endMin: 705 },
+
+  // Kode 13: ULVA MAULANA, S.Pd (ID: G09)
+  { teacherId: "G09", teacherName: "ULVA MAULANA, S.Pd", code: "13", day: "Senin", period: "Jam 6-7", time: "10.40 - 12.00 WIB", subject: "Geografi", class: "Kelas XI/XII", startMin: 640, endMin: 720 },
+  { teacherId: "G09", teacherName: "ULVA MAULANA, S.Pd", code: "13", day: "Senin", period: "Jam 8-9", time: "12.30 - 13.50 WIB", subject: "Geografi", class: "Kelas X", startMin: 750, endMin: 830 },
+
+  // Kode 16: ARI ARIANTO (ID: G10)
+  { teacherId: "G10", teacherName: "ARI ARIANTO", code: "16", day: "Kamis", period: "Jam 1-2", time: "07.00 - 08.30 WIB", subject: "PJOK", class: "Kelas X, XI/XII", startMin: 420, endMin: 510 },
+
+  // Kode 17: ADI AHMAD ABADI, S.E (ID: G11) & Drs. DUDUNG LUKMAN (ID: G12)
+  { teacherId: "G11", teacherName: "ADI AHMAD ABADI, S.E", code: "17", day: "Rabu", period: "Jam 1-2", time: "07.00 - 08.30 WIB", subject: "Tasauf", class: "Kelas XI/XII", startMin: 420, endMin: 510 },
+  { teacherId: "G11", teacherName: "ADI AHMAD ABADI, S.E", code: "17", day: "Rabu", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Tasauf", class: "Kelas X", startMin: 510, endMin: 600 },
+  { teacherId: "G12", teacherName: "Drs. DUDUNG LUKMAN", code: "17", day: "Rabu", period: "Jam 1-2", time: "07.00 - 08.30 WIB", subject: "Tasauf", class: "Kelas XI/XII", startMin: 420, endMin: 510 },
+  { teacherId: "G12", teacherName: "Drs. DUDUNG LUKMAN", code: "17", day: "Rabu", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Tasauf", class: "Kelas X", startMin: 510, endMin: 600 }
+];
+
+const INDO_DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+
+function getCurrentDayIndo() {
+  const d = new Date();
+  return INDO_DAYS[d.getDay()] || "Senin";
+}
+
+function getTeacherScheduleSlots(teacherId, targetDay = null) {
+  if (!teacherId) return [];
+  const teacher = teachers.find(t => t.id === teacherId);
+  if (!teacher) return [];
+
+  let slots = TEACHER_SCHEDULE_SLOTS.filter(s =>
+    s.teacherId === teacher.id ||
+    (s.teacherName && (s.teacherName.toLowerCase() === teacher.name.toLowerCase() || teacher.name.toLowerCase().includes(s.teacherName.toLowerCase()) || s.teacherName.toLowerCase().includes(teacher.name.toLowerCase())))
+  );
+
+  if (targetDay) {
+    slots = slots.filter(s => s.day === targetDay);
+  }
+  return slots;
+}
+
+function detectCurrentScheduleSlot(teacherId) {
+  const today = getCurrentDayIndo();
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  // 1. Cek Upacara Bendera pada hari Senin (06.30 - 08.00 WIB)
+  if (today === "Senin" && currentMinutes >= 390 && currentMinutes <= 480) {
+    return {
+      isCeremony: true,
+      val: "Upacara Bendera (Senin 06.45 - 07.40 WIB)",
+      label: "Upacara Bendera MA Al-Ikhlash (06.45 - 07.40 WIB)",
+      period: "Upacara",
+      time: "06.45 - 07.40 WIB",
+      subject: "Upacara Bendera",
+      class: "Seluruh Siswa & Dewan Guru",
+      note: "Hadir Upacara Bendera Hari Senin"
+    };
+  }
+
+  // 2. Cek slot mengajar guru pada hari ini dengan toleransi ±35 menit
+  const todaySlots = getTeacherScheduleSlots(teacherId, today);
+  for (const slot of todaySlots) {
+    const minStart = slot.startMin - 35;
+    const maxEnd = slot.endMin + 35;
+    if (currentMinutes >= minStart && currentMinutes <= maxEnd) {
+      return {
+        isCeremony: false,
+        slot: slot,
+        val: `${slot.period} (${slot.time}) - ${slot.subject} ${slot.class}`,
+        label: `${slot.period} (${slot.time}) • ${slot.subject} (${slot.class})`,
+        period: slot.period,
+        time: slot.time,
+        subject: slot.subject,
+        class: slot.class,
+        note: `Mengajar ${slot.subject} ${slot.class} (${slot.period})`
+      };
+    }
+  }
+
+  // 3. Cek kegiatan Ekstrakurikuler pada hari Sabtu (07.15 - 11.30 WIB)
+  if (today === "Sabtu" && currentMinutes >= 435 && currentMinutes <= 690) {
+    return {
+      isEkskul: true,
+      val: "Ekstrakurikuler (Sabtu 07.30 - 11.00 WIB)",
+      label: "Ekstrakurikuler & Pembinaan Santri (07.30 - 11.00 WIB)",
+      period: "Ekskul",
+      time: "07.30 - 11.00 WIB",
+      subject: "Ekstrakurikuler",
+      class: "Santri MA Al-Ikhlash",
+      note: "Pembinaan Ekstrakurikuler & Karakter Santri"
+    };
+  }
+
+  return null;
+}
+
 const DEFAULT_STUDENTS = [
   // Siswa Kelas 1 (Kelas 10 / X.1) Sesuai Berkas Resmi Madrasah - 14 Siswa
   { id: "S101", nisn: "0095675429", name: "DA'I HAMZAH", class: "Kelas 1", gender: "Laki-laki", status: "H", notes: "KALIGAMBIR SINDANGSARI, CIKAUM, SUBANG" },
@@ -1324,10 +1548,169 @@ function handleTeacherSelectChange() {
     const hasNip = teacher.nip && teacher.nip !== "-" && !teacher.nip.toLowerCase().includes("belum");
     nipInput.value = hasNip ? teacher.nip : "Belum Memiliki NIP (-)";
     mapelInput.value = `[Kode ${teacher.code || '-'}] ${teacher.mapel}`;
+    populateAttendanceTypeDropdown(teacher.id);
   } else {
     nipInput.value = "";
     mapelInput.value = "";
+    populateAttendanceTypeDropdown(null);
   }
+}
+
+// Mengisi Pilihan Jenis Presensi & Jam Jadwal Mengajar Secara Cerdas Sesuai Waktu Realtime & Matriks Sekolah
+function populateAttendanceTypeDropdown(teacherId) {
+  const select = document.getElementById("attendanceType");
+  const hintContainer = document.getElementById("attendanceScheduleHint");
+  const notesInput = document.getElementById("attendanceNotes");
+  if (!select) return;
+
+  const today = getCurrentDayIndo();
+  const now = new Date();
+  const timeNowStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")} WIB`;
+  const teacher = teachers.find(t => t.id === teacherId) || getLoggedInTeacher();
+
+  // Jika guru belum dipilih
+  if (!teacher) {
+    select.innerHTML = `
+      <option value="">-- Pilih Guru Terlebih Dahulu --</option>
+      <optgroup label="Pilihan Standar">
+        <option value="Tugas Dinas Luar">Tugas Dinas Luar (Dinas / Pelatihan / Workshop)</option>
+        <option value="Sakit (Surat Dokter / Istirahat)">Sakit (Surat Dokter / Istirahat)</option>
+        <option value="Izin (Keperluan Mendesak)">Izin (Keperluan Mendesak)</option>
+        <option value="Piket Guru / Pembinaan Madrasah">Piket Guru / Pembinaan Madrasah</option>
+      </optgroup>
+    `;
+    if (hintContainer) {
+      hintContainer.innerHTML = `
+        <div class="schedule-hint-pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Pilih Nama Dewan Guru di atas:</strong> Sistem akan otomatis mendeteksi jadwal mengajar, mata pelajaran, dan kelas Bapak/Ibu guru sesuai jam saat ini.
+          </div>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  const allTeacherSlots = getTeacherScheduleSlots(teacher.id);
+  const todaySlots = allTeacherSlots.filter(s => s.day === today);
+  const otherSlots = allTeacherSlots.filter(s => s.day !== today);
+  const detected = detectCurrentScheduleSlot(teacher.id);
+
+  let html = "";
+
+  // 1. Slot Khusus Upacara (Jika Hari Senin)
+  if (today === "Senin") {
+    html += `
+      <optgroup label="Upacara Bendera Hari Senin">
+        <option value="Upacara Bendera (Senin 06.45 - 07.40 WIB)">Upacara Bendera Madrasah (06.45 - 07.40 WIB)</option>
+      </optgroup>
+    `;
+  }
+
+  // 2. Jadwal Hari Ini untuk Guru ini
+  if (todaySlots.length > 0) {
+    html += `<optgroup label="Jadwal Mengajar Hari Ini (${today}) - ${teacher.name}">`;
+    todaySlots.forEach(s => {
+      const val = `${s.period} (${s.time}) - ${s.subject} ${s.class}`;
+      html += `<option value="${val}">${s.period} (${s.time}) • ${s.subject} (${s.class})</option>`;
+    });
+    html += `</optgroup>`;
+  }
+
+  // 3. Jadwal Hari Lain untuk Guru ini (Pilihan Fleksibel / Tukar Jam Mengajar)
+  if (otherSlots.length > 0) {
+    html += `<optgroup label="Jadwal Mengajar Hari Lain - ${teacher.name}">`;
+    otherSlots.forEach(s => {
+      const val = `${s.day} ${s.period} (${s.time}) - ${s.subject} ${s.class}`;
+      html += `<option value="${val}">${s.day} ${s.period} (${s.time}) • ${s.subject} (${s.class})</option>`;
+    });
+    html += `</optgroup>`;
+  }
+
+  // 4. Status Kehadiran Standar (Dinas Luar, Sakit, Izin, Piket)
+  html += `
+    <optgroup label="Status Kehadiran &amp; Tugas Khusus">
+      <option value="Tugas Dinas Luar">Tugas Dinas Luar (Dinas / Pelatihan / Workshop)</option>
+      <option value="Sakit (Surat Dokter / Istirahat)">Sakit (Surat Dokter / Istirahat)</option>
+      <option value="Izin (Keperluan Mendesak)">Izin (Keperluan Mendesak)</option>
+      <option value="Piket Guru / Pembinaan Madrasah">Piket Guru / Pembinaan Madrasah</option>
+    </optgroup>
+  `;
+
+  // 5. Opsi Tambahan Jadwal Kelas Lain (Sebagai Alternatif Guru Pengganti / Inval)
+  html += `<optgroup label="Jadwal Pelajaran Kelas Lain (Sebagai Guru Pengganti / Inval)">`;
+  TEACHER_SCHEDULE_SLOTS.filter(s => s.teacherId !== teacher.id).forEach(s => {
+    const val = `Inval: ${s.day} ${s.period} (${s.time}) - ${s.subject} ${s.class} (${s.teacherName})`;
+    html += `<option value="${val}">Inval [${s.day}] ${s.period} • ${s.subject} ${s.class} (${s.teacherName})</option>`;
+  });
+  html += `</optgroup>`;
+
+  select.innerHTML = html;
+
+  // Auto-Select dan Hint Cerdas Realtime
+  if (detected) {
+    select.value = detected.val;
+    if (notesInput && (!notesInput.value || notesInput.value.includes("Mengajar") || notesInput.value.includes("Upacara") || notesInput.value.includes("Tugas"))) {
+      notesInput.value = detected.note;
+    }
+
+    if (hintContainer) {
+      hintContainer.innerHTML = `
+        <div class="schedule-hint-pill highlight">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <div style="font-weight: 800; font-size: 0.875rem;">🎯 Jadwal Terdeteksi Otomatis: ${detected.label}</div>
+            <div style="font-size: 0.775rem; margin-top: 2px; opacity: 0.95;">
+              Waktu saat ini (<strong>${timeNowStr}</strong>) langsung tersinkron dengan jadwal KBM Bapak/Ibu. Opsi telah otomatis terpilih. Silakan ambil foto selfie untuk presensi.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  } else if (todaySlots.length > 0) {
+    // Ada jadwal hari ini tetapi waktu saat ini berada sebelum / sesudah rentang jam tersebut
+    select.value = `${todaySlots[0].period} (${todaySlots[0].time}) - ${todaySlots[0].subject} ${todaySlots[0].class}`;
+    if (notesInput && (!notesInput.value || notesInput.value.includes("Mengajar") || notesInput.value.includes("Upacara"))) {
+      notesInput.value = `Mengajar ${todaySlots[0].subject} ${todaySlots[0].class} (${todaySlots[0].period})`;
+    }
+
+    if (hintContainer) {
+      const slotListStr = todaySlots.map(s => `<strong>${s.period}</strong> (${s.subject} ${s.class})`).join(", ");
+      hintContainer.innerHTML = `
+        <div class="schedule-hint-pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Jadwal Hari Ini (${today}):</strong> Bapak/Ibu ${teacher.name} memiliki jadwal: ${slotListStr}. Silakan pilih jam mengajar yang sedang dijalani.
+          </div>
+        </div>
+      `;
+    }
+  } else {
+    // Tidak ada jadwal KBM tatap muka hari ini
+    if (today === "Senin") {
+      select.value = "Upacara Bendera (Senin 06.45 - 07.40 WIB)";
+      if (notesInput) notesInput.value = "Hadir Upacara Bendera Hari Senin";
+    } else {
+      select.value = "Tugas Dinas Luar";
+      if (notesInput && (!notesInput.value || notesInput.value.includes("Mengajar"))) {
+        notesInput.value = "Tugas Dinas Luar madrasah";
+      }
+    }
+
+    if (hintContainer) {
+      hintContainer.innerHTML = `
+        <div class="schedule-hint-pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div>
+            <strong>Info Jadwal:</strong> Hari <strong>${today}</strong> tidak ada jadwal tatap muka reguler di kelas untuk Bapak/Ibu ${teacher.name}. Anda dapat memilih opsi <strong>Tugas Dinas Luar</strong>, <strong>Sakit</strong>, <strong>Izin</strong>, <strong>Piket Guru</strong>, atau memilih jadwal hari lain di bawah.
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  updateGeotagUI();
 }
 
 function handleActTeacherSelectChange() {
@@ -1537,6 +1920,29 @@ function detectTeacherGpsLocation(forceToast = false) {
 }
 
 function handleAttendanceTypeChange() {
+  const select = document.getElementById("attendanceType");
+  const notesInput = document.getElementById("attendanceNotes");
+  if (!select) return;
+
+  const val = select.value;
+  if (notesInput) {
+    if (val.includes("Dinas")) {
+      notesInput.value = "Tugas Dinas Luar madrasah";
+    } else if (val.includes("Sakit")) {
+      notesInput.value = "Sakit / istirahat medis";
+    } else if (val.includes("Izin")) {
+      notesInput.value = "Izin keperluan mendesak";
+    } else if (val.includes("Piket")) {
+      notesInput.value = "Tugas piket & pembinaan ketertiban madrasah";
+    } else if (val.includes("Upacara")) {
+      notesInput.value = "Hadir Upacara Bendera Hari Senin";
+    } else if (val.includes("Ekstrakurikuler")) {
+      notesInput.value = "Pembinaan Ekstrakurikuler & Karakter Santri";
+    } else if (val.includes(" - ")) {
+      notesInput.value = "Mengajar di kelas: " + val;
+    }
+  }
+
   updateGeotagUI();
 }
 
@@ -1553,7 +1959,7 @@ function updateGeotagUI() {
   if (!container || !badge) return;
 
   const attTypeSelect = document.getElementById("attendanceType");
-  const attType = attTypeSelect ? attTypeSelect.value : "Datang (Pagi)";
+  const attType = attTypeSelect ? attTypeSelect.value : "Hadir Mengajar";
   const isDinasOrIzin = attType.includes("Dinas") || attType.includes("Izin") || attType.includes("Sakit");
   const maxRadius = geotagConfig.radiusMeters || 500;
   const isStrict = geotagConfig.mode !== "flexible";
@@ -1644,7 +2050,7 @@ function updateGeotagUI() {
 
       if (alertBox && alertText) {
         alertBox.classList.remove("d-none");
-        alertText.innerHTML = `<strong>Di Luar Radius Madrasah:</strong> Anda terdeteksi berjarak <strong>${formatDistanceText(currentTeacherGps.distance)}</strong> dari MA Al-Ikhlash (Batas radius maksimal: ${maxRadius} meter). Presensi masuk/pulang harian wajib dilakukan di lingkungan madrasah. Jika sedang bertugas dinas di luar sekolah, silakan pilih <em>'Tugas Dinas Luar'</em> pada pilihan Jenis Presensi.`;
+        alertText.innerHTML = `<strong>Di Luar Radius Madrasah:</strong> Anda terdeteksi berjarak <strong>${formatDistanceText(currentTeacherGps.distance)}</strong> dari MA Al-Ikhlash (Batas radius maksimal: ${maxRadius} meter). Presensi jam mengajar tatap muka wajib dilakukan di lingkungan madrasah. Jika sedang bertugas dinas di luar sekolah, silakan pilih <em>'Tugas Dinas Luar'</em> pada pilihan Jenis Presensi.`;
       }
 
       if (submitBtn) {
@@ -1706,10 +2112,20 @@ function submitTeacherAttendance(e) {
   const dateFormatted = formatTanggalIndo(dateIso);
   const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")} WIB`;
 
-  // Status Tepat Waktu / Terlambat
-  let attendanceStatus = "Tepat Waktu";
-  if (attendanceType.includes("Pagi") && (now.getHours() > 7 || (now.getHours() === 7 && now.getMinutes() > 30))) {
-    attendanceStatus = "Terlambat";
+  // Status Presensi Otomatis Mengikuti Jadwal Mengajar / Jenis Tugas (Bebas Penalty Terlambat)
+  let attendanceStatus = "Hadir Mengajar";
+  if (attendanceType.includes("Upacara")) {
+    attendanceStatus = "Hadir Upacara";
+  } else if (attendanceType.includes("Dinas")) {
+    attendanceStatus = "Dinas Luar";
+  } else if (attendanceType.includes("Sakit")) {
+    attendanceStatus = "Sakit";
+  } else if (attendanceType.includes("Izin")) {
+    attendanceStatus = "Izin";
+  } else if (attendanceType.includes("Piket")) {
+    attendanceStatus = "Piket";
+  } else {
+    attendanceStatus = "Hadir Mengajar";
   }
 
   // Ringkasan Lokasi & Jarak Geotagging
@@ -1754,15 +2170,65 @@ function submitTeacherAttendance(e) {
   updateTopStatistics();
   sendBackgroundAutoSync("SAVE_TEACHER_ATTENDANCE", record);
 
-  // Reset form
+  // Reset form & perbarui opsi jadwal mengajar
   document.getElementById("formTeacherAttendance").reset();
   populateTeacherDropdowns();
+  populateAttendanceTypeDropdown(teacher.id);
   currentCapturedSelfieData = "";
   const previewPhoto = document.getElementById("capturedPhotoImg");
   if (previewPhoto) previewPhoto.style.display = "none";
 
-  showToast(`Presensi berhasil disimpan untuk ${teacher.name} (${locationSummary})!`, "success");
+  showToast(`Presensi berhasil disimpan untuk ${teacher.name} (${attendanceStatus})!`, "success");
   switchTeacherSubTab("sub-rekap-guru");
+}
+
+// Format Label Badge & Status Presensi Pendidik (Mengubah Riwayat Lama Menjadi Positif Tanpa Warning Terlambat)
+function getTeacherAttBadgeInfo(item) {
+  const status = item.status || "Hadir Mengajar";
+  const type = item.type || "";
+
+  // Normalisasi data lama jika sebelumnya tercatat 'Terlambat', 'Tepat Waktu', atau 'Datang/Pulang'
+  if (status === "Terlambat" || status === "Tepat Waktu" || status.includes("Datang") || status.includes("Pulang")) {
+    return {
+      cssClass: "badge-hadir",
+      text: "✓ Hadir Mengajar • " + (type || "Sesuai Jadwal")
+    };
+  }
+  if (status.includes("Upacara") || type.includes("Upacara")) {
+    return {
+      cssClass: "badge-hadir",
+      text: "✓ Hadir Upacara • " + type
+    };
+  }
+  if (status.includes("Dinas") || type.includes("Dinas")) {
+    return {
+      cssClass: "badge-izin",
+      text: "🔵 Dinas Luar • " + type
+    };
+  }
+  if (status.includes("Sakit") || type.includes("Sakit")) {
+    return {
+      cssClass: "badge-sakit",
+      text: "🟡 Sakit • " + type
+    };
+  }
+  if (status.includes("Izin") || type.includes("Izin")) {
+    return {
+      cssClass: "badge-izin",
+      text: "🟠 Izin • " + type
+    };
+  }
+  if (status.includes("Piket") || type.includes("Piket")) {
+    return {
+      cssClass: "badge-hadir",
+      text: "✓ Piket Guru • " + type
+    };
+  }
+
+  return {
+    cssClass: "badge-hadir",
+    text: `✓ ${status} • ${type}`
+  };
 }
 
 function renderTeacherAttendanceTable() {
@@ -1784,9 +2250,7 @@ function renderTeacherAttendanceTable() {
   }
 
   tbody.innerHTML = list.map((item, idx) => {
-    let badgeClass = "badge-hadir";
-    if (item.status === "Terlambat") badgeClass = "badge-sakit";
-    if (item.type && item.type.includes("Dinas")) badgeClass = "badge-izin";
+    const badgeInfo = getTeacherAttBadgeInfo(item);
 
     return `
       <tr>
@@ -1802,7 +2266,7 @@ function renderTeacherAttendanceTable() {
           <div style="font-weight: 700; color: var(--color-primary-dark); font-size: 0.85rem;">${item.date || '08 Oktober 2026'}</div>
           <code style="font-size: 0.75rem; color: var(--color-text-muted);">${item.time}</code>
         </td>
-        <td><span class="badge ${badgeClass}">${item.status} • ${item.type}</span></td>
+        <td><span class="badge ${badgeInfo.cssClass}">${badgeInfo.text}</span></td>
         <td style="font-size: 0.8rem; color: var(--color-text-muted);">${item.notes}</td>
       </tr>
     `;
@@ -1944,6 +2408,165 @@ function renderScheduleMatrixTable() {
       </tr>
     `;
   }).join("");
+
+  renderWeeklyTimetableGrid();
+}
+
+// Render Matriks Jadwal Mingguan Lengkap MA Al-Ikhlash Semester I (Sesuai Berkas Resmi)
+let currentWeeklyTimetableFilter = "ALL";
+
+function switchTimetableDay(day) {
+  currentWeeklyTimetableFilter = day;
+  renderWeeklyTimetableGrid(day);
+}
+window.switchTimetableDay = switchTimetableDay;
+
+function renderWeeklyTimetableGrid(selectedDay = null) {
+  const container = document.getElementById("weeklyTimetableContainer");
+  if (!container) return;
+
+  if (selectedDay) {
+    currentWeeklyTimetableFilter = selectedDay;
+  }
+  const activeFilter = currentWeeklyTimetableFilter || "ALL";
+
+  const activeTeacher = getLoggedInTeacher();
+  const myCodes = activeTeacher && activeTeacher.code
+    ? activeTeacher.code.split(",").map(c => c.trim())
+    : [];
+
+  const daysToShow = activeFilter === "ALL"
+    ? WEEKLY_TIMETABLE_DATA
+    : WEEKLY_TIMETABLE_DATA.filter(d => d.day === activeFilter);
+
+  const dayTabs = [
+    { key: "ALL", label: "Semua Hari (Senin - Sabtu)" },
+    { key: "Senin", label: "Senin" },
+    { key: "Selasa", label: "Selasa" },
+    { key: "Rabu", label: "Rabu" },
+    { key: "Kamis", label: "Kamis" },
+    { key: "Jum'at", label: "Jum'at" },
+    { key: "Sabtu", label: "Sabtu" }
+  ];
+
+  let tabsHtml = `
+    <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; align-items: center;">
+      <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); margin-right: 4px;">Pilih Hari:</span>
+      ${dayTabs.map(tab => {
+        const isActive = activeFilter === tab.key;
+        const bg = isActive ? 'var(--color-primary)' : '#ffffff';
+        const color = isActive ? '#ffffff' : 'var(--color-text-main)';
+        const border = isActive ? 'var(--color-primary)' : 'var(--color-border)';
+        return `
+          <button type="button" class="btn btn-sm" onclick="switchTimetableDay('${tab.key}')" style="background:${bg}; color:${color}; border:1px solid ${border}; padding:4px 10px; font-size:0.775rem; border-radius:var(--radius-sm); font-weight:${isActive ? '700' : '500'};">
+            ${tab.label}
+          </button>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  let tablesHtml = daysToShow.map(dayData => {
+    return `
+      <div class="weekly-timetable-container" style="margin-bottom: 1.5rem;">
+        <div class="weekly-timetable-header">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span>JADWAL PELAJARAN HARI ${dayData.day.toUpperCase()}</span>
+          </div>
+          <span style="font-size: 0.775rem; font-weight: 600; opacity: 0.9;">Semester I TP 2026/2027</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="timetable-table">
+            <thead>
+              <tr>
+                <th style="width: 8%; text-align: center;">Jam Ke</th>
+                <th style="width: 16%; text-align: center;">Waktu (WIB)</th>
+                <th style="width: 38%;">KELAS X</th>
+                <th style="width: 38%;">KELAS XI / XII</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dayData.rows.map(row => {
+                if (row.isBreak) {
+                  return `
+                    <tr style="background: #f1f5f9;">
+                      <td style="text-align: center; font-weight: 700; color: var(--color-text-muted);">-</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--color-text-muted);">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 700; color: #475569; letter-spacing: 0.5px; font-size: 0.825rem; padding: 6px;">
+                        ☕ ${row.label}
+                      </td>
+                    </tr>
+                  `;
+                }
+
+                if (row.isCeremony) {
+                  return `
+                    <tr style="background: #eff6ff;">
+                      <td style="text-align: center; font-weight: 800; color: #1e3a8a;">${row.period}</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #1e3a8a;">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 800; color: #1e40af; padding: 10px; font-size: 0.875rem;">
+                        🇮🇩 UPACARA BENDERA (Seluruh Santri &amp; Dewan Guru MA Al-Ikhlash)
+                      </td>
+                    </tr>
+                  `;
+                }
+
+                if (row.isExtracurricular) {
+                  return `
+                    <tr style="background: #fef9c3;">
+                      <td style="text-align: center; font-weight: 800; color: #854d0e;">${row.period}</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #854d0e;">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 800; color: #854d0e; padding: 12px; font-size: 0.875rem;">
+                        🏆 ${row.label}
+                      </td>
+                    </tr>
+                  `;
+                }
+
+                const isMyCodeX = row.classX && myCodes.includes(row.classX.code);
+                const isMyCodeXI = row.classXI && myCodes.includes(row.classXI.code);
+
+                return `
+                  <tr>
+                    <td style="text-align: center; font-weight: 700; color: var(--color-primary-dark); font-size: 0.9rem;">${row.period}</td>
+                    <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--color-text-muted);">${row.time}</td>
+                    <td style="${isMyCodeX ? 'background:#eaf6ef;' : ''}">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="timetable-code-badge ${isMyCodeX ? 'highlight-my-code' : ''}">${row.classX.code}</span>
+                        <div>
+                          <div style="font-weight: 700; color: var(--color-text-main); font-size: 0.85rem;">
+                            ${row.classX.subject}
+                            ${isMyCodeX ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px;">Jam Anda</span>' : ''}
+                          </div>
+                          <div style="font-size: 0.75rem; color: var(--color-text-muted);">${row.classX.teacher}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="${isMyCodeXI ? 'background:#eaf6ef;' : ''}">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="timetable-code-badge ${isMyCodeXI ? 'highlight-my-code' : ''}">${row.classXI.code}</span>
+                        <div>
+                          <div style="font-weight: 700; color: var(--color-text-main); font-size: 0.85rem;">
+                            ${row.classXI.subject}
+                            ${isMyCodeXI ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px;">Jam Anda</span>' : ''}
+                          </div>
+                          <div style="font-size: 0.75rem; color: var(--color-text-muted);">${row.classXI.teacher}</div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = tabsHtml + tablesHtml;
 }
 
 // ==========================================
@@ -2062,9 +2685,7 @@ function renderOpAllTeacherAttendanceTable() {
   }
 
   tbody.innerHTML = filtered.map((item, idx) => {
-    let badgeClass = "badge-hadir";
-    if (item.status === "Terlambat") badgeClass = "badge-sakit";
-    if (item.type && item.type.includes("Dinas")) badgeClass = "badge-izin";
+    const badgeInfo = getTeacherAttBadgeInfo(item);
 
     return `
       <tr>
@@ -2080,7 +2701,7 @@ function renderOpAllTeacherAttendanceTable() {
           <div style="font-weight: 700; color: var(--color-primary-dark); font-size: 0.85rem;">${item.date || '08 Oktober 2026'}</div>
           <code style="font-size: 0.75rem; color: var(--color-text-muted);">${item.time}</code>
         </td>
-        <td><span class="badge ${badgeClass}">${item.status} • ${item.type}</span></td>
+        <td><span class="badge ${badgeInfo.cssClass}">${badgeInfo.text}</span></td>
         <td style="font-size: 0.8rem; color: var(--color-text-muted);">${item.notes}</td>
         <td style="text-align: right;">
           <button class="btn btn-secondary btn-sm" style="color: var(--color-danger); padding: 4px 8px; font-size: 0.75rem;" onclick="deleteOpTeacherAttendance('${item.id}')" title="Hapus Presensi">
@@ -3589,9 +4210,11 @@ function updateTeacherGateUI() {
 
   applyTeacherSessionToSiswaTab();
   populateTeacherDropdowns();
+  populateAttendanceTypeDropdown(teacher ? teacher.id : null);
   renderJournalTable();
   renderTeacherAttendanceTable();
   renderScheduleMatrixTable();
+  renderWeeklyTimetableGrid();
 }
 
 function toggleTeacherGatePassVisibility() {
