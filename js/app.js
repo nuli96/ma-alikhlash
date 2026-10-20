@@ -141,7 +141,7 @@ const WEEKLY_TIMETABLE_DATA = [
     ]
   },
   {
-    day: "Jum'at",
+    day: "Jumat",
     rows: [
       { period: "1", time: "07.00 - 07.35", isBreak: false, classX: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" } },
       { period: "2", time: "07.35 - 08.10", isBreak: false, classX: { code: "7", subject: "Bahasa Indonesia", teacher: "NULI MAULANA, S.Pd" }, classXI: { code: "8", subject: "Bahasa Inggris", teacher: "Cahaya Siti Riana, S.Pd" } },
@@ -179,8 +179,8 @@ const TEACHER_SCHEDULE_SLOTS = [
   // Kode 5, 7: NULI MAULANA, S.Pd (ID: G03)
   { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "5", day: "Kamis", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Bahasa Arab", class: "Kelas X", startMin: 510, endMin: 600 },
   { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "5", day: "Kamis", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Bahasa Arab", class: "Kelas XI/XII", startMin: 705, endMin: 825 },
-  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jum'at", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Indonesia", class: "Kelas X", startMin: 420, endMin: 525 },
-  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jum'at", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Indonesia", class: "Kelas XI/XII", startMin: 525, endMin: 650 },
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jumat", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Indonesia", class: "Kelas X", startMin: 420, endMin: 525 },
+  { teacherId: "G03", teacherName: "NULI MAULANA, S.Pd", code: "7", day: "Jumat", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Indonesia", class: "Kelas XI/XII", startMin: 525, endMin: 650 },
 
   // Kode 6: Rizki Ardiansah, S.Pd., M.Pd. (ID: G04)
   { teacherId: "G04", teacherName: "Rizki Ardiansah, S.Pd., M.Pd.", code: "6", day: "Selasa", period: "Jam 1-4", time: "07.00 - 10.00 WIB", subject: "Matematika", class: "Kelas X", startMin: 420, endMin: 600 },
@@ -188,9 +188,9 @@ const TEACHER_SCHEDULE_SLOTS = [
   { teacherId: "G04", teacherName: "Rizki Ardiansah, S.Pd., M.Pd.", code: "6", day: "Rabu", period: "Jam 7-8", time: "11.45 - 13.45 WIB", subject: "Matematika", class: "Kelas XI/XII", startMin: 705, endMin: 825 },
 
   // Kode 8, 10: Cahaya Siti Riana, S.Pd (ID: G05)
-  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jum'at", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Inggris", class: "Kelas XI/XII", startMin: 420, endMin: 525 },
-  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jum'at", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Inggris", class: "Kelas X", startMin: 525, endMin: 650 },
-  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "10", day: "Jum'at", period: "Jam 7-8", time: "10.50 - 12.00 WIB", subject: "Seni Budaya", class: "Kelas X, XI/XII", startMin: 650, endMin: 720 },
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jumat", period: "Jam 1-3", time: "07.00 - 08.45 WIB", subject: "Bahasa Inggris", class: "Kelas XI/XII", startMin: 420, endMin: 525 },
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "8", day: "Jumat", period: "Jam 4-6", time: "08.45 - 10.50 WIB", subject: "Bahasa Inggris", class: "Kelas X", startMin: 525, endMin: 650 },
+  { teacherId: "G05", teacherName: "Cahaya Siti Riana, S.Pd", code: "10", day: "Jumat", period: "Jam 7-8", time: "10.50 - 12.00 WIB", subject: "Seni Budaya", class: "Kelas X, XI/XII", startMin: 650, endMin: 720 },
 
   // Kode 9, 15: KURNIANENGSIH, S.Pd (ID: G06)
   { teacherId: "G06", teacherName: "KURNIANENGSIH, S.Pd", code: "15", day: "Senin", period: "Jam 2-3", time: "07.40 - 09.00 WIB", subject: "Informatika", class: "Kelas XI/XII", startMin: 460, endMin: 540 },
@@ -222,7 +222,7 @@ const TEACHER_SCHEDULE_SLOTS = [
   { teacherId: "G12", teacherName: "Drs. DUDUNG LUKMAN", code: "17", day: "Rabu", period: "Jam 3-4", time: "08.30 - 10.00 WIB", subject: "Tasauf", class: "Kelas X", startMin: 510, endMin: 600 }
 ];
 
-const INDO_DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
+const INDO_DAYS = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
 function getCurrentDayIndo() {
   const d = new Date();
@@ -240,7 +240,8 @@ function getTeacherScheduleSlots(teacherId, targetDay = null) {
   );
 
   if (targetDay) {
-    slots = slots.filter(s => s.day === targetDay);
+    const normTarget = targetDay.toLowerCase().replace(/['’]/g, "");
+    slots = slots.filter(s => s.day.toLowerCase().replace(/['’]/g, "") === normTarget);
   }
   return slots;
 }
@@ -2416,8 +2417,10 @@ function renderScheduleMatrixTable() {
 let currentWeeklyTimetableFilter = "ALL";
 
 function switchTimetableDay(day) {
-  currentWeeklyTimetableFilter = day;
-  renderWeeklyTimetableGrid(day);
+  if (!day) day = "ALL";
+  const clean = day.replace(/['’]/g, "");
+  currentWeeklyTimetableFilter = clean;
+  renderWeeklyTimetableGrid(clean);
 }
 window.switchTimetableDay = switchTimetableDay;
 
@@ -2426,9 +2429,9 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
   if (!container) return;
 
   if (selectedDay) {
-    currentWeeklyTimetableFilter = selectedDay;
+    currentWeeklyTimetableFilter = selectedDay.replace(/['’]/g, "");
   }
-  const activeFilter = currentWeeklyTimetableFilter || "ALL";
+  const activeFilter = (currentWeeklyTimetableFilter || "ALL").replace(/['’]/g, "");
 
   const activeTeacher = getLoggedInTeacher();
   const myCodes = activeTeacher && activeTeacher.code
@@ -2437,7 +2440,7 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
 
   const daysToShow = activeFilter === "ALL"
     ? WEEKLY_TIMETABLE_DATA
-    : WEEKLY_TIMETABLE_DATA.filter(d => d.day === activeFilter);
+    : WEEKLY_TIMETABLE_DATA.filter(d => d.day.replace(/['’]/g, "").toLowerCase() === activeFilter.toLowerCase());
 
   const dayTabs = [
     { key: "ALL", label: "Semua Hari (Senin - Sabtu)" },
@@ -2445,20 +2448,88 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
     { key: "Selasa", label: "Selasa" },
     { key: "Rabu", label: "Rabu" },
     { key: "Kamis", label: "Kamis" },
-    { key: "Jum'at", label: "Jum'at" },
+    { key: "Jumat", label: "Jum'at" },
     { key: "Sabtu", label: "Sabtu" }
   ];
+
+  // Scoped Style Tambahan agar Tampilan Selalu Konsisten Sempurna di GitHub Pages Maupun Lokal (Bebas Masalah Cache Browser)
+  const scopedStyle = `
+    <style>
+      .weekly-timetable-container {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      }
+      .weekly-timetable-header {
+        background: #065f46 !important;
+        color: #ffffff !important;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+      .timetable-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #ffffff;
+        margin: 0;
+      }
+      .timetable-table th {
+        background: #f8fafc;
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #065f46;
+        border-bottom: 2px solid #065f46;
+        border-right: 1px solid #e2e8f0;
+      }
+      .timetable-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #e2e8f0;
+        border-right: 1px solid #e2e8f0;
+        vertical-align: middle;
+      }
+      .timetable-code-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-weight: 800;
+        font-size: 0.825rem;
+        background: #eaf6ef;
+        color: #065f46;
+        border: 1px solid #b8e2cb;
+        flex-shrink: 0;
+      }
+      .timetable-code-badge.highlight-my-code {
+        background: #16a34a !important;
+        color: #ffffff !important;
+        border-color: #15803d !important;
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.35);
+        font-size: 0.9rem;
+      }
+    </style>
+  `;
 
   let tabsHtml = `
     <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; align-items: center;">
       <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-primary-dark); margin-right: 4px;">Pilih Hari:</span>
       ${dayTabs.map(tab => {
         const isActive = activeFilter === tab.key;
-        const bg = isActive ? 'var(--color-primary)' : '#ffffff';
-        const color = isActive ? '#ffffff' : 'var(--color-text-main)';
-        const border = isActive ? 'var(--color-primary)' : 'var(--color-border)';
+        const bg = isActive ? '#065f46' : '#ffffff';
+        const color = isActive ? '#ffffff' : '#1e293b';
+        const border = isActive ? '#065f46' : '#cbd5e1';
         return `
-          <button type="button" class="btn btn-sm" onclick="switchTimetableDay('${tab.key}')" style="background:${bg}; color:${color}; border:1px solid ${border}; padding:4px 10px; font-size:0.775rem; border-radius:var(--radius-sm); font-weight:${isActive ? '700' : '500'};">
+          <button type="button" class="btn btn-sm" onclick="switchTimetableDay('${tab.key}')" style="background:${bg}; color:${color}; border:1px solid ${border}; padding:5px 12px; font-size:0.775rem; border-radius:6px; font-weight:${isActive ? '700' : '600'}; cursor:pointer; transition:all 0.15s ease;">
             ${tab.label}
           </button>
         `;
@@ -2467,34 +2538,36 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
   `;
 
   let tablesHtml = daysToShow.map(dayData => {
+    const dayDisplay = dayData.day.toLowerCase() === 'jumat' ? "JUM'AT" : dayData.day.toUpperCase();
+
     return `
-      <div class="weekly-timetable-container" style="margin-bottom: 1.5rem;">
-        <div class="weekly-timetable-header">
+      <div class="weekly-timetable-container" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; overflow:hidden; margin-bottom:1.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+        <div class="weekly-timetable-header" style="background:#065f46; color:#ffffff; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; font-weight:700;">
           <div style="display: flex; align-items: center; gap: 8px;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span>JADWAL PELAJARAN HARI ${dayData.day.toUpperCase()}</span>
+            <span style="letter-spacing:0.3px;">JADWAL PELAJARAN HARI ${dayDisplay}</span>
           </div>
-          <span style="font-size: 0.775rem; font-weight: 600; opacity: 0.9;">Semester I TP 2026/2027</span>
+          <span style="font-size: 0.775rem; font-weight: 600; opacity: 0.95; background:rgba(255,255,255,0.15); padding:3px 8px; border-radius:4px;">Semester I TP 2026/2027</span>
         </div>
 
-        <div class="table-responsive">
-          <table class="timetable-table">
+        <div class="table-responsive" style="overflow-x:auto;">
+          <table class="timetable-table" style="width:100%; border-collapse:collapse; background:#ffffff; margin:0;">
             <thead>
-              <tr>
-                <th style="width: 8%; text-align: center;">Jam Ke</th>
-                <th style="width: 16%; text-align: center;">Waktu (WIB)</th>
-                <th style="width: 38%;">KELAS X</th>
-                <th style="width: 38%;">KELAS XI / XII</th>
+              <tr style="background:#f8fafc; border-bottom:2px solid #065f46;">
+                <th style="width: 8%; text-align: center; padding:10px 14px; font-size:0.8rem; font-weight:700; color:#065f46; border-right:1px solid #e2e8f0;">Jam Ke</th>
+                <th style="width: 16%; text-align: center; padding:10px 14px; font-size:0.8rem; font-weight:700; color:#065f46; border-right:1px solid #e2e8f0;">Waktu (WIB)</th>
+                <th style="width: 38%; padding:10px 14px; font-size:0.8rem; font-weight:700; color:#065f46; border-right:1px solid #e2e8f0;">KELAS X</th>
+                <th style="width: 38%; padding:10px 14px; font-size:0.8rem; font-weight:700; color:#065f46;">KELAS XI / XII</th>
               </tr>
             </thead>
             <tbody>
               ${dayData.rows.map(row => {
                 if (row.isBreak) {
                   return `
-                    <tr style="background: #f1f5f9;">
-                      <td style="text-align: center; font-weight: 700; color: var(--color-text-muted);">-</td>
-                      <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--color-text-muted);">${row.time}</td>
-                      <td colspan="2" style="text-align: center; font-weight: 700; color: #475569; letter-spacing: 0.5px; font-size: 0.825rem; padding: 6px;">
+                    <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
+                      <td style="text-align: center; font-weight: 700; color: #64748b; padding:8px 14px; border-right:1px solid #e2e8f0;">-</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: #64748b; padding:8px 14px; border-right:1px solid #e2e8f0;">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 700; color: #475569; letter-spacing: 0.5px; font-size: 0.825rem; padding: 8px 14px; background:#f1f5f9;">
                         ☕ ${row.label}
                       </td>
                     </tr>
@@ -2503,10 +2576,10 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
 
                 if (row.isCeremony) {
                   return `
-                    <tr style="background: #eff6ff;">
-                      <td style="text-align: center; font-weight: 800; color: #1e3a8a;">${row.period}</td>
-                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #1e3a8a;">${row.time}</td>
-                      <td colspan="2" style="text-align: center; font-weight: 800; color: #1e40af; padding: 10px; font-size: 0.875rem;">
+                    <tr style="background: #eff6ff; border-bottom: 1px solid #dbeafe;">
+                      <td style="text-align: center; font-weight: 800; color: #1e3a8a; padding:12px 14px; border-right:1px solid #dbeafe;">${row.period}</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #1e3a8a; padding:12px 14px; border-right:1px solid #dbeafe;">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 800; color: #1e40af; padding: 12px 14px; font-size: 0.875rem; background:#eff6ff;">
                         🇮🇩 UPACARA BENDERA (Seluruh Santri &amp; Dewan Guru MA Al-Ikhlash)
                       </td>
                     </tr>
@@ -2515,10 +2588,10 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
 
                 if (row.isExtracurricular) {
                   return `
-                    <tr style="background: #fef9c3;">
-                      <td style="text-align: center; font-weight: 800; color: #854d0e;">${row.period}</td>
-                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #854d0e;">${row.time}</td>
-                      <td colspan="2" style="text-align: center; font-weight: 800; color: #854d0e; padding: 12px; font-size: 0.875rem;">
+                    <tr style="background: #fef9c3; border-bottom: 1px solid #fef08a;">
+                      <td style="text-align: center; font-weight: 800; color: #854d0e; padding:12px 14px; border-right:1px solid #fef08a;">${row.period}</td>
+                      <td style="text-align: center; font-size: 0.8rem; font-weight: 700; color: #854d0e; padding:12px 14px; border-right:1px solid #fef08a;">${row.time}</td>
+                      <td colspan="2" style="text-align: center; font-weight: 800; color: #854d0e; padding: 14px; font-size: 0.875rem; background:#fef9c3;">
                         🏆 ${row.label}
                       </td>
                     </tr>
@@ -2528,31 +2601,42 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
                 const isMyCodeX = row.classX && myCodes.includes(row.classX.code);
                 const isMyCodeXI = row.classXI && myCodes.includes(row.classXI.code);
 
+                const bgCellX = isMyCodeX ? 'background:#eaf6ef;' : '';
+                const bgCellXI = isMyCodeXI ? 'background:#eaf6ef;' : '';
+
+                const badgeStyleX = isMyCodeX
+                  ? 'display:inline-flex; align-items:center; justify-content:center; min-width:32px; height:32px; padding:2px 6px; border-radius:6px; font-weight:800; font-size:0.85rem; background:#16a34a; color:#ffffff; border:1px solid #15803d; box-shadow:0 0 0 2px rgba(22,163,74,0.35); flex-shrink:0;'
+                  : 'display:inline-flex; align-items:center; justify-content:center; min-width:32px; height:32px; padding:2px 6px; border-radius:6px; font-weight:800; font-size:0.825rem; background:#eaf6ef; color:#065f46; border:1px solid #b8e2cb; flex-shrink:0;';
+
+                const badgeStyleXI = isMyCodeXI
+                  ? 'display:inline-flex; align-items:center; justify-content:center; min-width:32px; height:32px; padding:2px 6px; border-radius:6px; font-weight:800; font-size:0.85rem; background:#16a34a; color:#ffffff; border:1px solid #15803d; box-shadow:0 0 0 2px rgba(22,163,74,0.35); flex-shrink:0;'
+                  : 'display:inline-flex; align-items:center; justify-content:center; min-width:32px; height:32px; padding:2px 6px; border-radius:6px; font-weight:800; font-size:0.825rem; background:#eaf6ef; color:#065f46; border:1px solid #b8e2cb; flex-shrink:0;';
+
                 return `
-                  <tr>
-                    <td style="text-align: center; font-weight: 700; color: var(--color-primary-dark); font-size: 0.9rem;">${row.period}</td>
-                    <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: var(--color-text-muted);">${row.time}</td>
-                    <td style="${isMyCodeX ? 'background:#eaf6ef;' : ''}">
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="timetable-code-badge ${isMyCodeX ? 'highlight-my-code' : ''}">${row.classX.code}</span>
+                  <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="text-align: center; font-weight: 700; color: #065f46; font-size: 0.9rem; padding:10px 14px; border-right:1px solid #e2e8f0;">${row.period}</td>
+                    <td style="text-align: center; font-size: 0.8rem; font-weight: 600; color: #64748b; padding:10px 14px; border-right:1px solid #e2e8f0;">${row.time}</td>
+                    <td style="${bgCellX} padding:10px 14px; border-right:1px solid #e2e8f0; vertical-align:middle;">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="timetable-code-badge ${isMyCodeX ? 'highlight-my-code' : ''}" style="${badgeStyleX}">${row.classX.code}</span>
                         <div>
-                          <div style="font-weight: 700; color: var(--color-text-main); font-size: 0.85rem;">
+                          <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem;">
                             ${row.classX.subject}
-                            ${isMyCodeX ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px;">Jam Anda</span>' : ''}
+                            ${isMyCodeX ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:2px 6px; border-radius:4px;">Mapel Anda</span>' : ''}
                           </div>
-                          <div style="font-size: 0.75rem; color: var(--color-text-muted);">${row.classX.teacher}</div>
+                          <div style="font-size: 0.775rem; color: #64748b; margin-top:2px;">${row.classX.teacher}</div>
                         </div>
                       </div>
                     </td>
-                    <td style="${isMyCodeXI ? 'background:#eaf6ef;' : ''}">
-                      <div style="display: flex; align-items: center; gap: 8px;">
-                        <span class="timetable-code-badge ${isMyCodeXI ? 'highlight-my-code' : ''}">${row.classXI.code}</span>
+                    <td style="${bgCellXI} padding:10px 14px; vertical-align:middle;">
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="timetable-code-badge ${isMyCodeXI ? 'highlight-my-code' : ''}" style="${badgeStyleXI}">${row.classXI.code}</span>
                         <div>
-                          <div style="font-weight: 700; color: var(--color-text-main); font-size: 0.85rem;">
+                          <div style="font-weight: 700; color: #1e293b; font-size: 0.875rem;">
                             ${row.classXI.subject}
-                            ${isMyCodeXI ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px;">Jam Anda</span>' : ''}
+                            ${isMyCodeXI ? ' <span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:2px 6px; border-radius:4px;">Mapel Anda</span>' : ''}
                           </div>
-                          <div style="font-size: 0.75rem; color: var(--color-text-muted);">${row.classXI.teacher}</div>
+                          <div style="font-size: 0.775rem; color: #64748b; margin-top:2px;">${row.classXI.teacher}</div>
                         </div>
                       </div>
                     </td>
@@ -2566,7 +2650,7 @@ function renderWeeklyTimetableGrid(selectedDay = null) {
     `;
   }).join("");
 
-  container.innerHTML = tabsHtml + tablesHtml;
+  container.innerHTML = scopedStyle + tabsHtml + tablesHtml;
 }
 
 // ==========================================
